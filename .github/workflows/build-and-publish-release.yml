@@ -1,0 +1,41 @@
+name: Build & Publish Release
+
+on: [workflow_dispatch]
+
+jobs:
+  BuildAndPublish:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+    - name: Setup efscriptgen
+      run: dotnet tool install --global efscriptgen
+    - name: Setup mgfxc
+      run: dotnet tool install --global dotnet-mgfxc
+    - name: Generate effects build scripts
+      run: efscriptgen.exe Nursia/Effects
+    - name: Generate effects build scripts 2
+      run: efscriptgen.exe Samples/Nursia.Samples.ThirdPerson/Effects
+    - name: Build effects
+      run: Nursia/Effects/MonoGameOGL/compile_all.bat
+    - name: Build effects 2
+      run: Samples/Nursia.Samples.ThirdPerson/Effects/MonoGameOGL/compile_all.bat
+    - name: Build solution
+      run: dotnet build Nursia.MonoGame.DesktopGL.sln --configuration Release
+    - name: Test
+      run: dotnet test Nursia.MonoGame.DesktopGL.sln
+    - name: Publish Nursia.MonoGame to NuGet
+      run: nuget.exe push Nursia\bin\MonoGame\Release\Nursia.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
+      continue-on-error: true
+    - name: Publish nrs-editor to NuGet
+      run: nuget.exe push Nursia.Editor\bin\MonoGame\Release\nrs-editor.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
+      continue-on-error: true
+    - name: Publish nrs-mv to NuGet
+      run: nuget.exe push Nursia.ModelViewer\bin\MonoGame\Release\nrs-mv.*.nupkg ${{secrets.NUGET_APIKEY}} -Source https://api.nuget.org/v3/index.json
+      continue-on-error: true

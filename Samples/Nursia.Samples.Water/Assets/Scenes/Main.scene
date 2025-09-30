@@ -1,0 +1,72 @@
+{
+  "Camera": {
+    "$type": "Nursia.SceneGraph.Camera, Nursia",
+    "ViewAngle": 90.0,
+    "AspectRatio": 1.2351581,
+    "NearPlaneDistance": 0.1,
+    "FarPlaneDistance": 1000.0,
+    "Translation": "16.977472, 44.609936, -9.961245",
+    "Scale": "1, 1, 1",
+    "Rotation": "337.62595, 52.288033, 0",
+    "Children": []
+  },
+  "RenderEnvironment": {
+    "AmbientLightColor": "Black",
+    "FogStart": 300.0,
+    "FogEnd": 1000.0,
+    "FogEnabled": true,
+    "Sky": {
+      "DiffuseColor": "White"
+    }
+  },
+  "Root": {
+    "Scale": "1, 1, 1",
+    "Children": [
+      {
+        "$type": "Nursia.SceneGraph.Lights.DirectLight, Nursia",
+        "ShadowFadeStart": 0.8,
+        "ShadowIntensity": 0.6,
+        "Color": "White",
+        "MaxShadowDistance": 500.0,
+        "Translation": "0, 300, -177",
+        "Scale": "1, 1, 1",
+        "Rotation": "225, 0, 0",
+        "Children": []
+      },
+      {
+        "$type": "Nursia.SceneGraph.Landscape.TerrainNode, Nursia",
+        "HeightFieldPath": "t0_height.hf",
+        "TerrainSize": "2048, 128, 2048",
+        "DetailLevels": 3,
+        "PatchSize": 64,
+        "VerticalSkirtScale": 0.1,
+        "Material": {
+          "$type": "Nursia.SceneGraph.Landscape.TerrainMaterial, Nursia",
+          "DiffuseColor": "White",
+          "SpecularColor": "Black",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black",
+          "DetailTiling": "32, 32",
+          "WeightMap1Path": "t0_splat.png",
+          "DetailMap1Path": "../Textures/TerrainDetail1.dds",
+          "DetailMap2Path": "../Textures/TerrainDetail2.dds",
+          "DetailMap3Path": "../Textures/TerrainDetail3.dds"
+        },
+        "Scale": "1, 1, 1",
+        "Children": []
+      },
+      {
+        "$type": "Nursia.SceneGraph.Water.WaterNode, Nursia",
+        "Material": {
+          "$type": "Nursia.SceneGraph.Water.WaterMaterial, Nursia",
+          "NoiseSpeed": "0.05, 0.05",
+          "NoiseTiling": 50.0,
+          "WaterTint": "#CCCCFFFF"
+        },
+        "Translation": "0, 5, 0",
+        "Scale": "2048, 1, 2048",
+        "Children": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(FNATargetFramework)</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <RootNamespace>Nursia.ModelViewer</RootNamespace>
+    <AssemblyName>nrs-modelviewer</AssemblyName>
+    <PackageId>nrs-modelviewer</PackageId>
+    <ToolCommandName>nrs-modelviewer</ToolCommandName>
+    <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);FNA</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Myra\src\Myra\Myra.FNA.Core.csproj" />
+    <ProjectReference Include="..\Nursia\Nursia.FNA.Core.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+</Project>

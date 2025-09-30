@@ -1,0 +1,171 @@
+{
+  "Camera": {
+    "ViewAngle": 90.0,
+    "NearPlane": 0.1,
+    "FarPlane": 1000.0,
+    "Translation": "-0.28089333, 60.90192, 71.94882",
+    "Scale": "1, 0.99999994, 0.99999994",
+    "Rotation": "321.26624, 4.355126, 0.15930349",
+    "Children": []
+  },
+  "RenderEnvironment": {
+    "AmbientLightColor": "#202020FF",
+    "FogColor": "LightGray",
+    "FogStart": 100.0,
+    "FogEnd": 1000.0
+  },
+  "Root": {
+    "Scale": "1, 1, 1",
+    "Children": [
+      {
+        "$type": "Nursia.SceneGraph.Primitives.Plane, Nursia",
+        "Size": "1, 1",
+        "Tessellation": "1, 1",
+        "NormalDirection": "UpY",
+        "UScale": 32.0,
+        "VScale": 32.0,
+        "Material": {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "AmbientColor": "Black",
+          "DiffuseColor": "White",
+          "SpecularColor": "Black",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black",
+          "DiffuseTexturePath": "../Textures/checker.dds"
+        },
+        "Scale": "128, 1, 128",
+        "Children": []
+      },
+      {
+        "$type": "Nursia.SceneGraph.Primitives.Plane, Nursia",
+        "Size": "1, 1",
+        "Tessellation": "1, 1",
+        "GenerateBackface": true,
+        "UScale": 16.0,
+        "VScale": 16.0,
+        "Material": {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "AmbientColor": "Black",
+          "DiffuseColor": "White",
+          "SpecularColor": "Black",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black",
+          "DiffuseTexturePath": "../Textures/checker.dds"
+        },
+        "Translation": "0, 16, 0",
+        "Scale": "48, 48, 1",
+        "Children": []
+      },
+      {
+        "$type": "Nursia.SceneGraph.Lights.SpotLight, Nursia",
+        "AspectRatio": 1.0,
+        "FieldOfViewInDegrees": 30.0,
+        "Range": 12.0,
+        "CastsShadow": false,
+        "ShadowIntensity": 0.6,
+        "MaxShadowDistance": 100.0,
+        "Color": "White",
+        "Translation": "-8, 4, 8",
+        "Scale": "1, 1, 1",
+        "Children": [
+          {
+            "$type": "Nursia.SceneGraph.Billboards.Text3DNode, Nursia",
+            "Text": "Spot Normal",
+            "Color": "White",
+            "Translation": "0, 2, 0",
+            "Scale": "1.828125, 0.375, 1",
+            "Children": []
+          }
+        ]
+      },
+      {
+        "$type": "Nursia.SceneGraph.Lights.SpotLight, Nursia",
+        "AspectRatio": 1.0,
+        "FieldOfViewInDegrees": 30.0,
+        "Range": 12.0,
+        "Ramp": "Wide",
+        "CastsShadow": false,
+        "ShadowIntensity": 0.6,
+        "MaxShadowDistance": 100.0,
+        "Color": "White",
+        "Translation": "8, 4, 8",
+        "Scale": "1, 1, 1",
+        "Children": [
+          {
+            "$type": "Nursia.SceneGraph.Billboards.Text3DNode, Nursia",
+            "Text": "Spot Wide",
+            "Color": "White",
+            "Translation": "0, 2, 0",
+            "Scale": "1.53125, 0.375, 1",
+            "Children": []
+          }
+        ]
+      },
+      {
+        "$type": "Nursia.SceneGraph.Lights.PointLight, Nursia",
+        "_range": 8.0,
+        "Range": 8.0,
+        "CastsShadow": false,
+        "ShadowIntensity": 0.6,
+        "MaxShadowDistance": 100.0,
+        "Color": "White",
+        "Translation": "-16, 16, 2",
+        "Scale": "1, 1, 1",
+        "Children": [
+          {
+            "$type": "Nursia.SceneGraph.Billboards.Text3DNode, Nursia",
+            "Text": "Point Normal",
+            "Color": "White",
+            "Translation": "0, 2, 0",
+            "Scale": "1.90625, 0.375, 1",
+            "Children": []
+          }
+        ]
+      },
+      {
+        "$type": "Nursia.SceneGraph.Lights.PointLight, Nursia",
+        "_range": 8.0,
+        "Range": 8.0,
+        "Ramp": "Wide",
+        "CastsShadow": false,
+        "ShadowIntensity": 0.6,
+        "MaxShadowDistance": 100.0,
+        "Color": "White",
+        "Translation": "0, 16, 2",
+        "Scale": "1, 1, 1",
+        "Children": [
+          {
+            "$type": "Nursia.SceneGraph.Billboards.Text3DNode, Nursia",
+            "Text": "Point Wide",
+            "Color": "White",
+            "Translation": "0, 2, 0",
+            "Scale": "1.609375, 0.375, 1",
+            "Children": []
+          }
+        ]
+      },
+      {
+        "$type": "Nursia.SceneGraph.Lights.PointLight, Nursia",
+        "_range": 8.0,
+        "Range": 8.0,
+        "Ramp": "Extreme",
+        "CastsShadow": false,
+        "ShadowIntensity": 0.6,
+        "MaxShadowDistance": 100.0,
+        "Color": "White",
+        "Translation": "16, 16, 2",
+        "Scale": "1, 1, 1",
+        "Children": [
+          {
+            "$type": "Nursia.SceneGraph.Billboards.Text3DNode, Nursia",
+            "Text": "Point Extreme",
+            "Color": "White",
+            "Translation": "0, 2, 0",
+            "Scale": "2.078125, 0.375, 1",
+            "Children": []
+          }
+        ]
+      }
+    ]
+  }
+}

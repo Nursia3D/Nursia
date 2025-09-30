@@ -1,0 +1,30 @@
+{
+  "Camera": {
+    "$type": "Nursia.SceneGraph.Camera, Nursia",
+    "ViewAngle": 90.0,
+    "NearPlaneDistance": 0.1,
+    "FarPlaneDistance": 1000.0,
+    "Translation": "19.314957, 103.87016, 109.07249",
+    "Scale": "1, 1, 1",
+    "Rotation": "307.67648, 14.780332, 0",
+    "Children": []
+  },
+  "Root": {
+    "$type": "Nursia.SceneGraph.NursiaModelNode, Nursia",
+    "Materials": [
+      [
+        {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "DiffuseColor": "White",
+          "SpecularColor": "Black",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black",
+          "DiffuseTexturePath": "ground.png"
+        }
+      ]
+    ],
+    "ModelPath": "ground.glb",
+    "Scale": "1, 1, 1",
+    "Children": []
+  }
+}

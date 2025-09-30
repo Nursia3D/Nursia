@@ -1,0 +1,33 @@
+{
+  "Camera": {
+    "ViewAngle": 90.0,
+    "NearPlane": 0.1,
+    "FarPlane": 1000.0,
+    "Translation": "-0.53035045, 1.3065157, 3.383059",
+    "Scale": "0.9999999, 0.9999999, 1",
+    "Rotation": "340.25403, 351.12143, 0",
+    "Children": []
+  },
+  "RenderEnvironment": {
+    "AmbientLightColor": "Black",
+    "FogColor": "LightGray",
+    "FogStart": 100.0,
+    "FogEnd": 1000.0
+  },
+  "Root": {
+    "$type": "Nursia.SceneGraph.Primitives.Sphere, Nursia",
+    "Radius": 0.5,
+    "Tessellation": 64,
+    "UScale": 1.0,
+    "VScale": 1.0,
+    "Material": {
+      "$type": "Nursia.Materials.UnlitMaterial, Nursia",
+      "BlendState": "BlendState.NonPremultiplied",
+      "CastsShadows": false,
+      "IsTransparent": true,
+      "DiffuseColor": "#FFCC0120"
+    },
+    "Scale": "1, 1, 1",
+    "Children": []
+  }
+}

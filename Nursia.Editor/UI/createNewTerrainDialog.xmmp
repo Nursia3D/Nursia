@@ -1,0 +1,15 @@
+<Project>
+  <Project.ExportOptions Namespace="Nursia.Editor.UI" Class="CreateNewTerrainDialog" OutputPath="D:\Projects\Nursia\Nursia.Editor\UI" />
+  <Dialog Title="Create New Terrain" Left="636" Top="341">
+    <Grid ColumnSpacing="8" RowSpacing="8">
+      <Grid.DefaultColumnProportion Type="Auto" />
+      <Grid.DefaultRowProportion Type="Auto" />
+      <Label Text="SplatMap Size:" />
+      <ComboView Id="_comboSplatMapSize" Grid.Column="1">
+        <Label Text="256x256" />
+        <Label Text="512x512" />
+        <Label Text="1024x1024" />
+      </ComboView>
+    </Grid>
+  </Dialog>
+</Project>

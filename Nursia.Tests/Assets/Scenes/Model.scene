@@ -1,0 +1,42 @@
+{
+  "Camera": {
+    "$type": "Nursia.SceneGraph.Camera, Nursia",
+    "ViewAngle": 90.0,
+    "AspectRatio": 1.1703932,
+    "NearPlaneDistance": 0.1,
+    "FarPlaneDistance": 1000.0,
+    "Translation": "9.776967, 51.050938, 78.88698",
+    "Scale": "1, 1, 1",
+    "Rotation": "323.78983, 16.373049, 0",
+    "Children": []
+  },
+  "RenderEnvironment": {
+    "AmbientLightColor": "Black",
+    "FogColor": "LightGray",
+    "FogStart": 100.0,
+    "FogEnd": 1000.0,
+    "Sky": {
+      "DiffuseColor": "White"
+    }
+  },
+  "Root": {
+    "$type": "Nursia.SceneGraph.NursiaModelNode, Nursia",
+    "Materials": [
+      [
+        {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "DiffuseColor": "White",
+          "SpecularColor": "Black",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black",
+          "DiffuseTexturePath": "../Textures/ship1_c.tga",
+          "SpecularTexturePath": "../Textures/ship1_s.tga",
+          "NormalTexturePath": "../Textures/ship1_n.tga"
+        }
+      ]
+    ],
+    "ModelPath": "../Models/ship1.glb",
+    "Scale": "1, 1, 1",
+    "Children": []
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "Size": "2560, 1369",
+  "TopSplitterPosition": 0.2,
+  "LeftSplitterPosition": 0.5,
+  "OpenFiles": [
+    "D:\\Projects\\Nursia.FuelCell\\FuelCell.Core\\Assets\\Models\\cube10uR.scene",
+    "D:\\Projects\\Nursia.FuelCell\\FuelCell.Core\\Assets\\Models\\cylinder10uR.scene",
+    "D:\\Projects\\Nursia.FuelCell\\FuelCell.Core\\Assets\\Models\\fuelcarrier.scene",
+    "D:\\Projects\\Nursia.FuelCell\\FuelCell.Core\\Assets\\Models\\fuelcellmodel.scene",
+    "D:\\Projects\\Nursia.FuelCell\\FuelCell.Core\\Assets\\Models\\ground.scene",
+    "D:\\Projects\\Nursia.FuelCell\\FuelCell.Core\\Assets\\Models\\pyramid10uR.scene",
+    "D:\\Projects\\Nursia.FuelCell\\FuelCell.Core\\Assets\\Models\\sphere1uR.scene"
+  ],
+  "GraphicsSettings": {
+    "ShadowCascadeSize": "Size2048"
+  }
+}

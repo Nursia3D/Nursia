@@ -1,0 +1,42 @@
+name: Build & Publish Beta
+
+on:
+    push:
+        paths:
+            - '.github/**'
+            - 'Nursia/**'
+            - 'Nursia.DynamicEffects/**'
+            - 'Nursia.Editor/**'
+            - 'Nursia.ModelViewer/**'
+            - 'Nursia.Tests/**'
+            - 'Samples/**'
+    workflow_dispatch:
+
+jobs:
+  BuildAndPublish:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+    - name: Setup efscriptgen
+      run: dotnet tool install --global efscriptgen
+    - name: Setup mgfxc
+      run: dotnet tool install --global dotnet-mgfxc
+    - name: Generate effects build scripts
+      run: efscriptgen.exe Nursia/Effects
+    - name: Generate effects build scripts 2
+      run: efscriptgen.exe Samples/Nursia.Samples.ThirdPerson/Effects
+    - name: Build effects
+      run: Nursia/Effects/MonoGameOGL/compile_all.bat
+    - name: Build effects 2
+      run: Samples/Nursia.Samples.ThirdPerson/Effects/MonoGameOGL/compile_all.bat
+    - name: Build solution
+      run: dotnet build Nursia.MonoGame.DesktopGL.sln --configuration Release
+    - name: Test
+      run: dotnet test Nursia.MonoGame.DesktopGL.sln

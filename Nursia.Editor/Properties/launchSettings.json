@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Nursia.Editor.FNA.Core": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Projects\\Nursia\\Samples\\Nursia.Samples.Water\\Assets\\Scenes"
+    }
+  }
+}

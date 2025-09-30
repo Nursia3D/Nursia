@@ -1,0 +1,84 @@
+<Project>
+  <Project.ExportOptions Namespace="Nursia.Editor.UI" Class="MainForm" OutputPath="D:\Projects\Nursia\Nursia.Editor\UI" />
+  <VerticalStackPanel Id="_mainPanel">
+    <HorizontalMenu>
+      <MenuItem Text="&amp;File">
+        <MenuItem Text="&amp;Save Current Item" Id="_menuItemSaveCurrentItem" />
+        <MenuItem Text="Save &amp;Everything" Id="_menuItemSaveEverything" />
+        <MenuItem Text="&amp;Reload Current Item" Id="_menuItemReloadCurrentItem" />
+        <MenuItem Text="&amp;Quit" Id="_menuItemQuit" />
+      </MenuItem>
+      <MenuItem Text="&amp;Options">
+        <MenuItem Text="&amp;Graphics Settings" Id="_menuItemGraphicsSettings" />
+        <MenuItem Text="&amp;Render Environment" Id="_menuItemRenderEnvironment" />
+        <MenuItem Text="&amp;Debug Settings" Id="_menuItemDebugSettings" />
+      </MenuItem>
+      <MenuItem Text="&amp;Help">
+        <MenuItem Text="&amp;About" Id="_menuItemAbout" />
+      </MenuItem>
+    </HorizontalMenu>
+    <Panel StackPanel.ProportionType="Fill">
+      <HorizontalSplitPane Id="_topSplitPane">
+        <VerticalSplitPane Id="_leftSplitPane">
+          <ScrollViewer ScrollMultiplier="10" Id="_panelSceneExplorer" />
+          <ScrollViewer ScrollMultiplier="10" Id="_panelSolution" />
+        </VerticalSplitPane>
+        <Panel>
+          <VerticalStackPanel Id="_panelScenes">
+            <HorizontalStackPanel Spacing="8">
+              <ToggleButton Id="_buttonGrid">
+                <Label Text="Grid" />
+              </ToggleButton>
+              <ToggleButton Id="_buttonCameraPosition">
+                <Label Text="Camera Position" />
+              </ToggleButton>
+            </HorizontalStackPanel>
+            <Panel StackPanel.ProportionType="Fill">
+              <TabControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CloseableTabs="True" Id="_tabControlScenes">
+                <TabItem Text="Test">
+                  <HorizontalStackPanel Left="2" Top="2">
+                    <ToggleButton>
+                      <Label Text="Camera View" />
+                    </ToggleButton>
+                  </HorizontalStackPanel>
+                </TabItem>
+              </TabControl>
+              <Grid ColumnSpacing="8" HorizontalAlignment="Right" VerticalAlignment="Bottom" Left="-4" Id="_panelStatistics">
+                <Grid.DefaultRowProportion Type="Auto" />
+                <Grid.ColumnsProportions>
+                  <Proportion Type="Auto" />
+                  <Proportion Type="Fill" />
+                </Grid.ColumnsProportions>
+                <Label Text="FPS:" />
+                <Label Text="Effects Switches:" Grid.Row="1" />
+                <Label Text="Draw Calls:" Grid.Row="2" />
+                <Label Text="Vertices Drawn:" Grid.Row="3" />
+                <Label Text="Primitives Drawn:" Grid.Row="4" />
+                <Label Text="Passes:" Grid.Row="5" />
+                <Label Text="10" Id="_labelFps" Grid.Column="1" />
+                <Label Text="10" Id="_labelEffectsSwitches" Grid.Column="1" Grid.Row="1" />
+                <Label Text="10" Id="_labelDrawCalls" Grid.Column="1" Grid.Row="2" />
+                <Label Text="10" Id="_labelVerticesDrawn" Grid.Column="1" Grid.Row="3" />
+                <Label Text="10" Id="_labelPrimitivesDrawn" Grid.Column="1" Grid.Row="4" />
+                <Label Text="10" Id="_labelPasses" Grid.Column="1" Grid.Row="5" />
+              </Grid>
+              <Label Text="Camera: 1, 1, 1" Left="4" VerticalAlignment="Bottom" Visible="False" Id="_labelCameraPosition" />
+            </Panel>
+          </VerticalStackPanel>
+        </Panel>
+        <VerticalStackPanel Id="_rightPanel">
+          <VerticalStackPanel Id="_panelProperties" StackPanel.ProportionType="Part">
+            <ScrollViewer ScrollMultiplier="10" ShowHorizontalScrollBar="False" StackPanel.ProportionType="Fill">
+              <PropertyGrid Id="_propertyGrid" />
+            </ScrollViewer>
+            <HorizontalStackPanel Id="_panelPropertiesButtons">
+              <Button>
+                <Label Text="Reset Materials" />
+              </Button>
+            </HorizontalStackPanel>
+          </VerticalStackPanel>
+        </VerticalStackPanel>
+      </HorizontalSplitPane>
+    </Panel>
+  </VerticalStackPanel>
+</Project>

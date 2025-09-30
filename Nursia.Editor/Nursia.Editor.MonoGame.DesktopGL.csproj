@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(AppMonoGameTargetFramework)</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <RootNamespace>Nursia.Editor</RootNamespace>
+    <AssemblyName>nrs-editor</AssemblyName>
+    <PackageId>nrs-editor</PackageId>
+    <ToolCommandName>nrs-editor</ToolCommandName>
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(AppMonoGameVersion)" />
+    <PackageReference Include="Myra" Version="$(MyraVersion)" />
+    <PackageReference Include="StbImageWriteSharp" Version="$(StbImageWriteSharpVersion)" />
+    <PackageReference Include="XNAssets.FontStashSharp.MonoGame" Version="$(XNAssetsVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nursia\Nursia.MonoGame.csproj" />
+  </ItemGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+ 
+</Project>

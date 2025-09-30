@@ -1,0 +1,126 @@
+{
+  "Camera": {
+    "$type": "Nursia.SceneGraph.Camera, Nursia",
+    "ViewAngle": 90.0,
+    "AspectRatio": 1.1703932,
+    "NearPlaneDistance": 0.1,
+    "FarPlaneDistance": 1000.0,
+    "Translation": "31.724964, 135.79979, 265.32166",
+    "Scale": "1, 1, 1",
+    "Rotation": "322.68008, 21.12399, 0",
+    "Children": []
+  },
+  "RenderEnvironment": {
+    "AmbientLightColor": "Black",
+    "FogColor": "#0379FFFF",
+    "FogStart": 200.0,
+    "FogEnd": 1000.0,
+    "FogEnabled": true,
+    "Sky": {
+      "DiffuseColor": "White"
+    }
+  },
+  "Root": {
+    "Scale": "1, 1, 1",
+    "Children": [
+      {
+        "$type": "Nursia.SceneGraph.Lights.DirectLight, Nursia",
+        "ShadowFadeStart": 0.8,
+        "ShadowIntensity": 0.6,
+        "Color": "White",
+        "MaxShadowDistance": 500.0,
+        "Translation": "0, 100, 0",
+        "Scale": "1, 1, 1",
+        "Rotation": "320, 90, 0",
+        "Children": [],
+        "Id": "_light"
+      },
+      {
+        "$type": "Nursia.SceneGraph.Primitives.Plane, Nursia",
+        "Size": "512, 512",
+        "Tessellation": "1, 1",
+        "NormalDirection": "UpY",
+        "UScale": 32.0,
+        "VScale": 32.0,
+        "Material": {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "CastsShadows": false,
+          "DiffuseColor": "White",
+          "SpecularColor": "Black",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black",
+          "DiffuseTexturePath": "../Textures/checker.dds"
+        },
+        "Scale": "1, 1, 1",
+        "Children": [],
+        "Id": "_plane"
+      },
+      {
+        "$type": "Nursia.SceneGraph.Primitives.Capsule, Nursia",
+        "Length": 1.0,
+        "Radius": 0.5,
+        "Tessellation": 8,
+        "UScale": 1.0,
+        "VScale": 1.0,
+        "Material": {
+          "$type": "Nursia.Materials.UnlitMaterial, Nursia",
+          "IsTransparent": true,
+          "DiffuseColor": "#4CD96151"
+        },
+        "Translation": "0, 16, -44",
+        "Scale": "8, 8, 8",
+        "Children": [],
+        "Id": "_capsule"
+      },
+      {
+        "$type": "Nursia.SceneGraph.Primitives.Sphere, Nursia",
+        "Radius": 0.5,
+        "Tessellation": 16,
+        "UScale": 1.0,
+        "VScale": 1.0,
+        "Material": {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "BlendState": "BlendState.Additive",
+          "DepthStencilState": "DepthStencilState.Default",
+          "RasterizerState": "RasterizerState.CullNone",
+          "CastsShadows": false,
+          "DiffuseColor": "#FFCC01FF",
+          "SpecularColor": "Black",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black"
+        },
+        "Translation": "100, 16, 32",
+        "Scale": "10, 10, 10",
+        "Children": [],
+        "Id": "_sphere"
+      },
+      {
+        "$type": "Nursia.SceneGraph.SubsceneNode, Nursia",
+        "NodePath": "Model.scene",
+        "Translation": "0, 20, 50",
+        "Scale": "1, 1, 1",
+        "Children": [],
+        "Id": "_ship1"
+      },
+      {
+        "$type": "Nursia.SceneGraph.SubsceneNode, Nursia",
+        "NodePath": "Model.scene",
+        "Translation": "-120, 32, 100",
+        "Scale": "1, 1, 1",
+        "Rotation": "0, 90, 0",
+        "Children": [],
+        "Id": "_ship2"
+      },
+      {
+        "$type": "Nursia.SceneGraph.Water.WaterNode, Nursia",
+        "Material": {
+          "NoiseSpeed": "0.05, 0.05",
+          "WaterTint": "#264AFFFF"
+        },
+        "Translation": "0, 14, 200",
+        "Scale": "64, 1, 64",
+        "Children": []
+      }
+    ]
+  }
+}

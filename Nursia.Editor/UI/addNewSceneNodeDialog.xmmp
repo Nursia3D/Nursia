@@ -1,0 +1,16 @@
+<Project>
+  <Project.ExportOptions Namespace="Nursia.Editor.UI" Class="AddNewSceneNodeDialog" OutputPath="D:\Projects\Nursia\Nursia.Editor\UI" />
+  <Dialog Title="Add New Scene Node" Left="514" Top="128" Width="500" Height="400">
+    <VerticalStackPanel Spacing="8">
+      <HorizontalStackPanel Spacing="8" Id="_panelFilename">
+        <Label Text="File Name:" />
+        <TextBox Id="_textName" StackPanel.ProportionType="Fill" />
+      </HorizontalStackPanel>
+      <ScrollViewer ScrollMultiplier="10" Id="_panelNodes" StackPanel.ProportionType="Fill" />
+      <HorizontalStackPanel Spacing="8">
+        <Label Text="Filter:" />
+        <TextBox Id="_textFilter" StackPanel.ProportionType="Fill" />
+      </HorizontalStackPanel>
+    </VerticalStackPanel>
+  </Dialog>
+</Project>

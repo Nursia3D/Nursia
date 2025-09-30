@@ -1,0 +1,16 @@
+<Project>
+  <Project.ExportOptions Namespace="Nursia.Editor.UI" Class="TerrainEditorPanel" OutputPath="D:\Projects\Nursia\Nursia.Editor\UI" />
+  <HorizontalStackPanel Spacing="8" Id="_panel">
+    <ComboView Id="_comboInstrument">
+      <Label Text="Raise" />
+      <Label Text="Lower" />
+    </ComboView>
+    <Label Text="Radius:" />
+    <HorizontalSlider Maximum="20" Width="200" Id="_sliderRadius" />
+    <Label Text="5" Id="_labelRadius" />
+    <Label Text="Power:" />
+    <HorizontalSlider Maximum="1" Value="0.1" Width="200" Id="_sliderPower" />
+    <Label Id="_labelPower" />
+    <Panel Id="_panelAdditionalWidgets" />
+  </HorizontalStackPanel>
+</Project>

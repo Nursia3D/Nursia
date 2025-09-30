@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Nursia</AssemblyName>
+    <PackageId>Nursia.FNA.Core</PackageId>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);FNA</DefineConstants>
+    <TargetFramework>$(FNATargetFramework)</TargetFramework>
+    <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\**\*.*" />
+    <EmbeddedResource Include="Effects\FNA\bin\*.*" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DigitalRiseModel\Source\DigitalRiseModel.FNA.Core.csproj" />
+  </ItemGroup>
+</Project>

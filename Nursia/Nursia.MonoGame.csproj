@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Nursia</AssemblyName>
+    <PackageId>Nursia.MonoGame</PackageId>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\**\*.*" />
+    <EmbeddedResource Include="Effects\MonoGameOGL\bin\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DigitalRiseModel.MonoGame" Version="$(DigitalRiseModelVersion)" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" PrivateAssets="All" Version="$(MonoGameVersion)" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+{
+  "Size": "2560, 1369",
+  "TopSplitterPosition": 0.2,
+  "LeftSplitterPosition": 0.5,
+  "OpenFiles": [
+    "D:\\Projects\\Nursia\\Samples\\Nursia.Samples.Water\\Assets\\Scenes\\Main.scene"
+  ],
+  "GraphicsSettings": {
+    "ShadowIntensity": 0.6,
+    "ShadowFadeStart": 0.8,
+    "CascadesCount": 4,
+    "MinShadowDistance": 0.1,
+    "MaxShadowDistance": 100.0
+  },
+  "DebugSettings": {}
+}

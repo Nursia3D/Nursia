@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Nursia.Samples.ModelViewer.FNA.Core": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Projects\\glTF-Sample-Assets\\Models\\FlightHelmet\\glTF\\FlightHelmet.glb"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+<Root>
+	<MultiCompile>[SHADOW,PCFSHADOW,DIRLIGHT];[SHADOW,SIMPLESHADOW,DIRLIGHT];DIRLIGHT;POINTLIGHT;SPOTLIGHT</MultiCompile>
+	<MultiCompile>TRANSLUCENT;_</MultiCompile>
+	<MultiCompile>MARKER;_</MultiCompile>
+	<MultiCompile>CLIPPLANE;_</MultiCompile>
+</Root>
