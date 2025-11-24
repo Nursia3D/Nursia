@@ -16,15 +16,15 @@ It has following features:
 ## Documentation
 https://github.com/Nursia3D/Nursia/wiki
 
-## Screenshots
-<img width="1873" height="1040" alt="image" src="https://github.com/user-attachments/assets/f574c09a-9ec0-4d09-843b-45fe84af0f43" />
-<img width="1602" height="932" alt="image" src="https://github.com/user-attachments/assets/18ffcec2-79b9-48f5-95bd-5c8a5aa4a2d3" />
-<img width="1202" height="832" alt="image" src="https://github.com/user-attachments/assets/90e03a78-797e-4e1d-a44a-6d8ff33758df" />
-
 ## Support
 Use following resources if you need help with Nursia or have other questions:
 * [Discord](https://discord.gg/ZeHxhCY)
 * [Nursia Topic at gamedev.ru (Russian)](https://gamedev.ru/projects/forum/?id=292958)
+
+## Screenshots
+<img width="1873" height="1040" alt="image" src="https://github.com/user-attachments/assets/f574c09a-9ec0-4d09-843b-45fe84af0f43" />
+<img width="1602" height="932" alt="image" src="https://github.com/user-attachments/assets/18ffcec2-79b9-48f5-95bd-5c8a5aa4a2d3" />
+<img width="1202" height="832" alt="image" src="https://github.com/user-attachments/assets/90e03a78-797e-4e1d-a44a-6d8ff33758df" />
 
 ## Credits
 * [U3D](https://u3d.io/) (shaders were borrowed from there)
