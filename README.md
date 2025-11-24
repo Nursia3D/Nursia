@@ -22,6 +22,6 @@ https://github.com/Nursia3D/Nursia/wiki
 <img width="1202" height="832" alt="image" src="https://github.com/user-attachments/assets/90e03a78-797e-4e1d-a44a-6d8ff33758df" />
 
 ## Credits
-* [U3D](https://u3d.io/) (that is where shaders were borrowed)
+* [U3D](https://u3d.io/) (shaders were borrowed from there)
 * [MonoGame](http://www.monogame.net/)
 * [FNA](https://github.com/FNA-XNA/FNA)
