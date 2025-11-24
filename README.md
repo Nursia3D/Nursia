@@ -9,6 +9,8 @@ It has following features:
 * Blinn-Phong Lightning Model
 * 3 Types of Lights: Direct, Point and Spot
 * Cascaded Shadows
+* Models could be loaded from GLTF/GLB
+* Skeletal Animation
 * Basic Terrain
 * Basic Water
 * Scene Editor
