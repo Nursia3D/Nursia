@@ -13,6 +13,7 @@ It has following features:
 * Skeletal Animation
 * Basic Terrain
 * Basic Water
+* Basic Billboards
 * Scene Editor
 
 ## Documentation
