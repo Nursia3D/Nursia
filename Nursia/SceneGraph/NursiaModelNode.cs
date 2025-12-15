@@ -150,7 +150,7 @@ namespace Nursia.SceneGraph
 			}
 		}
 
-		private void SetModel(DrModel model, bool setMaterials)
+		public void SetModel(DrModel model, bool setMaterials)
 		{
 			ModelInstance.Model = model;
 

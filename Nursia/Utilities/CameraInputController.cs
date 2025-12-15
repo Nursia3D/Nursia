@@ -11,7 +11,6 @@ namespace Nursia.Utilities
 	{
 		private const float LinearVelocityMagnitude = 5f;
 		private const float AngularVelocityMagnitude = 0.1f;
-		private const float SpeedBoost = 20;
 
 		// Position and Orientation of camera.
 		private Vector3 _defaultPosition = new Vector3(0, 2, 5);
@@ -30,6 +29,8 @@ namespace Nursia.Utilities
 		public Camera Camera { get; private set; }
 
 		public bool IsEnabled { get; set; }
+
+		public float SpeedBoost { get; set; } = 20.0f;
 
 
 		public CameraInputController(Camera camera)

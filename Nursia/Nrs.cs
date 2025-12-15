@@ -1,10 +1,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Framework.Utilities;
 using Newtonsoft.Json.Linq;
 using Nursia.Rendering;
 using System;
 using System.Reflection;
+
+#if MONOGAME
+
+using MonoGame.Framework.Utilities;
+
+#endif
 
 namespace Nursia
 {
