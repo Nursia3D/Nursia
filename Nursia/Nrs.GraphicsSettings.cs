@@ -1,12 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using Nursia.SceneGraph;
-using Nursia.SceneGraph.Lights;
-using Nursia.Shadows;
+﻿using Nursia.Shadows;
 using System;
 using System.ComponentModel;
 
 namespace Nursia
 {
+	public enum ShadowType
+	{
+		None,
+		Simple,
+		PCF
+	}
+
 	partial class Nrs
 	{
 		public class GraphicsSettingsType

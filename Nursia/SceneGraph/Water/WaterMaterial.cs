@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Materials;
 using Nursia.Rendering;
-using Nursia.SceneGraph.Lights;
 using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Water
@@ -110,7 +109,12 @@ namespace Nursia.SceneGraph.Water
 			return _binding;
 		}
 
-		public EffectBinding GetEffectBinding(LightTechnique technique, ShadowType shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+		public EffectBinding GetShadowTechnique(DrMeshPart mesh)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
 		{
 			return InternalGetBinding();
 		}

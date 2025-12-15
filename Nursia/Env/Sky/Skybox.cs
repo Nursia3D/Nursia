@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Materials;
 using Nursia.Rendering;
-using Nursia.SceneGraph.Lights;
 using Nursia.Serialization;
 using System;
 using System.ComponentModel;
@@ -39,7 +38,12 @@ namespace Nursia.Env.Sky
 				throw new NotImplementedException();
 			}
 
-			public EffectBinding GetEffectBinding(LightTechnique technique, ShadowType shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+			public EffectBinding GetShadowTechnique(DrMeshPart mesh)
+			{
+				throw new NotImplementedException();
+			}
+
+			public EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
 			{
 				if (_binding == null)
 				{
@@ -52,6 +56,7 @@ namespace Nursia.Env.Sky
 
 				return _binding;
 			}
+
 
 			public void Load(AssetManager assetManager)
 			{

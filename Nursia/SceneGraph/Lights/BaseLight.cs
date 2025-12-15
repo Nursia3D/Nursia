@@ -5,13 +5,6 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Lights
 {
-	public enum ShadowType
-	{
-		None,
-		Simple,
-		PCF
-	}
-
 	/// <summary>
 	/// Base Light
 	/// </summary>

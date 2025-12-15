@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nursia.Materials;
 using Nursia.Rendering;
-using Nursia.SceneGraph.Lights;
 using System.ComponentModel;
 
 namespace Nursia.Samples.ThirdPerson.Materials
@@ -51,7 +50,12 @@ namespace Nursia.Samples.ThirdPerson.Materials
 			};
 		}
 
-		public EffectBinding GetEffectBinding(LightTechnique technique, ShadowType shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+		public EffectBinding GetShadowTechnique(DrMeshPart mesh)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
 		{
 			if (_binding != null)
 			{

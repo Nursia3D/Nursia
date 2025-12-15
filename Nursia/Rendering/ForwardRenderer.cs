@@ -105,8 +105,7 @@ namespace Nursia.Rendering
 			}
 		}
 
-		private void RenderPass(JobsBatch batch, BaseLight light,
-			RenderPassType passType, bool lightAffectsCheck = true)
+		private void RenderPass(JobsBatch batch, BaseLight light, RenderPassType passType, bool lightAffectsCheck = true)
 		{
 			if (batch.Count == 0)
 			{
@@ -135,12 +134,7 @@ namespace Nursia.Rendering
 			{
 				case RenderPassType.Color:
 					var translucent = light != null ? light.Translucent : false;
-					var shadow = ShadowType.None;
-					if (light != null && light.CastsShadow)
-					{
-						shadow = Nrs.GraphicsSettings.ShadowType;
-					}
-
+					var shadow = Nrs.GraphicsSettings.ShadowType != ShadowType.None && light != null && light.CastsShadow;
 					batch.SetTechnique(light.GetTechnique(), shadow, translucent);
 					break;
 				case RenderPassType.DepthBuffer:

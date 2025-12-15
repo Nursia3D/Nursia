@@ -142,12 +142,11 @@ namespace Nursia.Rendering
 			}
 		}
 
-		public void SetTechnique(LightTechnique lightTechnique, ShadowType shadow, bool translucent)
+		public void SetTechnique(LightTechnique lightTechnique, bool shadow, bool translucent)
 		{
 			foreach (var job in UnsortedJobs)
 			{
-				var jobShadow = job.Material.Flags.HasFlag(MaterialFlags.AcceptsShadows) ? shadow : ShadowType.None;
-				job.SetTechnique(lightTechnique, jobShadow, translucent);
+				job.SetTechnique(lightTechnique, shadow, translucent);
 			}
 		}
 	}

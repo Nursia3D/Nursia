@@ -4,14 +4,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Rendering;
-using Nursia.SceneGraph.Lights;
 using Nursia.Serialization;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Nursia.Materials
 {
-	public class BlinnPhongMaterial : IMaterial, IHasExternalAssets
+	public class BlinnPhongMaterial : BaseMaterial, IHasExternalAssets
 	{
 		private static readonly EffectBinding[] _allBindings = new EffectBinding[256];
 
@@ -19,18 +18,7 @@ namespace Nursia.Materials
 
 		public string Id { get; set; }
 
-		[Category("States")]
-		public BlendState BlendState { get; set; }
-
-		[Category("States")]
-		public DepthStencilState DepthStencilState { get; set; }
-
-		[Category("States")]
-		public RasterizerState RasterizerState { get; set; }
-
-		[Browsable(false)]
-		[JsonIgnore]
-		public MaterialFlags Flags => _flags;
+		public override MaterialFlags Flags => _flags;
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
@@ -124,7 +112,7 @@ namespace Nursia.Materials
 			}
 		}
 
-		public IMaterial Clone()
+		public override IMaterial Clone()
 		{
 			return new BlinnPhongMaterial
 			{
@@ -147,8 +135,7 @@ namespace Nursia.Materials
 			};
 		}
 
-		private static EffectBinding InternalGetBinding(LightTechnique lightTechnique, ShadowType shadow,
-			bool translucent, bool skinning, bool normalMap, bool clipPlane)
+		private static EffectBinding InternalGetBinding(LightTechnique lightTechnique, bool shadow, bool translucent, bool skinning, bool normalMap, bool clipPlane)
 		{
 			var key = 0;
 
@@ -162,14 +149,17 @@ namespace Nursia.Materials
 				key |= 2;
 			}
 
-			if (shadow == ShadowType.Simple)
+			if (shadow)
 			{
-				key |= 4;
-			}
+				if (Nrs.GraphicsSettings.ShadowType == ShadowType.Simple)
+				{
+					key |= 4;
+				}
 
-			if (shadow == ShadowType.PCF)
-			{
-				key |= 8;
+				if (Nrs.GraphicsSettings.ShadowType == ShadowType.PCF)
+				{
+					key |= 8;
+				}
 			}
 
 			if (translucent)
@@ -213,15 +203,15 @@ namespace Nursia.Materials
 					break;
 			}
 
-			if (shadow != ShadowType.None)
+			if (shadow)
 			{
 				defines["SHADOW"] = "1";
 
-				if (shadow == ShadowType.PCF)
+				if (Nrs.GraphicsSettings.ShadowType == ShadowType.PCF)
 				{
 					defines["PCFSHADOW"] = "1";
 				}
-				else if (shadow == ShadowType.Simple)
+				else if (Nrs.GraphicsSettings.ShadowType == ShadowType.Simple)
 				{
 					defines["SIMPLESHADOW"] = "1";
 				}
@@ -264,7 +254,7 @@ namespace Nursia.Materials
 			return binding;
 		}
 
-		public EffectBinding GetEffectBinding(LightTechnique technique, ShadowType shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+		public override EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
 		{
 			return InternalGetBinding(technique, shadow, translucent, mesh != null && mesh.Skin != null,
 				!Nrs.DebugSettings.DisableNormalMap && NormalTexture != null && mesh != null && mesh.TangentsFormat == VertexElementFormat.Vector4,

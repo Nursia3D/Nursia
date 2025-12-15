@@ -54,12 +54,12 @@ namespace Nursia.Rendering
 
 		public void SetShadowTechnique()
 		{
-			EffectBinding = UtilityEffects.GetShadowEffect(Mesh != null && Mesh.Skin != null);
+			EffectBinding = Material.GetShadowTechnique(Mesh);
 		}
 
-		public void SetTechnique(LightTechnique lightTechnique, ShadowType shadow, bool translucent)
+		public void SetTechnique(LightTechnique lightTechnique, bool shadow, bool translucent)
 		{
-			EffectBinding = Material.GetEffectBinding(lightTechnique, shadow, translucent, Mesh, ClipPlane != null);
+			EffectBinding = Material.GetColorTechnique(lightTechnique, shadow && Material.Flags.HasFlag(MaterialFlags.AcceptsShadows), translucent, Mesh, ClipPlane != null);
 		}
 
 		public void Reset()

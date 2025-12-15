@@ -5,14 +5,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Materials;
 using Nursia.Rendering;
-using Nursia.SceneGraph.Lights;
 using Nursia.Serialization;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Landscape
 {
-	public class TerrainMaterial : IMaterial, IHasExternalAssets
+	public class TerrainMaterial : BaseMaterial, IHasExternalAssets
 	{
 		private static readonly EffectBinding[] _allBindings = new EffectBinding[128];
 
@@ -20,19 +19,7 @@ namespace Nursia.SceneGraph.Landscape
 
 		[Browsable(false)]
 		[JsonIgnore]
-		public BlendState BlendState => null;
-
-		[Browsable(false)]
-		[JsonIgnore]
-		public DepthStencilState DepthStencilState => null;
-		
-		[Browsable(false)]
-		[JsonIgnore]
-		public RasterizerState RasterizerState => null;
-
-		[Browsable(false)]
-		[JsonIgnore]
-		public MaterialFlags Flags => _flags;
+		public override MaterialFlags Flags => _flags;
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
@@ -133,7 +120,7 @@ namespace Nursia.SceneGraph.Landscape
 		[Browsable(false)]
 		public string DetailMap4Path { get; set; }
 
-		public IMaterial Clone()
+		public override IMaterial Clone()
 		{
 			var result = new TerrainMaterial
 			{
@@ -159,7 +146,7 @@ namespace Nursia.SceneGraph.Landscape
 			return result;
 		}
 
-		private static EffectBinding InternalGetBinding(LightTechnique lightTechnique, ShadowType shadow, bool translucent, bool marker, bool clipPlane)
+		private static EffectBinding InternalGetBinding(LightTechnique lightTechnique, bool shadow, bool translucent, bool marker, bool clipPlane)
 		{
 			var key = 0;
 
@@ -173,14 +160,17 @@ namespace Nursia.SceneGraph.Landscape
 				key |= 2;
 			}
 
-			if (shadow == ShadowType.Simple)
+			if (shadow)
 			{
-				key |= 4;
-			}
+				if (Nrs.GraphicsSettings.ShadowType == ShadowType.Simple)
+				{
+					key |= 4;
+				}
 
-			if (shadow == ShadowType.PCF)
-			{
-				key |= 8;
+				if (Nrs.GraphicsSettings.ShadowType == ShadowType.PCF)
+				{
+					key |= 8;
+				}
 			}
 
 			if (translucent)
@@ -219,15 +209,15 @@ namespace Nursia.SceneGraph.Landscape
 					break;
 			}
 
-			if (shadow != ShadowType.None)
+			if (shadow)
 			{
 				defines["SHADOW"] = "1";
 
-				if (shadow == ShadowType.PCF)
+				if (Nrs.GraphicsSettings.ShadowType == ShadowType.PCF)
 				{
 					defines["PCFSHADOW"] = "1";
 				}
-				else if (shadow == ShadowType.Simple)
+				else if (Nrs.GraphicsSettings.ShadowType == ShadowType.Simple)
 				{
 					defines["SIMPLESHADOW"] = "1";
 				}
@@ -272,7 +262,7 @@ namespace Nursia.SceneGraph.Landscape
 			return binding;
 		}
 
-		public EffectBinding GetEffectBinding(LightTechnique technique, ShadowType shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+		public override EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
 		{
 			return InternalGetBinding(technique, shadow, translucent, Nrs.EditorSettings.TerrainMarkerPosition != null, clipPlane);
 		}

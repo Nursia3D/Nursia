@@ -4,14 +4,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Rendering;
-using Nursia.SceneGraph.Lights;
 using Nursia.Serialization;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Nursia.Materials
 {
-	public class UnlitMaterial : IMaterial, IHasExternalAssets
+	public class UnlitMaterial : BaseMaterial, IHasExternalAssets
 	{
 		private static readonly EffectBinding[] _allBindings = new EffectBinding[4];
 
@@ -19,18 +18,9 @@ namespace Nursia.Materials
 
 		public string Id { get; set; }
 
-		[Category("States")]
-		public BlendState BlendState { get; set; }
-
-		[Category("States")]
-		public DepthStencilState DepthStencilState { get; set; }
-
-		[Category("States")]
-		public RasterizerState RasterizerState { get; set; }
-
 		[Browsable(false)]
 		[JsonIgnore]
-		public MaterialFlags Flags => _flags;
+		public override MaterialFlags Flags => _flags;
 
 		[Category("Behavior")]
 		[DefaultValue(true)]
@@ -89,7 +79,7 @@ namespace Nursia.Materials
 			}
 		}
 
-		public IMaterial Clone()
+		public override IMaterial Clone()
 		{
 			return new UnlitMaterial
 			{
@@ -145,7 +135,7 @@ namespace Nursia.Materials
 			return binding;
 		}
 
-		public EffectBinding GetEffectBinding(LightTechnique technique, ShadowType shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+		public override EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
 		{
 			return InternalGetBinding(Texture != null, mesh.Skin != null);
 		}

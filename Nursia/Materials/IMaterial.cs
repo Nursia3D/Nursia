@@ -1,10 +1,8 @@
 ﻿using DigitalRiseModel;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json;
 using Nursia.Rendering;
 using Nursia.SceneGraph.Lights;
 using System;
-using System.ComponentModel;
 
 namespace Nursia.Materials
 {
@@ -33,15 +31,18 @@ namespace Nursia.Materials
 
 	public interface IMaterial
 	{
+		MaterialFlags Flags { get; }
+
 		BlendState BlendState { get; }
 
 		DepthStencilState DepthStencilState { get; }
 
 		RasterizerState RasterizerState { get; }
 
-		MaterialFlags Flags { get; }
+		EffectBinding GetShadowTechnique(DrMeshPart mesh);
 
-		EffectBinding GetEffectBinding(LightTechnique technique, ShadowType shadow, bool translucent, DrMeshPart mesh, bool clipPlane);
+		EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane);
+		
 		IMaterial Clone();
 	}
 }
