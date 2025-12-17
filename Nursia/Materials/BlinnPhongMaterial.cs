@@ -12,7 +12,7 @@ namespace Nursia.Materials
 {
 	public class BlinnPhongMaterial : BaseMaterial, IHasExternalAssets
 	{
-		private static readonly EffectBinding[] _allBindings = new EffectBinding[256];
+		private static readonly EffectBinding[] _allBindings = new EffectBinding[512];
 
 		private MaterialFlags _flags = MaterialFlags.AcceptsLight | MaterialFlags.CastsShadows | MaterialFlags.AcceptsShadows;
 
@@ -135,7 +135,7 @@ namespace Nursia.Materials
 			};
 		}
 
-		private static EffectBinding InternalGetBinding(LightTechnique lightTechnique, bool shadow, bool translucent, bool skinning, bool normalMap, bool clipPlane)
+		private static EffectBinding InternalGetBinding(LightTechnique lightTechnique, bool shadow, bool translucent, bool skinning, bool normalMap, bool clipPlane, bool instancing)
 		{
 			var key = 0;
 
@@ -180,6 +180,11 @@ namespace Nursia.Materials
 			if (clipPlane)
 			{
 				key |= 128;
+			}
+
+			if (instancing)
+			{
+				key |= 256;
 			}
 
 			var binding = _allBindings[key];
@@ -237,6 +242,11 @@ namespace Nursia.Materials
 				defines["CLIPPLANE"] = "1";
 			}
 
+			if (instancing)
+			{
+				defines["INSTANCED"] = "1";
+			}
+
 			binding = EffectsRegistry.GetStockEffectBinding("BlinnPhong", defines);
 
 			binding.AddMaterialLevelSetter<BlinnPhongMaterial>("cMatAmbientColor", (m, p) => p.SetValue(m.AmbientColor.ToVector3()));
@@ -254,11 +264,12 @@ namespace Nursia.Materials
 			return binding;
 		}
 
-		public override EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+		public override EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
 		{
 			return InternalGetBinding(technique, shadow, translucent, mesh != null && mesh.Skin != null,
 				!Nrs.DebugSettings.DisableNormalMap && NormalTexture != null && mesh != null && mesh.TangentsFormat == VertexElementFormat.Vector4,
-				clipPlane);
+				clipPlane,
+				instancing);
 		}
 	}
 }

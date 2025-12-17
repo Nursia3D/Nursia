@@ -1,19 +1,23 @@
-﻿using Nursia.SceneGraph.Lights;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Nursia.Rendering
 {
 	internal static class UtilityEffects
 	{
-		private static readonly EffectBinding[] _shadowEffects = new EffectBinding[2];
-		private static readonly EffectBinding[] _depthEffects = new EffectBinding[2];
+		private static readonly EffectBinding[] _shadowEffects = new EffectBinding[4];
+		private static readonly EffectBinding[] _depthEffects = new EffectBinding[4];
 
-		public static EffectBinding GetShadowEffect(bool skinning)
+		public static EffectBinding GetShadowEffect(bool skinning, bool instancing)
 		{
 			var key = 0;
 			if (skinning)
 			{
 				key |= 1;
+			}
+
+			if (instancing)
+			{
+				key |= 2;
 			}
 
 			var binding = _shadowEffects[key];
@@ -28,18 +32,28 @@ namespace Nursia.Rendering
 				defines["SKINNED"] = "1";
 			}
 
+			if (instancing)
+			{
+				defines["INSTANCED"] = "1";
+			}
+
 			binding = EffectsRegistry.GetStockEffectBinding("Shadow", defines);
 			_shadowEffects[key] = binding;
 
 			return binding;
 		}
 
-		public static EffectBinding GetDepthEffect(bool skinning)
+		public static EffectBinding GetDepthEffect(bool skinning, bool instancing)
 		{
 			var key = 0;
 			if (skinning)
 			{
 				key |= 1;
+			}
+
+			if (instancing)
+			{
+				key |= 2;
 			}
 
 			var binding = _depthEffects[key];
@@ -52,6 +66,11 @@ namespace Nursia.Rendering
 			if (skinning)
 			{
 				defines["SKINNED"] = "1";
+			}
+
+			if (instancing)
+			{
+				defines["INSTANCED"] = "1";
 			}
 
 			binding = EffectsRegistry.GetStockEffectBinding("Depth", defines);

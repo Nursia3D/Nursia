@@ -1,5 +1,6 @@
 ﻿using DigitalRiseModel;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Nursia.Materials;
 using Nursia.Utilities;
 using System;
@@ -17,7 +18,7 @@ namespace Nursia.Rendering
 		public override void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
 			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, Matrix[] instancesTransforms = null)
+			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null)
 		{
 			var materialFlags = material.Flags;
 			if (!materialFlags.HasFlag(MaterialFlags.CastsShadows))

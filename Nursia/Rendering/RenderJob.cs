@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nursia.Materials;
-using Nursia.SceneGraph.Lights;
 using System;
 
 namespace Nursia.Rendering
@@ -39,7 +38,7 @@ namespace Nursia.Rendering
 		public float SquaredDistanceToCamera { get; set; }
 		public Plane? ReflectionPlane { get; set; }
 		public Plane? ClipPlane { get; set; }
-		public Matrix[] InstancesTransforms { get; set; }
+		public VertexBuffer InstancesTransforms { get; set; }
 
 		public EffectBinding EffectBinding { get; private set; }
 		public int EffectBatchId => EffectBinding.BatchId;
@@ -51,17 +50,17 @@ namespace Nursia.Rendering
 
 		public void SetDepthTechnique()
 		{
-			EffectBinding = UtilityEffects.GetDepthEffect(Mesh != null && Mesh.Skin != null);
+			EffectBinding = UtilityEffects.GetDepthEffect(Mesh != null && Mesh.Skin != null, InstancesTransforms != null);
 		}
 
 		public void SetShadowTechnique()
 		{
-			EffectBinding = Material.GetShadowTechnique(Mesh);
+			EffectBinding = Material.GetShadowTechnique(Mesh, InstancesTransforms != null);
 		}
 
 		public void SetTechnique(LightTechnique lightTechnique, bool shadow, bool translucent)
 		{
-			EffectBinding = Material.GetColorTechnique(lightTechnique, shadow && Material.Flags.HasFlag(MaterialFlags.AcceptsShadows), translucent, Mesh, ClipPlane != null);
+			EffectBinding = Material.GetColorTechnique(Mesh, lightTechnique, shadow && Material.Flags.HasFlag(MaterialFlags.AcceptsShadows), translucent, ClipPlane != null, InstancesTransforms != null);
 		}
 
 		public void Reset()

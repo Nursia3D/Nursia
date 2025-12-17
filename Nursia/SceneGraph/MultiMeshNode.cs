@@ -1,5 +1,6 @@
 ﻿using DigitalRiseModel;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Attributes;
 using Nursia.Materials;
@@ -15,8 +16,17 @@ namespace Nursia.SceneGraph
 	/// </summary>
 	public class MultiMeshNode : SceneNode
 	{
-		private Matrix[] _transforms;
-		private bool _transformsDirty = true;
+		// To store instance transform matrices in a vertex buffer, we use this custom
+		// vertex type which encodes 4x4 matrices as a set of four Vector4 values.
+		static VertexDeclaration instanceVertexDeclaration = new VertexDeclaration
+		(
+			new VertexElement(0, VertexElementFormat.Vector4, VertexElementUsage.TextureCoordinate, 0),
+			new VertexElement(16, VertexElementFormat.Vector4, VertexElementUsage.TextureCoordinate, 1),
+			new VertexElement(32, VertexElementFormat.Vector4, VertexElementUsage.TextureCoordinate, 2),
+			new VertexElement(48, VertexElementFormat.Vector4, VertexElementUsage.TextureCoordinate, 3)
+		);
+
+		private DynamicVertexBuffer _vertexBuffer;
 
 		[Browsable(false)]
 		[JsonIgnore]
@@ -33,14 +43,11 @@ namespace Nursia.SceneGraph
 
 		private void InstancesTransforms_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			_transforms = null;
-			_transformsDirty = true;
-		}
-
-		public override void InvalidateTransform()
-		{
-			base.InvalidateTransform();
-			_transformsDirty = true;
+			if (_vertexBuffer != null)
+			{
+				_vertexBuffer.Dispose();
+				_vertexBuffer = null;
+			}
 		}
 
 		protected internal override void Render(IRenderBatch batch)
@@ -52,23 +59,21 @@ namespace Nursia.SceneGraph
 				return;
 			}
 
-			// Update transforms
-			if (_transforms == null)
+			if (_vertexBuffer == null)
 			{
-				_transforms = new Matrix[InstancesTransforms.Count];
-			}
+				// Update transforms
+				var transforms = new Matrix[InstancesTransforms.Count];
+				_vertexBuffer = new DynamicVertexBuffer(Nrs.GraphicsDevice, instanceVertexDeclaration, transforms.Length, BufferUsage.WriteOnly);
 
-			if (_transformsDirty)
-			{
-				for(var i = 0; i < _transforms.Length; ++i)
+				for (var i = 0; i < transforms.Length; ++i)
 				{
-					_transforms[i] = InstancesTransforms[i] * GlobalTransform;
+					transforms[i] = InstancesTransforms[i];
 				}
 
-				_transformsDirty = false;
+				_vertexBuffer.SetData(transforms, 0, transforms.Length, SetDataOptions.Discard);
 			}
 
-			batch.BatchJob(Material, _transforms[0], Mesh, instancesTransforms: _transforms);
+			batch.BatchJob(Material, GlobalTransform, Mesh, instancesTransforms: _vertexBuffer);
 		}
 	}
 }

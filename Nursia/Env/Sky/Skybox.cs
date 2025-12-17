@@ -38,12 +38,12 @@ namespace Nursia.Env.Sky
 				throw new NotImplementedException();
 			}
 
-			public EffectBinding GetShadowTechnique(DrMeshPart mesh)
+			public EffectBinding GetShadowTechnique(DrMeshPart mesh, bool instancing)
 			{
 				throw new NotImplementedException();
 			}
 
-			public EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+			public EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
 			{
 				if (_binding == null)
 				{

@@ -39,9 +39,9 @@ namespace Nursia.Materials
 
 		RasterizerState RasterizerState { get; }
 
-		EffectBinding GetShadowTechnique(DrMeshPart mesh);
+		EffectBinding GetShadowTechnique(DrMeshPart mesh, bool instancing);
 
-		EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane);
+		EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing);
 		
 		IMaterial Clone();
 	}

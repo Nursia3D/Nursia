@@ -1,5 +1,6 @@
 ﻿using DigitalRiseModel;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Nursia.Materials;
 using Nursia.SceneGraph.Lights;
 using Nursia.Utilities;
@@ -83,7 +84,7 @@ namespace Nursia.Rendering
 		public RenderJob AddJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback, RenderJobFlags flags, BoundingBox boundingBox,
 			float squaredDistanceToViewer, Matrix[] bonesTransforms,
-			Plane? clipPlane, Plane? reflectionPlane, Matrix[] instancesTransforms = null)
+			Plane? clipPlane, Plane? reflectionPlane, VertexBuffer instancesTransforms = null)
 		{
 			if (material == null)
 			{

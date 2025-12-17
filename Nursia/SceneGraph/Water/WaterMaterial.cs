@@ -109,12 +109,12 @@ namespace Nursia.SceneGraph.Water
 			return _binding;
 		}
 
-		public EffectBinding GetShadowTechnique(DrMeshPart mesh)
+		public EffectBinding GetShadowTechnique(DrMeshPart mesh, bool instancing)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane)
+		public EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
 		{
 			return InternalGetBinding();
 		}

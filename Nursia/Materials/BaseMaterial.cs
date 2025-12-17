@@ -21,12 +21,12 @@ namespace Nursia.Materials
 		[Category("States")]
 		public RasterizerState RasterizerState { get; set; }
 
-		public virtual EffectBinding GetShadowTechnique(DrMeshPart mesh)
+		public virtual EffectBinding GetShadowTechnique(DrMeshPart mesh, bool instancing)
 		{
-			return UtilityEffects.GetShadowEffect(mesh != null && mesh.Skin != null);
+			return UtilityEffects.GetShadowEffect(mesh != null && mesh.Skin != null, instancing);
 		}
 
-		public abstract EffectBinding GetColorTechnique(LightTechnique technique, bool shadow, bool translucent, DrMeshPart mesh, bool clipPlane);
+		public abstract EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing);
 		public abstract IMaterial Clone();
 	}
 }

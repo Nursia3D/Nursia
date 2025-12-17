@@ -1,5 +1,6 @@
 ﻿using DigitalRiseModel;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Nursia.Materials;
 using Nursia.SceneGraph;
 using System;
@@ -14,7 +15,7 @@ namespace Nursia.Rendering
 		void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
 			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, Matrix[] instancesTransforms = null);
+			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null);
 	}
 
 	internal abstract class RenderBatchBase : IRenderBatch
@@ -32,7 +33,7 @@ namespace Nursia.Rendering
 		public abstract void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
 			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, Matrix[] instancesTransforms = null);
+			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null);
 		public abstract void Clear();
 	}
 }

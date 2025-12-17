@@ -269,7 +269,7 @@ namespace Nursia.Rendering
 
 					if (mesh != null)
 					{
-						mesh.Draw(device);
+						mesh.Draw(device, job.InstancesTransforms);
 						_statistics.VerticesDrawn += mesh.NumVertices;
 						_statistics.PrimitivesDrawn += mesh.PrimitiveCount;
 					}
@@ -776,7 +776,7 @@ namespace Nursia.Rendering
 							terrain.DebugDrawBoundingBoxes(camera);
 						}*/
 
-			foreach(var bb in root.CustomBoxes)
+			foreach (var bb in root.CustomBoxes)
 			{
 				DebugShapeRenderer.AddBoundingBox(bb, Color.LightGreen);
 			}
