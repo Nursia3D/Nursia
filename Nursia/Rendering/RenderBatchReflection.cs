@@ -61,7 +61,8 @@ namespace Nursia.Rendering
 		public override void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
 			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null)
+			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null,
+			BoundingBox? customBox = null)
 		{
 			if (reflectionPlane != null)
 			{
@@ -69,7 +70,8 @@ namespace Nursia.Rendering
 				return;
 			}
 
-			var boundingBox = mesh.BoundingBox.Transform(ref transform);
+			var boundingBox = customBox ?? mesh.BoundingBox;
+			boundingBox = boundingBox.Transform(ref transform);
 			if (cullByBoundingBox)
 			{
 				if (Camera.Frustum.Contains(boundingBox) == ContainmentType.Disjoint)

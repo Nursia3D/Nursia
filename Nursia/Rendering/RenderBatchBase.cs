@@ -15,7 +15,8 @@ namespace Nursia.Rendering
 		void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
 			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null);
+			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null,
+			BoundingBox? customBox = null);
 	}
 
 	internal abstract class RenderBatchBase : IRenderBatch
@@ -33,7 +34,8 @@ namespace Nursia.Rendering
 		public abstract void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
 			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null);
+			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null,
+			BoundingBox? customBox = null);
 		public abstract void Clear();
 	}
 }
