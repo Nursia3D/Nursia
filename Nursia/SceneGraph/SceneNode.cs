@@ -26,6 +26,8 @@ namespace Nursia.SceneGraph
 		private Matrix? _globalTransform = null, _localTransform = null, _inverseGlobalTransform = null;
 		private readonly List<SceneNode> _childrenCopy = new List<SceneNode>();
 
+		public List<BoundingBox> CustomBoxes { get; } = new List<BoundingBox>();
+
 		public string Id { get; set; }
 
 		[Category("Transform")]

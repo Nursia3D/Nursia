@@ -25,6 +25,7 @@ namespace Nursia.Rendering
 	{
 		public IMaterial Material { get; set; }
 		public Matrix Transform { get; set; }
+
 		public Matrix ModelViewProj { get; set; }
 		public DrMeshPart Mesh { get; set; }
 		public Action RenderCallback { get; set; }
@@ -38,6 +39,7 @@ namespace Nursia.Rendering
 		public float SquaredDistanceToCamera { get; set; }
 		public Plane? ReflectionPlane { get; set; }
 		public Plane? ClipPlane { get; set; }
+		public Matrix[] InstancesTransforms { get; set; }
 
 		public EffectBinding EffectBinding { get; private set; }
 		public int EffectBatchId => EffectBinding.BatchId;
@@ -70,6 +72,7 @@ namespace Nursia.Rendering
 			BonesTransforms = null;
 			ReflectionTexture = null;
 			EffectBinding = null;
+			InstancesTransforms = null;
 		}
 	}
 }

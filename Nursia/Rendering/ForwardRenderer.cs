@@ -776,6 +776,11 @@ namespace Nursia.Rendering
 							terrain.DebugDrawBoundingBoxes(camera);
 						}*/
 
+			foreach(var bb in root.CustomBoxes)
+			{
+				DebugShapeRenderer.AddBoundingBox(bb, Color.LightGreen);
+			}
+
 			DebugShapeRenderer.Draw(camera.View, camera.Projection);
 
 			/*			using (var stream = File.Create(@"D:\Temp\refract.png"))

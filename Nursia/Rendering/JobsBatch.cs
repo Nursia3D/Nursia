@@ -83,7 +83,7 @@ namespace Nursia.Rendering
 		public RenderJob AddJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback, RenderJobFlags flags, BoundingBox boundingBox,
 			float squaredDistanceToViewer, Matrix[] bonesTransforms,
-			Plane? clipPlane, Plane? reflectionPlane)
+			Plane? clipPlane, Plane? reflectionPlane, Matrix[] instancesTransforms = null)
 		{
 			if (material == null)
 			{
@@ -107,6 +107,7 @@ namespace Nursia.Rendering
 			job.BonesTransforms = bonesTransforms;
 			job.ClipPlane = clipPlane;
 			job.ReflectionPlane = reflectionPlane;
+			job.InstancesTransforms = instancesTransforms;
 
 			UnsortedJobs.Add(job);
 			_jobsSorted = false;

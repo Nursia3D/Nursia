@@ -17,7 +17,7 @@ namespace Nursia.Rendering
 		public override void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
 			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null)
+			Plane? clipPlane = null, Plane? reflectionPlane = null, Matrix[] instancesTransforms = null)
 		{
 			var materialFlags = material.Flags;
 			if (!materialFlags.HasFlag(MaterialFlags.CastsShadows))
@@ -40,7 +40,7 @@ namespace Nursia.Rendering
 
 			var dist = Vector3.DistanceSquared(Camera.Translation, boundingBox.CalculateCenter());
 			_shadowJobs.AddJob(material, transform, mesh, renderCallback, flags,
-				boundingBox, dist, bonesTransforms, clipPlane, reflectionPlane);
+				boundingBox, dist, bonesTransforms, clipPlane, reflectionPlane, instancesTransforms);
 		}
 
 		public override void Clear()

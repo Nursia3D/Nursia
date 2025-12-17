@@ -113,7 +113,7 @@ namespace Nursia.Rendering
 		public override void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
 			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
 			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null)
+			Plane? clipPlane = null, Plane? reflectionPlane = null, Matrix[] instancesTransforms = null)
 		{
 			var boundingBox = Mathematics.DefaultBox;
 			if (mesh != null)
@@ -145,7 +145,7 @@ namespace Nursia.Rendering
 
 			var batch = storage.GetJobsBatch(materialFlags.HasFlag(MaterialFlags.AcceptsLight), materialFlags.HasFlag(MaterialFlags.IsTransparent));
 			var job = batch.AddJob(material, transform, mesh, renderCallback, flags,
-				boundingBox, dist, bonesTransforms, clipPlane, reflectionPlane);
+				boundingBox, dist, bonesTransforms, clipPlane, reflectionPlane, instancesTransforms);
 
 			if (reflectionPlane != null)
 			{
