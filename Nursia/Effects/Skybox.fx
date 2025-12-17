@@ -9,9 +9,6 @@ DECLARE_TEXTURECUBE_LINEAR_CLAMP(DiffCubeMap);
 struct VSInput
 {
 	float4 Pos : POSITION;
-	#ifdef INSTANCED
-		float4x3 ModelInstance : TEXCOORD4;
-	#endif
 };
 
 struct VSOutput

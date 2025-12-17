@@ -9,7 +9,7 @@ struct VSInput
 		int4 BlendIndices : BLENDINDICES;
 	#endif
 	#ifdef INSTANCED
-		float4x3 ModelInstance : TEXCOORD0;
+		float4x3 ModelInstance : BLENDWEIGHT;
 	#endif
 };
 
@@ -23,8 +23,7 @@ VSOutput VS(VSInput input)
 {
 	VSOutput output = (VSOutput)0;
 
-	float4x3 modelMatrix = iModelMatrix;
-	float3 worldPos = GetWorldPos(modelMatrix);
+	CalculateWorldPos();
 
 	output.Pos = GetClipPos(worldPos);
 

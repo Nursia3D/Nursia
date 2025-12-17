@@ -1,4 +1,4 @@
 <Root>
 	<MultiCompile>DIFFMAP;_</MultiCompile>
-	<MultiCompile>SKINNED;_</MultiCompile>
+	<MultiCompile>INSTANCED;SKINNED;_</MultiCompile>
 </Root>

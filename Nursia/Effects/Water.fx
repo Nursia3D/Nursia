@@ -4,6 +4,8 @@
 #include "Include/Fog.fxh"
 #include "Include/Depth.fxh"
 
+uniform float3 cCameraPos;
+
 uniform float2 cNoiseSpeed;
 uniform float cNoiseTiling;
 uniform float cNoiseStrength;
@@ -26,9 +28,6 @@ struct VSInput
 	float4 Pos: POSITION;
 	float3 Normal: NORMAL;
 	float2 TexCoord: TEXCOORD0;
-	#ifdef INSTANCED
-		float4x3 ModelInstance: TEXCOORD4;
-	#endif
 };
 
 struct VSOutput
@@ -48,9 +47,12 @@ struct VSOutput
 VSOutput VS(VSInput input)
 {
 	VSOutput output = (VSOutput)0;
-	float4x3 modelMatrix = iModelMatrix;
-	float3 worldPos = GetWorldPos(modelMatrix);
+
+	CalculateWorldPos();
+	CalculateWorldNormal();
+
 	output.Pos = GetClipPos(worldPos);
+	output.Normal = worldNormal;
 	output.PosCopy = output.Pos;
 
 	output.ScreenPos = GetScreenPos(output.Pos);
@@ -59,7 +61,6 @@ VSOutput VS(VSInput input)
 	// coordinate to make it work with arbitrary meshes such as the water plane (perform divide in pixel shader)
 	output.ReflectUV = GetQuadTexCoord(output.Pos) * output.Pos.w;
 	output.WaterUV = input.TexCoord * cNoiseTiling + cElapsedTime * cNoiseSpeed;
-	output.Normal = GetWorldNormal(modelMatrix);
 	output.EyeVec = float4(cCameraPos - worldPos, GetDepth(output.Pos));
 
 	#if defined(CLIPPLANE)

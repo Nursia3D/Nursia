@@ -12,6 +12,8 @@
 
 #define PI 3.1415926535897932384626433832795
 
+uniform float3 cCameraPos;
+
 uniform float4 cMatDiffColor;
 uniform float4 cMatSpecColor;
 uniform float3 cMatEmissiveColor;
@@ -46,9 +48,6 @@ struct VSInput
 		float4 BlendWeights : BLENDWEIGHT;
 		int4 BlendIndices : BLENDINDICES;
 	#endif
-	#ifdef INSTANCED
-		float4x3 ModelInstance : TEXCOORD1;
-	#endif
 	#if defined(TRAILFACECAM) || defined(TRAILBONE)
 		float4 Tangent : TANGENT;
 	#endif
@@ -78,10 +77,12 @@ struct VSOutput
 VSOutput VS(VSInput input)
 {
 	VSOutput output = (VSOutput)0;
-	float4x3 modelMatrix = iModelMatrix;
-	float3 worldPos = GetWorldPos(modelMatrix);
+
+	CalculateWorldPos();
+	CalculateWorldNormal();
+
 	output.Pos = GetClipPos(worldPos);
-	output.Normal = GetWorldNormal(modelMatrix);
+	output.Normal = worldNormal;
 	output.WorldPos = float4(worldPos, GetDepth(output.Pos));
 	output.TexCoord = GetTexCoord(input.TexCoord);
 	output.DetailTexCoord = cDetailTiling * output.TexCoord;

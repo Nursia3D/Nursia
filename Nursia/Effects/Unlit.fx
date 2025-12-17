@@ -24,7 +24,7 @@ struct VSInput
 		int4 BlendIndices: BLENDINDICES;
 	#endif
 	#ifdef INSTANCED
-		float4x3 ModelInstance: TEXCOORD4;
+		float4x3 ModelInstance: BLENDWEIGHT;
 	#endif
 	#if defined(TRAILBONE)
 		float3 Normal: NORMAL;
@@ -51,8 +51,7 @@ VSOutput VS(VSInput input)
 {
 	VSOutput output = (VSOutput)0;
 
-	float4x3 modelMatrix = iModelMatrix;
-	float3 worldPos = GetWorldPos(modelMatrix);
+	CalculateWorldPos();
 
 	output.Pos = GetClipPos(worldPos);
 	output.WorldPos = float4(worldPos, GetDepth(output.Pos));

@@ -10,6 +10,8 @@
 
 #include "Include/Fog.fxh"
 
+uniform float3 cCameraPos;
+
 uniform float4 cMatDiffColor;
 uniform float4 cMatSpecColor;
 uniform float3 cMatEmissiveColor;
@@ -49,7 +51,7 @@ struct VSInput
 		int4 BlendIndices : BLENDINDICES;
 	#endif
 	#ifdef INSTANCED
-		float4x3 ModelInstance : TEXCOORD2;
+		float4x3 ModelInstance : BLENDWEIGHT;
 	#endif
 };
 
@@ -84,11 +86,12 @@ struct VSOutput
 VSOutput VS(VSInput input)
 {
 	VSOutput output = (VSOutput)0;
-	float4x3 modelMatrix = iModelMatrix;
-	float3 worldPos = GetWorldPos(modelMatrix);
+
+	CalculateWorldPos();
+	CalculateWorldNormal();
 
 	output.Pos = GetClipPos(worldPos);
-	output.Normal = GetWorldNormal(modelMatrix);
+	output.Normal = worldNormal;
 
 	output.WorldPos = float4(worldPos, GetDepth(output.Pos));
 
@@ -101,7 +104,7 @@ VSOutput VS(VSInput input)
 	#endif
 
 	#ifdef NORMALMAP
-		float4 tangent = GetWorldTangent(modelMatrix);
+		float4 tangent = GetWorldTangent();
 		float3 bitangent = cross(tangent.xyz, output.Normal) * tangent.w;
 		output.TexCoord = float4(GetTexCoord(input.TexCoord), bitangent.xy);
 		output.Tangent = float4(tangent.xyz, bitangent.z);

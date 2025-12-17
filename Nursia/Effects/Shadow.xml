@@ -1,4 +1,3 @@
 <Root>
-	<MultiCompile>SKINNED;_</MultiCompile>
-	<MultiCompile>VSM;_</MultiCompile>
+	<MultiCompile>INSTANCED;SKINNED;_</MultiCompile>
 </Root>

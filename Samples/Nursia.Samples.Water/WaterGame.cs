@@ -1,4 +1,6 @@
 ﻿using AssetManagementBase;
+using DigitalRiseModel;
+using DigitalRiseModel.Primitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nursia.Env;
@@ -80,23 +82,23 @@ namespace Nursia.Samples.Primives
 
 			// Add some random boxes
 			var rnd = new Random();
+
+			var multiMesh = new MultiMeshNode
+			{
+				Mesh = MeshPrimitives.CreateBoxMeshPart(GraphicsDevice, Vector3.One),
+				Material = material
+			};
+			_root.Children.Add(multiMesh);
+
 			for (var i = 0; i < 1000; ++i)
 			{
 				var pos = new Vector3(rnd.Next(2000) - 1000, 0, rnd.Next(2000) - 1000);
 				pos.Y = terrain.GetHeight(pos) + 2.25f;
 
 				var normal = terrain.ComputeNormal(new Vector2(pos.X, pos.Z));
-				var rotation = Utility.MakeRotationFromTo(Vector3.Up, normal).ToEulerAngles().ToDegrees();
+				var rotation = Utility.MakeRotationFromTo(Vector3.Up, normal);
 
-				var box = new Box
-				{
-					Translation = pos,
-					Scale = new Vector3(5.0f),
-					Rotation = rotation,
-					Material = material
-				};
-
-				_root.Children.Add(box);
+				multiMesh.InstancesTransforms.Add(SrtTransform.CreateMatrix(pos, new Vector3(5.0f), rotation));
 			}
 
 			_controller = new CameraInputController(_camera);

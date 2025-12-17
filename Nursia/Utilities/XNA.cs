@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using DigitalRiseModel;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Nursia.Utilities
 {
@@ -79,6 +81,54 @@ namespace Nursia.Utilities
 			for (var i = 0; i < 16; ++i)
 			{
 				device.Textures[i] = null;
+			}
+		}
+
+		public static void Draw(this DrMeshPart mesh, GraphicsDevice graphicsDevice, VertexBuffer instancesTransforms)
+		{
+			if (graphicsDevice == null)
+			{
+				throw new ArgumentNullException(nameof(graphicsDevice));
+			}
+
+			if (instancesTransforms == null)
+			{
+				graphicsDevice.SetVertexBuffer(mesh.VertexBuffer);
+				if (mesh.IndexBuffer == null)
+				{
+					graphicsDevice.DrawPrimitives(mesh.PrimitiveType, mesh.VertexOffset, mesh.PrimitiveCount);
+				}
+				else
+				{
+
+					graphicsDevice.Indices = mesh.IndexBuffer;
+
+#if MONOGAME
+					graphicsDevice.DrawIndexedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, mesh.StartIndex, mesh.PrimitiveCount);
+#else
+					graphicsDevice.DrawIndexedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, 0, mesh.NumVertices, mesh.StartIndex, mesh.PrimitiveCount);
+#endif
+				}
+			}
+			else
+			{
+				graphicsDevice.SetVertexBuffers(new VertexBufferBinding(mesh.VertexBuffer), new VertexBufferBinding(instancesTransforms, 0, 1));
+
+				if (mesh.IndexBuffer == null)
+				{
+					throw new Exception($"Instanced primitives must be indexed");
+				}
+				else
+				{
+
+					graphicsDevice.Indices = mesh.IndexBuffer;
+
+#if MONOGAME
+					graphicsDevice.DrawInstancedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, mesh.StartIndex, mesh.PrimitiveCount, instancesTransforms.VertexCount);
+#else
+					graphicsDevice.DrawInstancedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, 0, mesh.NumVertices, mesh.StartIndex, mesh.PrimitiveCount, instancesTransforms.VertexCount);
+#endif
+				}
 			}
 		}
 	}

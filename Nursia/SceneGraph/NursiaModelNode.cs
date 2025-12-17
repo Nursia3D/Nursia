@@ -65,7 +65,7 @@ namespace Nursia.SceneGraph
 					// applied to bones transform
 					// Thus to avoid applying parent transform twice, we use
 					// ordinary Transform(not AbsoluteTransform) for parts with bones
-					Matrix transform = part.Skin != null ? rootTransform : ModelInstance.GetBoneGlobalTransform(bone.Index);
+					Matrix transform = part.Skin != null ? rootTransform : ModelInstance.GetBoneGlobalTransform(bone.Index) * rootTransform;
 
 					// Apply the effect and render items
 					Matrix[] bonesTransforms = null;
@@ -80,16 +80,6 @@ namespace Nursia.SceneGraph
 		}
 
 		public IMaterial GetMaterial(int meshIndex, int meshPartIndex) => Materials[meshIndex][meshPartIndex];
-
-		protected override void OnGlobalTransformUpdated()
-		{
-			base.OnGlobalTransformUpdated();
-
-			if (Model != null)
-			{
-				ModelInstance.RootTransform = GlobalTransform;
-			}
-		}
 
 		public override void Load(AssetManager assetManager)
 		{
