@@ -51,7 +51,7 @@ VSOutput VS(VSInput input)
 {
 	VSOutput output = (VSOutput)0;
 
-	CalculateWorldPos();
+	CALCULATE_WORLD_POS(worldPos);
 
 	output.Pos = GetClipPos(worldPos);
 	output.WorldPos = float4(worldPos, GetDepth(output.Pos));

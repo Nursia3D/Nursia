@@ -14,39 +14,39 @@ float4x3 GetSkinMatrix(float4 blendWeights, int4 blendIndices)
 #endif
 
 #if defined(INSTANCED)
-	#define CalculateWorldPos() \
-		float3 worldPos = mul(input.Pos, input.ModelInstance).xyz; \
-		worldPos = mul(float4(worldPos, 1.0), cModel);
+	#define CALCULATE_WORLD_POS(Name) \
+		float3 Name = mul(input.Pos, input.ModelInstance).xyz; \
+		Name = mul(float4(Name, 1.0), cModel);
 
-	#define CalculateWorldNormal() \
-		float3 worldNormal = mul(input.Normal, (float3x3)input.ModelInstance); \
-		worldNormal = normalize(mul(worldNormal, (float3x3)cModel));
+	#define CALCULATE_WORLD_NORMAL(Name) \
+		float3 Name = mul(input.Normal, (float3x3)input.ModelInstance); \
+		Name = normalize(mul(Name, (float3x3)cModel));
 
-	#define GetWorldTangent() float4(normalize(mul(mul(input.Tangent.xyz, (float3x3)input.ModelInstance), (float3x3)cModel)), input.Tangent.w)
+	#define GET_WORLD_TANGENT float4(normalize(mul(mul(input.Tangent.xyz, (float3x3)input.ModelInstance), (float3x3)cModel)), input.Tangent.w)
 #elif defined(SKINNED)
-	#define CalculateWorldPos() \
+	#define CALCULATE_WORLD_POS(Name) \
 		float4x3 skinMatrix = GetSkinMatrix(input.BlendWeights, input.BlendIndices); \
-		float3 worldPos = mul(input.Pos, skinMatrix); \
-		worldPos = mul(float4(worldPos, 1.0), cModel);
+		float3 Name = mul(input.Pos, skinMatrix); \
+		Name = mul(float4(Name, 1.0), cModel);
 
-	#define CalculateWorldNormal() \
-		float3 worldNormal = mul(input.Normal, (float3x3)skinMatrix); \
-		worldNormal = normalize(mul(worldNormal, (float3x3)cModel));
+	#define CALCULATE_WORLD_NORMAL(Name) \
+		float3 Name = mul(input.Normal, (float3x3)skinMatrix); \
+		Name = normalize(mul(Name, (float3x3)cModel));
 
-	#define GetWorldTangent() float4(normalize(mul(mul(input.Tangent.xyz, (float3x3)skinMatrix), (float3x3)cModel)), input.Tangent.w)
+	#define GET_WORLD_TANGENT float4(normalize(mul(mul(input.Tangent.xyz, (float3x3)skinMatrix), (float3x3)cModel)), input.Tangent.w)
 #else
-	#define CalculateWorldPos() \
-		float3 worldPos = mul(input.Pos, cModel);
+	#define CALCULATE_WORLD_POS(Name) \
+		float3 Name = mul(input.Pos, cModel);
 
-	#define CalculateWorldNormal() \
-		float3 worldNormal = normalize(mul(input.Normal, (float3x3)cModel));
+	#define CALCULATE_WORLD_NORMAL(Name) \
+		float3 Name = normalize(mul(input.Normal, (float3x3)cModel));
 
-	#define GetWorldTangent() float4(normalize(mul(input.Tangent.xyz, (float3x3)cModel)), input.Tangent.w)
+	#define GET_WORLD_TANGENT float4(normalize(mul(input.Tangent.xyz, (float3x3)cModel)), input.Tangent.w)
 #endif
 
-float4 GetClipPos(float3 worldPos)
+float4 GetClipPos(float3 Name)
 {
-	return mul(float4(worldPos, 1.0), cViewProj);
+	return mul(float4(Name, 1.0), cViewProj);
 }
 
 float3 DecodeNormal(float4 normalInput)

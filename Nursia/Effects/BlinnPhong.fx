@@ -87,8 +87,8 @@ VSOutput VS(VSInput input)
 {
 	VSOutput output = (VSOutput)0;
 
-	CalculateWorldPos();
-	CalculateWorldNormal();
+	CALCULATE_WORLD_POS(worldPos);
+	CALCULATE_WORLD_NORMAL(worldNormal);
 
 	output.Pos = GetClipPos(worldPos);
 	output.Normal = worldNormal;
@@ -104,7 +104,7 @@ VSOutput VS(VSInput input)
 	#endif
 
 	#ifdef NORMALMAP
-		float4 tangent = GetWorldTangent();
+		float4 tangent = GET_WORLD_TANGENT;
 		float3 bitangent = cross(tangent.xyz, output.Normal) * tangent.w;
 		output.TexCoord = float4(GetTexCoord(input.TexCoord), bitangent.xy);
 		output.Tangent = float4(tangent.xyz, bitangent.z);

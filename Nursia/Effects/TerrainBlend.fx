@@ -78,8 +78,8 @@ VSOutput VS(VSInput input)
 {
 	VSOutput output = (VSOutput)0;
 
-	CalculateWorldPos();
-	CalculateWorldNormal();
+	CALCULATE_WORLD_POS(worldPos);
+	CALCULATE_WORLD_NORMAL(worldNormal);
 
 	output.Pos = GetClipPos(worldPos);
 	output.Normal = worldNormal;
