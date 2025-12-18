@@ -11,6 +11,7 @@ It has following features:
 * Cascaded Shadows
 * Models could be loaded from GLTF/GLB
 * Skeletal Animation
+* Hardware Instancing
 * Basic Terrain
 * Basic Water
 * Basic Billboards
