@@ -1,8 +1,4 @@
-﻿using DigitalRiseModel;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Nursia.Materials;
-using Nursia.Utilities;
+﻿using Nursia.Materials;
 using System;
 using System.Collections.Generic;
 
@@ -75,11 +71,11 @@ namespace Nursia.Rendering
 				throw new NotSupportedException("Materials with ReceivesLight=true and IsTransparent=true arent supported");
 			}
 
-			public void Clear()
+			public void Reset()
 			{
-				OpaqueUnlit.Clear();
-				OpaqueLit.Clear();
-				Transparent.Clear();
+				OpaqueUnlit.Reset();
+				OpaqueLit.Reset();
+				Transparent.Reset();
 			}
 		}
 
@@ -110,31 +106,10 @@ namespace Nursia.Rendering
 			}
 		}
 
-
-		public override void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
-			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
-			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null,
-			BoundingBox? customBox = null)
+		protected override void InternalAddJob(RenderJob job)
 		{
-			var boundingBox = Mathematics.DefaultBox;
-			if (mesh != null)
-			{
-				boundingBox = customBox ?? mesh.BoundingBox;
-				boundingBox = boundingBox.Transform(ref transform);
-				if (cullByBoundingBox)
-				{
-					if (Camera.Frustum.Contains(boundingBox) == ContainmentType.Disjoint)
-					{
-						return;
-					}
-				}
-			}
-
-			var dist = Vector3.DistanceSquared(Camera.Translation, boundingBox.CalculateCenter());
-
-			var materialFlags = material.Flags;
-			var storage = (materialFlags.HasFlag(MaterialFlags.RequiresDepthBuffer) || materialFlags.HasFlag(MaterialFlags.RequiresScreenTexture) || reflectionPlane != null) ? _secondaryStorage : _mainStorage;
+			var materialFlags = job.Material.Flags;
+			var storage = (materialFlags.HasFlag(MaterialFlags.RequiresDepthBuffer) || materialFlags.HasFlag(MaterialFlags.RequiresScreenTexture) || job.ReflectionPlane != null) ? _secondaryStorage : _mainStorage;
 
 			if (materialFlags.HasFlag(MaterialFlags.RequiresDepthBuffer))
 			{
@@ -147,21 +122,19 @@ namespace Nursia.Rendering
 			}
 
 			var batch = storage.GetJobsBatch(materialFlags.HasFlag(MaterialFlags.AcceptsLight), materialFlags.HasFlag(MaterialFlags.IsTransparent));
-			var job = batch.AddJob(material, transform, mesh, renderCallback, flags,
-				boundingBox, dist, bonesTransforms, clipPlane, reflectionPlane, instancesTransforms);
-
-			if (reflectionPlane != null)
+			batch.AddJob(job);
+			if (job.ReflectionPlane != null)
 			{
 				Reflections.Add(job);
 			}
 		}
 
-		public override void Clear()
+		public override void Reset()
 		{
 			RequiresDepthBuffer = false;
 			RequiresScreenTexture = false;
-			_mainStorage.Clear();
-			_secondaryStorage.Clear();
+			_mainStorage.Reset();
+			_secondaryStorage.Reset();
 			Reflections.Clear();
 		}
 	}

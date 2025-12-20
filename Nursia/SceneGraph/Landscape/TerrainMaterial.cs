@@ -1,5 +1,4 @@
 ﻿using AssetManagementBase;
-using DigitalRiseModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -262,9 +261,9 @@ namespace Nursia.SceneGraph.Landscape
 			return binding;
 		}
 
-		public override EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
+		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
 		{
-			return InternalGetBinding(technique, shadow, translucent, Nrs.EditorSettings.TerrainMarkerPosition != null, clipPlane);
+			return InternalGetBinding(lightTechnique, shadow, translucent, Nrs.EditorSettings.TerrainMarkerPosition != null, clipPlane);
 		}
 
 		public void Load(AssetManager assetManager)

@@ -1,5 +1,4 @@
 ﻿using AssetManagementBase;
-using DigitalRiseModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -135,54 +134,54 @@ namespace Nursia.Materials
 			};
 		}
 
-		private static EffectBinding InternalGetBinding(LightTechnique lightTechnique, bool shadow, bool translucent, bool skinning, bool normalMap, bool clipPlane, bool instancing)
+		private static EffectBinding InternalGetBinding(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMap, bool clipPlane)
 		{
 			var key = 0;
 
-			if (lightTechnique == LightTechnique.Point)
+			switch (materialTechnique)
 			{
-				key |= 1;
+				case MaterialTechnique.Skinned:
+					key |= 1;
+					break;
+				case MaterialTechnique.Instanced:
+					key |= 2;
+					break;
 			}
 
-			if (lightTechnique == LightTechnique.Spot)
+			switch (lightTechnique)
 			{
-				key |= 2;
+				case LightTechnique.Point:
+					key |= 4;
+					break;
+				case LightTechnique.Spot:
+					key |= 8;
+					break;
 			}
 
 			if (shadow)
 			{
 				if (Nrs.GraphicsSettings.ShadowType == ShadowType.Simple)
 				{
-					key |= 4;
+					key |= 16;
 				}
 
 				if (Nrs.GraphicsSettings.ShadowType == ShadowType.PCF)
 				{
-					key |= 8;
+					key |= 32;
 				}
 			}
 
 			if (translucent)
 			{
-				key |= 16;
-			}
-
-			if (skinning)
-			{
-				key |= 32;
+				key |= 64;
 			}
 
 			if (normalMap)
 			{
-				key |= 64;
-			}
-
-			if (clipPlane)
-			{
 				key |= 128;
 			}
 
-			if (instancing)
+			if (clipPlane)
 			{
 				key |= 256;
 			}
@@ -194,6 +193,16 @@ namespace Nursia.Materials
 			}
 
 			var defines = new Dictionary<string, string>();
+
+			switch (materialTechnique)
+			{
+				case MaterialTechnique.Skinned:
+					defines["SKINNED"] = "1";
+					break;
+				case MaterialTechnique.Instanced:
+					defines["INSTANCED"] = "1";
+					break;
+			}
 
 			switch (lightTechnique)
 			{
@@ -227,11 +236,6 @@ namespace Nursia.Materials
 				defines["TRANSLUCENT"] = "1";
 			}
 
-			if (skinning)
-			{
-				defines["SKINNED"] = "1";
-			}
-
 			if (normalMap)
 			{
 				defines["NORMALMAP"] = "1";
@@ -240,11 +244,6 @@ namespace Nursia.Materials
 			if (clipPlane)
 			{
 				defines["CLIPPLANE"] = "1";
-			}
-
-			if (instancing)
-			{
-				defines["INSTANCED"] = "1";
 			}
 
 			binding = EffectsRegistry.GetStockEffectBinding("BlinnPhong", defines);
@@ -264,12 +263,9 @@ namespace Nursia.Materials
 			return binding;
 		}
 
-		public override EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
+		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
 		{
-			return InternalGetBinding(technique, shadow, translucent, mesh != null && mesh.Skin != null,
-				!Nrs.DebugSettings.DisableNormalMap && NormalTexture != null && mesh != null && mesh.TangentsFormat == VertexElementFormat.Vector4,
-				clipPlane,
-				instancing);
+			return InternalGetBinding(materialTechnique, lightTechnique, shadow, translucent, !Nrs.DebugSettings.DisableNormalMap && NormalTexture != null, clipPlane);
 		}
 	}
 }

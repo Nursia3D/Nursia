@@ -13,6 +13,8 @@ namespace Nursia.SceneGraph.Water
 	{
 		private readonly DrMeshPart _planeMesh;
 
+		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
+
 		[Category("Appearance")]
 		public IMaterial Material { get; set; } = new WaterMaterial();
 
@@ -23,16 +25,16 @@ namespace Nursia.SceneGraph.Water
 			_planeMesh = MeshPrimitives.CreatePlaneMeshPart(Nrs.GraphicsDevice, normalDirection: NormalDirection.UpY);
 		}
 
-		protected internal override void Render(IRenderBatch batch)
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
-			base.Render(batch);
+			base.AddRenderJobs(camera, batch);
 
 			if (Material == null)
 			{
 				return;
 			}
 
-			batch.BatchJob(Material, GlobalTransform, _planeMesh,
+			batch.AddMesh(_planeMesh, Material, GlobalTransform,
 				flags: RenderJobFlags.ClipReflectionPlane,
 				reflectionPlane: new Plane(Vector3.UnitY, 0));
 		}

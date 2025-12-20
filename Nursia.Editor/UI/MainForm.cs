@@ -1037,7 +1037,7 @@ namespace Nursia.Editor.UI
 						var fileName = Path.ChangeExtension(dialog.Name, "scene");
 						var fullPath = Path.Combine(path, fileName);
 
-						var stored = new StoredScene(newScene);
+						var stored = new Scene(newScene);
 						stored.SaveToFile(fullPath);
 						RefreshProject(treeNode, path);
 						OpenFile(fullPath);
@@ -1115,7 +1115,7 @@ namespace Nursia.Editor.UI
 			}
 		}
 
-		private void ProcessSave(StoredScene scene, string filePath)
+		private void ProcessSave(Scene scene, string filePath)
 		{
 			if (string.IsNullOrEmpty(filePath))
 			{

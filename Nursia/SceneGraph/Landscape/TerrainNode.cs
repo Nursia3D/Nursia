@@ -20,7 +20,8 @@ namespace Nursia.SceneGraph.Landscape
 			public IMaterial Material;
 			public Matrix World;
 			public Matrix WorldViewProjection;
-			public IRenderBatch RenderBatch;
+			public Camera Camera;
+			public IRenderJobsBatch RenderBatch;
 			public Plane? ClipPlane;
 		}
 
@@ -119,7 +120,7 @@ namespace Nursia.SceneGraph.Landscape
 		private static readonly Func<QuadTreeNode<TerrainPatch>, FillRenderPartsContext, bool> _fillRenderPartsAction = (node, context) =>
 		{
 			var bb = node.BoundingBox.Transform(ref context.World);
-			if (context.RenderBatch.Camera.Frustum.Contains(bb) == ContainmentType.Disjoint)
+			if (context.Camera.Frustum.Contains(bb) == ContainmentType.Disjoint)
 			{
 				return false;
 			}
@@ -169,15 +170,15 @@ namespace Nursia.SceneGraph.Landscape
 				}
 
 				// Don't do additional bounding box in the BatchJob, since it had been done already in the above code
-				context.RenderBatch.BatchJob(context.Material, context.World, node.Data.Levels[lod], cullByBoundingBox: false, clipPlane: context.ClipPlane);
+				context.RenderBatch.AddMesh(node.Data.Levels[lod], context.Material, context.World, flags: RenderJobFlags.DontCullByCameraFrustum, clipPlane: context.ClipPlane);
 			}
 
 			return true;
 		};
 
-		protected internal override void Render(IRenderBatch batch)
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
-			base.Render(batch);
+			base.AddRenderJobs(camera, batch);
 
 			if (Material == null || _terrain.Patches == null)
 			{
@@ -186,12 +187,14 @@ namespace Nursia.SceneGraph.Landscape
 
 			_fillRenderPartsContext.Material = Material;
 			_fillRenderPartsContext.World = GlobalTransform;
-			_fillRenderPartsContext.WorldViewProjection = GlobalTransform * batch.Camera.ViewProjection;
+			_fillRenderPartsContext.WorldViewProjection = GlobalTransform * camera.ViewProjection;
+			_fillRenderPartsContext.Camera = camera;
 			_fillRenderPartsContext.RenderBatch = batch;
 
 			_terrain.PatchTreeRecursiveAction(_fillRenderPartsAction, _fillRenderPartsContext);
 
 			_fillRenderPartsContext.Material = null;
+			_fillRenderPartsContext.Camera = null;
 			_fillRenderPartsContext.RenderBatch = null;
 		}
 

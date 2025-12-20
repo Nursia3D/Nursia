@@ -15,6 +15,8 @@ namespace Nursia.SceneGraph.Billboards
 		private static DrMeshPart _mesh;
 		private readonly UnlitMaterial _material;
 
+		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
+
 		public Color Color { get; set; } = Color.White;
 
 		private static DrMeshPart Mesh
@@ -71,15 +73,19 @@ namespace Nursia.SceneGraph.Billboards
 			};
 		}
 
-		protected internal override void Render(IRenderBatch batch)
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
-			base.Render(batch);
+			base.AddRenderJobs(camera, batch);
 
-			// Apply scale
+			// Update material
+			_material.DiffuseColor = Color;
+			_material.Texture = RenderTexture;
+
+			// Update transform
 			var transform = Matrix.CreateScale(Scale);
 
 			// Apply billboard transform
-			transform *= Mathematics.CreateScreenAlignedBillboard(batch.Camera.View, Translation);
+			transform *= Mathematics.CreateScreenAlignedBillboard(camera.View, Translation);
 
 			// Apply parent transform
 			if (Parent != null)
@@ -87,9 +93,7 @@ namespace Nursia.SceneGraph.Billboards
 				transform *= Parent.GlobalTransform;
 			}
 
-			_material.DiffuseColor = Color;
-			_material.Texture = RenderTexture;
-			batch.BatchJob(_material, transform, Mesh);
+			batch.AddMesh(Mesh, _material, transform);
 		}
 	}
 }

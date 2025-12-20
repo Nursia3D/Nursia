@@ -14,6 +14,11 @@ namespace Nursia.SceneGraph
 	[EditorInfo("Base")]
 	public class NursiaModelNode : SceneNode
 	{
+		/// <summary>
+		/// TODO: More sophisticated algorithm of invalidating the render jobs
+		/// </summary>
+		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
+
 		[Browsable(false)]
 		public IMaterial[][] Materials { get; set; }
 
@@ -35,9 +40,9 @@ namespace Nursia.SceneGraph
 
 		public override BoundingBox? BoundingBox => ModelInstance.BoundingBox;
 
-		protected internal override void Render(IRenderBatch batch)
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
-			base.Render(batch);
+			base.AddRenderJobs(camera, batch);
 
 			if (Model == null || Materials == null)
 			{
@@ -74,7 +79,7 @@ namespace Nursia.SceneGraph
 						bonesTransforms = ModelInstance.GetSkinTransforms(part.Skin.SkinIndex);
 					}
 
-					batch.BatchJob(material, transform, part, bonesTransforms: bonesTransforms);
+					batch.AddMesh(part, material, transform, bonesTransforms: bonesTransforms);
 				}
 			}
 		}

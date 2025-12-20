@@ -50,12 +50,12 @@ namespace Nursia.Samples.ThirdPerson.Materials
 			};
 		}
 
-		public EffectBinding GetShadowTechnique(DrMeshPart mesh, bool instancing)
+		public EffectBinding GetShadowTechnique(MaterialTechnique materialTechnique)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
+		public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
 		{
 			if (_binding != null)
 			{

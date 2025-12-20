@@ -1,8 +1,5 @@
-﻿using DigitalRiseModel;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Nursia.Materials;
-using Nursia.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -58,42 +55,28 @@ namespace Nursia.Rendering
 			throw new NotSupportedException("Materials with ReceivesLight=true and IsTransparent=true arent supported");
 		}
 
-		public override void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
-			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
-			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null,
-			BoundingBox? customBox = null)
+		protected override void InternalAddJob(RenderJob job)
 		{
-			if (reflectionPlane != null)
+			if (job.ReflectionPlane != null)
 			{
 				// Ignore other reflective jobs for this batch
+				job.Recycle();
 				return;
 			}
 
-			var boundingBox = customBox ?? mesh.BoundingBox;
-			boundingBox = boundingBox.Transform(ref transform);
-			if (cullByBoundingBox)
-			{
-				if (Camera.Frustum.Contains(boundingBox) == ContainmentType.Disjoint)
-				{
-					return;
-				}
-			}
-
 			// Use batch defined clip plane
-			var dist = Vector3.DistanceSquared(Camera.Translation, boundingBox.CalculateCenter());
-
-			var materialFlags = material.Flags;
+			var materialFlags = job.Material.Flags;
 			var batch = GetJobsBatch(materialFlags.HasFlag(MaterialFlags.AcceptsLight), materialFlags.HasFlag(MaterialFlags.IsTransparent));
-			batch.AddJob(material, transform, mesh, renderCallback, flags,
-				boundingBox, dist, bonesTransforms, ClipPlane, null, instancesTransforms);
+
+			job.ClipPlane = ClipPlane;
+			batch.AddJob(job);
 		}
 
-		public override void Clear()
+		public override void Reset()
 		{
-			OpaqueUnlit.Clear();
-			OpaqueLit.Clear();
-			Transparent.Clear();
+			OpaqueUnlit.Reset();
+			OpaqueLit.Reset();
+			Transparent.Reset();
 		}
 	}
 }

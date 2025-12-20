@@ -14,9 +14,11 @@ namespace Nursia.Editor
 		private Desktop _desktop = null;
 		private MainForm _mainForm;
 		private readonly State _state;
+		private GameTime _gameTime;
 
 		public static StudioGame Instance { get; private set; }
 		public static MainForm MainForm => Instance._mainForm;
+		public static GameTime GameTime => Instance._gameTime;
 
 		public StudioGame(string path)
 		{
@@ -125,6 +127,8 @@ namespace Nursia.Editor
 		protected override void Draw(GameTime gameTime)
 		{
 			base.Draw(gameTime);
+
+			_gameTime = gameTime;
 
 			GraphicsDevice.Clear(Color.Black);
 

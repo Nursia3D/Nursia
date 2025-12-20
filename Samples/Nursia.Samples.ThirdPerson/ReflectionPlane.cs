@@ -15,6 +15,9 @@ namespace Nursia.Samples.ThirdPerson
 
 		private readonly DrMeshPart _planeMesh;
 
+		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
+
+
 		public override BoundingBox? BoundingBox => _planeMesh.BoundingBox;
 
 		public Color DiffuseColor
@@ -29,11 +32,11 @@ namespace Nursia.Samples.ThirdPerson
 			_planeMesh = MeshPrimitives.CreatePlaneMeshPart(Nrs.GraphicsDevice, normalDirection: NormalDirection.UpZ);
 		}
 
-		protected override void Render(IRenderBatch batch)
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
-			base.Render(batch);
+			base.AddRenderJobs(camera, batch);
 
-			batch.BatchJob(_material, GlobalTransform, _planeMesh, reflectionPlane: new Plane(Vector3.UnitZ, 0));
+			batch.AddMesh(_planeMesh, _material, GlobalTransform, reflectionPlane: new Plane(Vector3.UnitZ, 0));
 		}
 
 		protected override SceneNode CreateInstanceCore() => new ReflectionPlane();

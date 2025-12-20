@@ -13,6 +13,13 @@ namespace Nursia.Materials
 		Spot
 	}
 
+	public enum MaterialTechnique
+	{
+		Ordinary,
+		Skinned,
+		Instanced
+	}
+
 	[Flags]
 	public enum MaterialFlags
 	{
@@ -39,9 +46,9 @@ namespace Nursia.Materials
 
 		RasterizerState RasterizerState { get; }
 
-		EffectBinding GetShadowTechnique(DrMeshPart mesh, bool instancing);
+		EffectBinding GetShadowTechnique(MaterialTechnique materialTechnique);
 
-		EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing);
+		EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane);
 		
 		IMaterial Clone();
 	}

@@ -1,5 +1,6 @@
 ﻿using DigitalRiseModel;
 using Microsoft.Xna.Framework.Graphics;
+using Nursia.Rendering;
 using System;
 
 namespace Nursia.Utilities
@@ -84,52 +85,33 @@ namespace Nursia.Utilities
 			}
 		}
 
-		public static void Draw(this DrMeshPart mesh, GraphicsDevice graphicsDevice, VertexBuffer instancesTransforms)
+		public static void Draw(this DrMeshPart mesh, GraphicsDevice graphicsDevice, ref RenderStatistics statistics)
 		{
 			if (graphicsDevice == null)
 			{
 				throw new ArgumentNullException(nameof(graphicsDevice));
 			}
 
-			if (instancesTransforms == null)
+			graphicsDevice.SetVertexBuffer(mesh.VertexBuffer);
+			if (mesh.IndexBuffer == null)
 			{
-				graphicsDevice.SetVertexBuffer(mesh.VertexBuffer);
-				if (mesh.IndexBuffer == null)
-				{
-					graphicsDevice.DrawPrimitives(mesh.PrimitiveType, mesh.VertexOffset, mesh.PrimitiveCount);
-				}
-				else
-				{
-
-					graphicsDevice.Indices = mesh.IndexBuffer;
-
-#if MONOGAME
-					graphicsDevice.DrawIndexedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, mesh.StartIndex, mesh.PrimitiveCount);
-#else
-					graphicsDevice.DrawIndexedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, 0, mesh.NumVertices, mesh.StartIndex, mesh.PrimitiveCount);
-#endif
-				}
+				graphicsDevice.DrawPrimitives(mesh.PrimitiveType, mesh.VertexOffset, mesh.PrimitiveCount);
 			}
 			else
 			{
-				graphicsDevice.SetVertexBuffers(new VertexBufferBinding(mesh.VertexBuffer), new VertexBufferBinding(instancesTransforms, 0, 1));
 
-				if (mesh.IndexBuffer == null)
-				{
-					throw new Exception($"Instanced primitives must be indexed");
-				}
-				else
-				{
-
-					graphicsDevice.Indices = mesh.IndexBuffer;
+				graphicsDevice.Indices = mesh.IndexBuffer;
 
 #if MONOGAME
-					graphicsDevice.DrawInstancedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, mesh.StartIndex, mesh.PrimitiveCount, instancesTransforms.VertexCount);
+				graphicsDevice.DrawIndexedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, mesh.StartIndex, mesh.PrimitiveCount);
 #else
-					graphicsDevice.DrawInstancedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, 0, mesh.NumVertices, mesh.StartIndex, mesh.PrimitiveCount, instancesTransforms.VertexCount);
+				graphicsDevice.DrawIndexedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, 0, mesh.NumVertices, mesh.StartIndex, mesh.PrimitiveCount);
 #endif
-				}
 			}
+
+			statistics.VerticesDrawn += mesh.NumVertices;
+			statistics.PrimitivesDrawn += mesh.PrimitiveCount;
+			++statistics.DrawCalls;
 		}
 	}
 }

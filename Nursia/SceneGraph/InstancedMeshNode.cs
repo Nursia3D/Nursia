@@ -13,9 +13,9 @@ using System.ComponentModel;
 namespace Nursia.SceneGraph
 {
 	/// <summary>
-	/// Does the hardware instancing
+	/// Draw single mesh-material multiple times through the hardware instancing
 	/// </summary>
-	public class MultiMeshNode : SceneNode
+	public class InstancedMeshNode : SceneNode
 	{
 		// To store instance transform matrices in a vertex buffer, we use this custom
 		// vertex type which encodes 4x4 matrices as a set of four Vector4 values.
@@ -30,10 +30,12 @@ namespace Nursia.SceneGraph
 		private DynamicVertexBuffer _vertexBuffer;
 		private BoundingBox _boundingBox;
 
+		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
 
 		[Browsable(false)]
 		[JsonIgnore]
 		public DrMeshPart Mesh { get; set; }
+
 		[DefaultMaterial]
 		public IMaterial Material { get; set; }
 
@@ -41,7 +43,7 @@ namespace Nursia.SceneGraph
 
 		public ObservableCollection<Matrix> InstancesTransforms { get; } = new ObservableCollection<Matrix>();
 
-		public MultiMeshNode()
+		public InstancedMeshNode()
 		{
 			InstancesTransforms.CollectionChanged += InstancesTransforms_CollectionChanged;
 		}
@@ -55,9 +57,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
-		protected internal override void Render(IRenderBatch batch)
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
-			base.Render(batch);
+			base.AddRenderJobs(camera, batch);
 
 			if (Mesh == null || Material == null || InstancesTransforms.Count == 0)
 			{
@@ -80,7 +82,8 @@ namespace Nursia.SceneGraph
 					if (i == 0)
 					{
 						_boundingBox = Mesh.BoundingBox.Transform(ref transform);
-					} else
+					}
+					else
 					{
 						_boundingBox = Microsoft.Xna.Framework.BoundingBox.CreateMerged(_boundingBox, Mesh.BoundingBox.Transform(ref transform));
 					}
@@ -89,7 +92,7 @@ namespace Nursia.SceneGraph
 				_vertexBuffer.SetData(transforms, 0, transforms.Length, SetDataOptions.Discard);
 			}
 
-			batch.BatchJob(Material, GlobalTransform, Mesh, instancesTransforms: _vertexBuffer, customBox: _boundingBox);
+			batch.AddInstancedMesh(Mesh, Material, GlobalTransform, _vertexBuffer, _boundingBox);
 		}
 	}
 }

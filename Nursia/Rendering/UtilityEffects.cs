@@ -1,24 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Nursia.Materials;
+using System.Collections.Generic;
 
 namespace Nursia.Rendering
 {
 	internal static class UtilityEffects
 	{
-		private static readonly EffectBinding[] _shadowEffects = new EffectBinding[4];
+		private static readonly EffectBinding[] _shadowEffects = new EffectBinding[3];
 		private static readonly EffectBinding[] _depthEffects = new EffectBinding[4];
 
-		public static EffectBinding GetShadowEffect(bool skinning, bool instancing)
+		public static EffectBinding GetShadowEffect(MaterialTechnique materialTechnique)
 		{
-			var key = 0;
-			if (skinning)
-			{
-				key |= 1;
-			}
-
-			if (instancing)
-			{
-				key |= 2;
-			}
+			var key = (int)materialTechnique;
 
 			var binding = _shadowEffects[key];
 			if (binding != null)
@@ -27,14 +19,14 @@ namespace Nursia.Rendering
 			}
 
 			var defines = new Dictionary<string, string>();
-			if (skinning)
+			switch (materialTechnique)
 			{
-				defines["SKINNED"] = "1";
-			}
-
-			if (instancing)
-			{
-				defines["INSTANCED"] = "1";
+				case MaterialTechnique.Skinned:
+					defines["SKINNED"] = "1";
+					break;
+				case MaterialTechnique.Instanced:
+					defines["INSTANCED"] = "1";
+					break;
 			}
 
 			binding = EffectsRegistry.GetStockEffectBinding("Shadow", defines);
@@ -43,34 +35,25 @@ namespace Nursia.Rendering
 			return binding;
 		}
 
-		public static EffectBinding GetDepthEffect(bool skinning, bool instancing)
+		public static EffectBinding GetDepthEffect(MaterialTechnique materialTechnique)
 		{
-			var key = 0;
-			if (skinning)
-			{
-				key |= 1;
-			}
+			var key = (int)materialTechnique;
 
-			if (instancing)
-			{
-				key |= 2;
-			}
-
-			var binding = _depthEffects[key];
+			var binding = _shadowEffects[key];
 			if (binding != null)
 			{
 				return binding;
 			}
 
 			var defines = new Dictionary<string, string>();
-			if (skinning)
+			switch (materialTechnique)
 			{
-				defines["SKINNED"] = "1";
-			}
-
-			if (instancing)
-			{
-				defines["INSTANCED"] = "1";
+				case MaterialTechnique.Skinned:
+					defines["SKINNED"] = "1";
+					break;
+				case MaterialTechnique.Instanced:
+					defines["INSTANCED"] = "1";
+					break;
 			}
 
 			binding = EffectsRegistry.GetStockEffectBinding("Depth", defines);

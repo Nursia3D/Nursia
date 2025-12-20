@@ -294,7 +294,7 @@ namespace Nursia.Rendering
 		{
 			SetMeshPartLevelParameterSetter(MeshPartLevelParameter.Model, (j, p) => p.SetValue(j.Transform));
 			SetMeshPartLevelParameterSetter(MeshPartLevelParameter.ModelViewProj, (j, p) => p.SetValue(j.ModelViewProj));
-			SetMeshPartLevelParameterSetter(MeshPartLevelParameter.SkinMatrices, (j, p) => p.SetValue(j.BonesTransforms));
+			SetMeshPartLevelParameterSetter(MeshPartLevelParameter.SkinMatrices, (j, p) => p.SetValue(((RenderJobMesh)j).BonesTransforms));
 			SetMeshPartLevelParameterSetter(MeshPartLevelParameter.ReflectionMap, (j, p) => p.SetValue(j.ReflectionTexture));
 			SetMeshPartLevelParameterSetter(MeshPartLevelParameter.ClipPlane, (j, p) => p.SetValue(j.ClipPlane.Value.ToVector4()));
 		}

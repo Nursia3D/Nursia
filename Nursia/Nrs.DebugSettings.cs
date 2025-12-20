@@ -14,8 +14,6 @@
 		public class DebugSettingsType
 		{
 			public bool DrawBoundingBoxes { get; set; }
-			public bool DrawCamerasFrustums { get; set; }
-			public bool DrawLightViewFrustrum { get; set; }
 			public bool DisableNormalMap { get; set; }
 			public DebugVisualizeBuffer VisualizeBuffer { get; set; }
 		}

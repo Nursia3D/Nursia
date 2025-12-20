@@ -1,4 +1,5 @@
 ﻿using AssetManagementBase;
+using Microsoft.Xna.Framework;
 using Nursia.Env;
 using Nursia.Serialization;
 using Nursia.Utilities;
@@ -11,30 +12,34 @@ namespace Nursia.SceneGraph
 	/// <summary>
 	/// Class for storing a SceneNode
 	/// </summary>
-	public class StoredScene: IHasExternalAssets
+	public partial class Scene : IHasExternalAssets
 	{
 		[Browsable(false)]
 		public Camera Camera { get; set; }
+
+		public GameTime GameTime { get; private set; }
+
 		public RenderEnvironment RenderEnvironment { get; set; } = RenderEnvironment.Default.Clone();
+
 		public SceneNode Root { get; set; }
 
-		public StoredScene()
+		public Scene()
 		{
 			Camera = new Camera();
 		}
 
-		public StoredScene(SceneNode node)
+		public Scene(SceneNode node)
 		{
 			Root = node ?? throw new ArgumentNullException(nameof(node));
 		}
 
-		public StoredScene(SceneNode node, Camera camera)
+		public Scene(SceneNode node, Camera camera)
 		{
 			Root = node ?? throw new ArgumentNullException(nameof(node));
 			Camera = camera ?? throw new ArgumentNullException(nameof(camera));
 		}
 
-		public StoredScene(SceneNode node, Camera camera, RenderEnvironment env)
+		public Scene(SceneNode node, Camera camera, RenderEnvironment env)
 		{
 			Root = node ?? throw new ArgumentNullException(nameof(node));
 			Camera = camera ?? throw new ArgumentNullException(nameof(camera));
@@ -46,21 +51,21 @@ namespace Nursia.SceneGraph
 			JsonExtensions.SerializeToFile(path, this);
 		}
 
-		public StoredScene Clone()
+		public Scene Clone()
 		{
-			return new StoredScene(Root.Clone(), (Camera)Camera.Clone(), RenderEnvironment.Clone());
+			return new Scene(Root.Clone(), (Camera)Camera.Clone(), RenderEnvironment.Clone());
 		}
 
-		public static StoredScene ReadFromString(string data, AssetManager assetManager)
+		public static Scene ReadFromString(string data, AssetManager assetManager)
 		{
-			var result = JsonExtensions.DeserializeFromString<StoredScene>(data);
+			var result = JsonExtensions.DeserializeFromString<Scene>(data);
 
 			result.Load(assetManager);
 
 			return result;
 		}
 
-		public static StoredScene ReadFromFile(string path, AssetManager assetManager)
+		public static Scene ReadFromFile(string path, AssetManager assetManager)
 		{
 			var data = File.ReadAllText(path);
 			return ReadFromString(data, assetManager);

@@ -1,41 +1,101 @@
 ﻿using DigitalRiseModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Nursia.Env;
 using Nursia.Materials;
 using Nursia.SceneGraph;
+using Nursia.Utilities;
 using System;
 using System.Collections.Generic;
 
 namespace Nursia.Rendering
 {
-	public interface IRenderBatch
-	{
-		Camera Camera { get; }
-
-		void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
-			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
-			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null,
-			BoundingBox? customBox = null);
-	}
-
-	internal abstract class RenderBatchBase : IRenderBatch
+	internal abstract class RenderBatchBase : IRenderJobsBatch
 	{
 		public Camera Camera { get; private set; }
+
 		public abstract IEnumerable<RenderJob> AllJobs { get; }
 
-		public void PrepareRender(Camera camera)
+		public void BatchScene(IRenderSource source, Camera camera, RenderEnvironment renderEnvironment)
 		{
+			Reset();
+
 			Camera = camera ?? throw new ArgumentNullException(nameof(camera));
 
-			Clear();
+			if (renderEnvironment != null && renderEnvironment.Sky != null)
+			{
+				renderEnvironment.Sky.AddRenderJobs(camera, this);
+			}
+
+			source.QueryRenderJobs(camera, this);
+
+			Camera = null;
 		}
 
-		public abstract void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
-			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
-			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null,
-			BoundingBox? customBox = null);
-		public abstract void Clear();
+		private void AddJob(RenderJob job)
+		{
+			if (!job.Flags.HasFlag(RenderJobFlags.DontCullByCameraFrustum) && !Camera.Frustum.Intersects(job.WorldBoundingBox))
+			{
+				job.Recycle();
+				return;
+			}
+
+			job.SquaredDistanceToCamera = Vector3.DistanceSquared(Camera.Translation, job.WorldBoundingBox.CalculateCenter());
+			InternalAddJob(job);
+		}
+
+		void IRenderJobsBatch.AddMesh(DrMeshPart mesh, IMaterial material, Matrix transform,
+			RenderJobFlags flags, Matrix[] bonesTransforms, Plane? clipPlane, Plane? reflectionPlane)
+		{
+			var job = RenderJobMesh.Obtain();
+
+			job.Mesh = mesh;
+			job.Material = material;
+			job.Transform = transform;
+			job.Flags = flags;
+			job.BonesTransforms = bonesTransforms;
+			job.ClipPlane = clipPlane;
+			job.ReflectionPlane = reflectionPlane;
+
+			AddJob(job);
+		}
+
+		void IRenderJobsBatch.AddInstancedMesh(DrMeshPart mesh, IMaterial material, Matrix transform,
+			VertexBuffer instancesTransforms, BoundingBox boundingBox,
+			RenderJobFlags flags, Plane? clipPlane, Plane? reflectionPlane)
+		{
+			var job = RenderJobMeshInstanced.Obtain();
+
+			job.Mesh = mesh;
+			job.Material = material;
+			job.Transform = transform;
+			job.InstancesTransforms = instancesTransforms;
+			job.LocalBoundingBox = boundingBox;
+			job.Flags = flags;
+			job.ClipPlane = clipPlane;
+			job.ReflectionPlane = reflectionPlane;
+
+			AddJob(job);
+		}
+
+
+		void IRenderJobsBatch.AddMeshLOD(List<DrMeshPart> levels, IMaterial material, Matrix transform,
+			RenderJobFlags flags, Plane? clipPlane, Plane? reflectionPlane)
+		{
+			var job = RenderJobMeshLOD.Obtain();
+
+			job.Levels = levels;
+			job.Material = material;
+			job.Transform = transform;
+			job.Flags = flags;
+			job.ClipPlane = clipPlane;
+			job.ReflectionPlane = reflectionPlane;
+
+			AddJob(job);
+		}
+
+		protected abstract void InternalAddJob(RenderJob job);
+
+		public abstract void Reset();
 	}
 }

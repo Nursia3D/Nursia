@@ -1,5 +1,4 @@
-﻿using DigitalRiseModel;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Materials;
@@ -67,8 +66,6 @@ namespace Nursia.SceneGraph.Water
 		[Browsable(false)]
 		public string NormalTexturePath { get; set; }
 
-
-
 		public IMaterial Clone()
 		{
 			return new WaterMaterial
@@ -109,12 +106,12 @@ namespace Nursia.SceneGraph.Water
 			return _binding;
 		}
 
-		public EffectBinding GetShadowTechnique(DrMeshPart mesh, bool instancing)
+		public EffectBinding GetShadowTechnique(MaterialTechnique materialTechnique)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
+		public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
 		{
 			return InternalGetBinding();
 		}

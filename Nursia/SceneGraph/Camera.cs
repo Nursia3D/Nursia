@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Utilities;
 using System.ComponentModel;
-using System.Xml.Linq;
 
 namespace Nursia.SceneGraph
 {

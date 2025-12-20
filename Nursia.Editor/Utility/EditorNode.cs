@@ -9,6 +9,8 @@ namespace Nursia.Editor.Utility
 {
 	internal class EditorNode : SceneNode
 	{
+		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
+
 		public DrMeshPart Mesh { get; }
 		public IMaterial Material { get; }
 		public Matrix Transform { get; set; }
@@ -19,11 +21,11 @@ namespace Nursia.Editor.Utility
 			Material = material ?? throw new ArgumentNullException(nameof(material));
 		}
 
-		protected internal override void Render(IRenderBatch batch)
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
-			base.Render(batch);
+			base.AddRenderJobs(camera, batch);
 
-			batch.BatchJob(Material, Transform, Mesh);
+			batch.AddMesh(Mesh, Material, Transform);
 		}
 	}
 }

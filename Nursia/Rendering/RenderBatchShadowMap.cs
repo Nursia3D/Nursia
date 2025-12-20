@@ -1,9 +1,4 @@
-﻿using DigitalRiseModel;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Nursia.Materials;
-using Nursia.Utilities;
-using System;
+﻿using Nursia.Materials;
 using System.Collections.Generic;
 
 namespace Nursia.Rendering
@@ -15,40 +10,21 @@ namespace Nursia.Rendering
 		public JobsBatch Batch => _shadowJobs;
 		public override IEnumerable<RenderJob> AllJobs => _shadowJobs.Jobs;
 
-		public override void BatchJob(IMaterial material, Matrix transform, DrMeshPart mesh,
-			Action renderCallback = null, RenderJobFlags flags = RenderJobFlags.None,
-			Matrix[] bonesTransforms = null, bool cullByBoundingBox = true,
-			Plane? clipPlane = null, Plane? reflectionPlane = null, VertexBuffer instancesTransforms = null,
-			BoundingBox? customBox = null)
+		protected override void InternalAddJob(RenderJob job)
 		{
-			var materialFlags = material.Flags;
+			var materialFlags = job.Material.Flags;
 			if (!materialFlags.HasFlag(MaterialFlags.CastsShadows))
 			{
+				job.Recycle();
 				return;
 			}
 
-			var boundingBox = Mathematics.DefaultBox;
-			if (mesh != null)
-			{
-				boundingBox = customBox ?? mesh.BoundingBox;
-				boundingBox = boundingBox.Transform(ref transform);
-				if (cullByBoundingBox)
-				{
-					if (Camera.Frustum.Contains(boundingBox) == ContainmentType.Disjoint)
-					{
-						return;
-					}
-				}
-			}
-
-			var dist = Vector3.DistanceSquared(Camera.Translation, boundingBox.CalculateCenter());
-			_shadowJobs.AddJob(material, transform, mesh, renderCallback, flags,
-				boundingBox, dist, bonesTransforms, clipPlane, reflectionPlane, instancesTransforms);
+			_shadowJobs.AddJob(job);
 		}
 
-		public override void Clear()
+		public override void Reset()
 		{
-			_shadowJobs.Clear();
+			_shadowJobs.Reset();
 		}
 	}
 }

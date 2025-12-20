@@ -55,8 +55,7 @@ namespace FuelCell
 		private float aspectRatio;
 		private IInputState inputState;
 		private ForwardRenderer _renderer;
-		private SceneNode _root;
-		private Camera _camera;
+		private Scene _scene;
 		private DirectLight _light;
 
 
@@ -79,12 +78,16 @@ namespace FuelCell
 			aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
 			_renderer = new ForwardRenderer();
-			_root = new SceneNode();
-			_camera = new Camera
+
+			_scene = new Scene
 			{
-				ViewAngle = GameConstants.ViewAngle,
-				NearPlane = GameConstants.NearClip,
-				FarPlane = GameConstants.FarClip
+				Root = new SceneNode(),
+				Camera = new Camera
+				{
+					ViewAngle = GameConstants.ViewAngle,
+					NearPlane = GameConstants.NearClip,
+					FarPlane = GameConstants.FarClip
+				}
 			};
 
 
@@ -245,7 +248,7 @@ namespace FuelCell
 					DrawSplashScreen();
 					break;
 				case GameState.Running:
-					DrawGameplayScreen();
+					DrawGameplayScreen(gameTime);
 					break;
 				case GameState.Won:
 					DrawWinOrLossScreen(GameConstants.StrGameWon);
@@ -258,34 +261,35 @@ namespace FuelCell
 			base.Draw(gameTime);
 		}
 
-		private void DrawGameplayScreen()
+		private void DrawGameplayScreen(GameTime gameTime)
 		{
-			_root.Children.Clear();
+			var root = _scene.Root;
+			root.Children.Clear();
 
-			_root.Children.Add(_light);
+			root.Children.Add(_light);
 
 			// Draw the ground terrain model
-			_root.Children.Add(ground.Model);
+			root.Children.Add(ground.Model);
 
 			// Draw the fuel cells on the map
 			foreach (FuelCell fuelCell in fuelCells)
 			{
 				if (!fuelCell.Retrieved)
 				{
-					_root.Children.Add(fuelCell.Model);
+					root.Children.Add(fuelCell.Model);
 				}
 			}
 
 			// Draw the barriers on the map
 			foreach (Barrier barrier in barriers)
 			{
-				_root.Children.Add(barrier.Model);
+				root.Children.Add(barrier.Model);
 			}
 
 			// Draw the player fuelcarrier on the map
-			_root.Children.Add(fuelCarrier.Model);
+			root.Children.Add(fuelCarrier.Model);
 
-			_renderer.Render(_root, _camera);
+			_renderer.Render(_scene);
 
 			DrawStats();
 		}
@@ -524,7 +528,7 @@ namespace FuelCell
 			Vector3 cameraPosition = position + transformedheadOffset;
 			Vector3 cameraTarget = position + transformedReference;
 
-			_camera.View = Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
+			_scene.Camera.View = Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
 		}
 	}
 }

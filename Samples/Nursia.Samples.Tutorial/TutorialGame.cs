@@ -17,8 +17,7 @@ namespace Nursia.Samples.Primives
 	{
 		private readonly GraphicsDeviceManager _graphics;
 		private readonly ForwardRenderer _renderer = new ForwardRenderer();
-		private Camera _camera;
-		private SceneNode _root;
+		private Scene _scene;
 		private CameraInputController _controller;
 		private FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private SpriteBatch _spriteBatch;
@@ -56,17 +55,11 @@ namespace Nursia.Samples.Primives
 			// Required to work with Nursia
 			Nrs.Game = this;
 
-			// Create the perspective camera at position (0, 25, 25) looking at (0, 0, 0)
-			_camera = new Camera
-			{
-				View = Matrix.CreateLookAt(new Vector3(0, 25, 25), Vector3.Zero, Vector3.Up)
-			};
-
-			// Create the camera controller that will allow to move and rotate using keyboard and mouse
-			_controller = new CameraInputController(_camera);
-
+			// Scene
+			_scene = new Scene();
+			
 			// Root scene node
-			_root = new SceneNode();
+			var root = new SceneNode();
 
 			// Direct light
 			var directLight = new DirectLight
@@ -74,7 +67,22 @@ namespace Nursia.Samples.Primives
 				Rotation = new Vector3(320, 320, 0),
 				Color = Color.White,
 			};
-			_root.Children.Add(directLight);
+			root.Children.Add(directLight);
+
+			// Set scene root
+			_scene.Root = root;
+
+			// Create the perspective camera at position (0, 25, 25) looking at (0, 0, 0)
+			var camera = new Camera
+			{
+				View = Matrix.CreateLookAt(new Vector3(0, 25, 25), Vector3.Zero, Vector3.Up)
+			};
+
+			// Create the camera controller that will allow to move and rotate using keyboard and mouse
+			_controller = new CameraInputController(camera);
+
+			// Set scene camera
+			_scene.Camera = camera;
 
 			// Create the asset manager
 			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(ExecutingAssemblyDirectory, "Assets"));
@@ -93,12 +101,12 @@ namespace Nursia.Samples.Primives
 					CastsShadows = false
 				}
 			};
-			_root.Children.Add(plane);
+			root.Children.Add(plane);
 
 			// Add model
 			var model = assetManager.LoadModelNode("Models/mixamo_base.glb");
 			model.Scale = new Vector3(5, 5, 5);
-			_root.Children.Add(model);
+			root.Children.Add(model);
 
 			// Add some more primitives
 			var sphere = new Sphere
@@ -110,7 +118,7 @@ namespace Nursia.Samples.Primives
 				Translation = new Vector3(0, 15, -10),
 				Scale = new Vector3(5, 5, 5)
 			};
-			_root.Children.Add(sphere);
+			root.Children.Add(sphere);
 
 			var capsule = new Capsule
 			{
@@ -121,7 +129,7 @@ namespace Nursia.Samples.Primives
 				Translation = new Vector3(15, 15, 0),
 				Scale = new Vector3(5, 5, 5)
 			};
-			_root.Children.Add(capsule);
+			root.Children.Add(capsule);
 
 			// Shadows settings
 			Nrs.GraphicsSettings.ShadowMapSize = Shadows.ShadowMapSize.Size4096;
@@ -146,7 +154,7 @@ namespace Nursia.Samples.Primives
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render(_root, _camera);
+			_renderer.Render(_scene);
 
 			_spriteBatch.Begin();
 

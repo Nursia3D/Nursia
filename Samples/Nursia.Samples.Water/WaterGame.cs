@@ -9,7 +9,6 @@ using Nursia.Rendering;
 using Nursia.SceneGraph;
 using Nursia.SceneGraph.Landscape;
 using Nursia.SceneGraph.Lights;
-using Nursia.SceneGraph.Primitives;
 using Nursia.Utilities;
 using System;
 using System.IO;
@@ -22,11 +21,9 @@ namespace Nursia.Samples.Primives
 		private readonly GraphicsDeviceManager _graphics;
 		private readonly ForwardRenderer _renderer = new ForwardRenderer();
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
-		private SceneNode _root;
+		private Scene _scene;
 		private CameraInputController _controller;
 		private SpriteBatch _spriteBatch;
-		private Camera _camera;
-		private RenderEnvironment _environment;
 
 		public static string ExecutingAssemblyDirectory
 		{
@@ -45,11 +42,13 @@ namespace Nursia.Samples.Primives
 			{
 				PreferredBackBufferWidth = 1600,
 				PreferredBackBufferHeight = 900,
-				GraphicsProfile = GraphicsProfile.HiDef
+				GraphicsProfile = GraphicsProfile.HiDef,
+				SynchronizeWithVerticalRetrace = false
 			};
 
 			Window.AllowUserResizing = true;
 			IsMouseVisible = true;
+			IsFixedTimeStep = false;
 		}
 
 		protected override void LoadContent()
@@ -63,16 +62,15 @@ namespace Nursia.Samples.Primives
 			Nrs.Game = this;
 
 			// Root scene node
-			_root = new SceneNode();
+			var root = new SceneNode();
 
 			// Create the asset manager
 			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(ExecutingAssemblyDirectory, "Assets"));
-			var scene = assetManager.LoadStoredScene("Scenes/Main.scene");
-			_camera = scene.Camera;
-			_environment = scene.RenderEnvironment;
-			_root.Children.Add(scene.Root);
+			_scene = assetManager.LoadStoredScene("Scenes/Main.scene");
 
-			var terrain = _root.QueryFirstByType<TerrainNode>();
+			root.Children.Add(_scene.Root);
+
+			var terrain = root.QueryFirstByType<TerrainNode>();
 
 			var checker = assetManager.LoadTexture2D(GraphicsDevice, "Textures/checker.dds");
 			var material = new BlinnPhongMaterial
@@ -83,12 +81,12 @@ namespace Nursia.Samples.Primives
 			// Add some random boxes
 			var rnd = new Random();
 
-			var multiMesh = new MultiMeshNode
+			var multiMesh = new InstancedMeshNode
 			{
 				Mesh = MeshPrimitives.CreateBoxMeshPart(GraphicsDevice, Vector3.One),
 				Material = material
 			};
-			_root.Children.Add(multiMesh);
+			root.Children.Add(multiMesh);
 
 			for (var i = 0; i < 1000; ++i)
 			{
@@ -101,7 +99,10 @@ namespace Nursia.Samples.Primives
 				multiMesh.InstancesTransforms.Add(SrtTransform.CreateMatrix(pos, new Vector3(5.0f), rotation));
 			}
 
-			_controller = new CameraInputController(_camera);
+			// Set new root
+			_scene.Root = root;
+
+			_controller = new CameraInputController(_scene.Camera);
 
 			// SpriteBatch
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -109,7 +110,7 @@ namespace Nursia.Samples.Primives
 			// DebugSettings.DrawBoundingBoxes = true;
 			// Nrs.DebugSettings.VisualizeBuffer = DebugVisualizeBuffer.DepthBuffer;
 
-			var light = _root.QueryFirstByType<DirectLight>();
+			var light = root.QueryFirstByType<DirectLight>();
 			// light.ShadowBias = 0.00002f;
 
 			// Nrs.GraphicsSettings.ShadowMapSize = ShadowMapSize.Size8192;
@@ -130,7 +131,7 @@ namespace Nursia.Samples.Primives
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render(_root, _camera, _environment);
+			_renderer.Render(_scene);
 
 			_spriteBatch.Begin();
 
@@ -141,7 +142,9 @@ namespace Nursia.Samples.Primives
 			_spriteBatch.DrawString(font, $"Vertices Drawn: {_renderer.Statistics.VerticesDrawn}", new Vector2(0, 72), Color.White);
 			_spriteBatch.DrawString(font, $"Primitives Drawn: {_renderer.Statistics.PrimitivesDrawn}", new Vector2(0, 96), Color.White);
 			_spriteBatch.DrawString(font, $"Passes: {_renderer.Statistics.Passes}", new Vector2(0, 120), Color.White);
-			_spriteBatch.DrawString(font, $"Camera: {_camera.Translation.X}, {_camera.Translation.Y}, {_camera.Translation.Z}", new Vector2(0, 144), Color.White);
+
+			var camera = _scene.Camera;
+			_spriteBatch.DrawString(font, $"Camera: {camera.Translation.X}, {camera.Translation.Y}, {camera.Translation.Z}", new Vector2(0, 144), Color.White);
 
 			_spriteBatch.End();
 

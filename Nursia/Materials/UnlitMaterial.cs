@@ -1,5 +1,4 @@
 ﻿using AssetManagementBase;
-using DigitalRiseModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -12,7 +11,7 @@ namespace Nursia.Materials
 {
 	public class UnlitMaterial : BaseMaterial, IHasExternalAssets
 	{
-		private static readonly EffectBinding[] _allBindings = new EffectBinding[4];
+		private static readonly EffectBinding[] _allBindings = new EffectBinding[8];
 
 		private MaterialFlags _flags = MaterialFlags.CastsShadows;
 
@@ -94,18 +93,23 @@ namespace Nursia.Materials
 			};
 		}
 
-		private static EffectBinding InternalGetBinding(bool texture, bool skinning)
+		private static EffectBinding InternalGetBinding(MaterialTechnique materialTechnique, bool texture)
 		{
 			var key = 0;
 
-			if (texture)
+			switch (materialTechnique)
 			{
-				key |= 1;
+				case MaterialTechnique.Skinned:
+					key |= 1;
+					break;
+				case MaterialTechnique.Instanced:
+					key |= 2;
+					break;
 			}
 
-			if (skinning)
+			if (texture)
 			{
-				key |= 2;
+				key |= 4;
 			}
 
 			if (_allBindings[key] != null)
@@ -115,14 +119,19 @@ namespace Nursia.Materials
 
 			var defines = new Dictionary<string, string>();
 
+			switch (materialTechnique)
+			{
+				case MaterialTechnique.Skinned:
+					defines["SKINNED"] = "1";
+					break;
+				case MaterialTechnique.Instanced:
+					defines["INSTANCED"] = "1";
+					break;
+			}
+
 			if (texture)
 			{
 				defines["DIFFMAP"] = "1";
-			}
-
-			if (skinning)
-			{
-				defines["SKINNED"] = "1";
 			}
 
 			var binding = EffectsRegistry.GetStockEffectBinding("Unlit", defines);
@@ -135,9 +144,9 @@ namespace Nursia.Materials
 			return binding;
 		}
 
-		public override EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
+		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
 		{
-			return InternalGetBinding(Texture != null, mesh.Skin != null);
+			return InternalGetBinding(materialTechnique, Texture != null);
 		}
 	}
 }

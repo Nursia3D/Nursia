@@ -13,12 +13,20 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph
 {
+	[Flags]
+	public enum SceneFlags
+	{
+		None,
+		HasRenderJobs = 1 << 0
+	}
+
 	/// <summary>
 	/// Base 3D Scene Node
 	/// </summary>
 	[EditorInfo("Base")]
-	public class SceneNode : DrDisposable
+	public partial class SceneNode : DrDisposable
 	{
+		private static int _lastId = 0;
 		private SceneNode _parent;
 		private Vector3 _translation = Vector3.Zero;
 		private Vector3 _rotation = Vector3.Zero;
@@ -26,7 +34,14 @@ namespace Nursia.SceneGraph
 		private Matrix? _globalTransform = null, _localTransform = null, _inverseGlobalTransform = null;
 		private readonly List<SceneNode> _childrenCopy = new List<SceneNode>();
 
-		public List<BoundingBox> CustomBoxes { get; } = new List<BoundingBox>();
+		[Browsable(false)]
+		[JsonIgnore]
+		public int UniqueId { get; }
+
+		[Browsable(false)]
+		[JsonIgnore]
+		public virtual SceneFlags Flags => SceneFlags.None;
+
 
 		public string Id { get; set; }
 
@@ -174,7 +189,7 @@ namespace Nursia.SceneGraph
 		{
 			get => _parent;
 
-			set
+			internal set
 			{
 				if (value == _parent)
 				{
@@ -202,10 +217,18 @@ namespace Nursia.SceneGraph
 
 		[Browsable(false)]
 		[JsonIgnore]
-		public Action PreRender { get; set; }
+		public Action<GameTime> PreRender { get; set; }
 
 		public SceneNode()
 		{
+			UniqueId = _lastId;
+
+			++_lastId;
+			if (_lastId >= int.MaxValue)
+			{
+				_lastId = 0;
+			}
+
 			Children.CollectionChanged += ChildrenOnCollectionChanged;
 		}
 
@@ -264,11 +287,6 @@ namespace Nursia.SceneGraph
 			n.Parent = null;
 		}
 
-		protected internal virtual void Render(IRenderBatch batch)
-		{
-			PreRender?.Invoke();
-		}
-
 		public virtual void InvalidateTransform()
 		{
 			_localTransform = null;
@@ -278,6 +296,36 @@ namespace Nursia.SceneGraph
 			foreach (var child in ActualChildren)
 			{
 				child.InvalidateTransform();
+			}
+		}
+
+		public void Traverse(Action<SceneNode> handler)
+		{
+			handler(this);
+
+			foreach (var child in ActualChildren)
+			{
+				child.Traverse(handler);
+			}
+		}
+
+		public void Traverse<T>(Action<SceneNode, T> handler, T param)
+		{
+			handler(this, param);
+
+			foreach (var child in ActualChildren)
+			{
+				child.Traverse(handler, param);
+			}
+		}
+
+		public void Traverse<T1, T2>(Action<SceneNode, T1, T2> handler, T1 param1, T2 param2)
+		{
+			handler(this, param1, param2);
+
+			foreach (var child in ActualChildren)
+			{
+				child.Traverse(handler, param1, param2);
 			}
 		}
 
@@ -348,21 +396,6 @@ namespace Nursia.SceneGraph
 			return result;
 		}
 
-		private static void IterateInternal(SceneNode node, Action<SceneNode> action)
-		{
-			action(node);
-
-			foreach (var child in node.ActualChildren)
-			{
-				IterateInternal(child, action);
-			}
-		}
-
-		public void Iterate(Action<SceneNode> action)
-		{
-			IterateInternal(this, action);
-		}
-
 		public void RemoveFromParent()
 		{
 			if (Parent == null)
@@ -428,6 +461,10 @@ namespace Nursia.SceneGraph
 			{
 				Children.Add(child.Clone());
 			}
+		}
+
+		public virtual void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
+		{
 		}
 	}
 }

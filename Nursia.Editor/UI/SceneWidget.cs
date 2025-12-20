@@ -1,6 +1,5 @@
 ﻿using AssetManagementBase;
 using DigitalRiseModel;
-using info.lundin.math;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -34,8 +33,8 @@ namespace Nursia.Editor.UI
 			new DirectLight { Rotation = new Vector3(225, 45, 0), CastsShadow = false }
 		};
 
+		private Scene _scene;
 		private readonly SceneNode _root = new SceneNode();
-		private StoredScene _scene;
 		private readonly ForwardRenderer _renderer = new ForwardRenderer();
 		private CameraInputController _controller;
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
@@ -46,7 +45,7 @@ namespace Nursia.Editor.UI
 		private readonly bool[] _keysDown = new bool[256];
 		private readonly SpriteBatch _spriteBatch;
 
-		public StoredScene Scene
+		public Scene Scene
 		{
 			get => _scene;
 		}
@@ -243,10 +242,10 @@ namespace Nursia.Editor.UI
 				}
 
 				// Draw lights' icons and gizmos
-				Scene.Root.Iterate(AddGizmos);
+				Scene.Root.Traverse(AddGizmos);
 
 				// Draw main target
-				var target = _renderer.RenderToTarget(_root, camera, Scene.RenderEnvironment, bounds.Width, bounds.Height);
+				var target = _renderer.RenderToTarget(_root, camera, _scene.RenderEnvironment, bounds.Width, bounds.Height);
 				_spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.Opaque);
 				_spriteBatch.Draw(target, bounds, Color.White);
 				_spriteBatch.End();
@@ -265,7 +264,7 @@ namespace Nursia.Editor.UI
 				m.Translation = direction * 2.5f;
 
 				// Draw axises
-				target = _renderer.RenderToTarget(m, c, RenderEnvironment.Default, 160, 160);
+				target = _renderer.RenderToTarget(m, c, 160, 160);
 				_spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
 				_spriteBatch.Draw(target, new Rectangle(bounds.Right - 160, bounds.Top, 160, 160), Color.White);
 				_spriteBatch.End();

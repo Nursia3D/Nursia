@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Nursia.Rendering
 {
-	public partial class ForwardRenderer
+	public partial class ForwardRenderer : ILightsBatch
 	{
 		private enum RenderPassType
 		{
@@ -150,7 +150,7 @@ namespace Nursia.Rendering
 			var jobsRendered = 0;
 			foreach (var job in batch.Jobs)
 			{
-				if (lightAffectsCheck && light != null && !light.AffectsObject(job.BoundingBox))
+				if (lightAffectsCheck && light != null && !light.AffectsObject(job.WorldBoundingBox))
 				{
 					continue;
 				}
@@ -188,51 +188,6 @@ namespace Nursia.Rendering
 					v.Setter(job.Material, v.Parameter);
 				}
 
-				var mesh = job.Mesh;
-
-				/*				if (mesh.Tag != null && mesh.Tag is int)
-								{
-									var lod = (int)mesh.Tag;
-
-									Color color;
-									switch (lod)
-									{
-										case 0:
-											color = Color.White;
-											break;
-										case 1:
-											color = Color.LightBlue;
-											break;
-										default:
-											color = Color.Green;
-											break;
-									}
-
-									var par = effectBinding.Effect.Parameters["cMatDiffColor"];
-									par?.SetValue(color.ToVector4());
-								}*/
-
-				/*				if (mesh.Tag != null && mesh.Tag is DateTime)
-								{
-									var dt = (DateTime)mesh.Tag;
-
-									var passed = (DateTime.Now - dt).TotalSeconds;
-
-									if (passed <= 5)
-									{
-										var k = 1.0f - (float)(passed / 5.0f);
-
-										var r = (byte)(255 * k + 255 * (1 - k));
-										var g = (byte)(255 * (1 - k));
-										var b = (byte)(255 * (1 - k));
-
-										var c = new Color(r, g, b, (byte)255);
-
-										var par = effectBinding.Effect.Parameters["cMatDiffColor"];
-										par?.SetValue(c.ToVector4());
-									}
-								}*/
-
 				var blendStateChanged = false;
 				var depthStencilStateChanged = false;
 				var rasterizerStateChanged = false;
@@ -267,18 +222,7 @@ namespace Nursia.Rendering
 				{
 					pass.Apply();
 
-					if (mesh != null)
-					{
-						mesh.Draw(device, job.InstancesTransforms);
-						_statistics.VerticesDrawn += mesh.NumVertices;
-						_statistics.PrimitivesDrawn += mesh.PrimitiveCount;
-					}
-					else
-					{
-						job.RenderCallback();
-					}
-
-					++_statistics.DrawCalls;
+					job.Render(device, ref _statistics);
 				}
 
 				// Restore states
@@ -306,29 +250,7 @@ namespace Nursia.Rendering
 			}
 		}
 
-		private void BatchNode(RenderBatchBase batch, SceneNode node)
-		{
-			if (!node.Visible)
-			{
-				return;
-			}
-
-			node.Render(batch);
-
-			foreach (var child in node.ActualChildren)
-			{
-				BatchNode(batch, child);
-			}
-		}
-
-		private void BatchNodes(RenderBatchBase batch, SceneNode root, Camera camera)
-		{
-			batch.PrepareRender(camera);
-
-			BatchNode(batch, root);
-		}
-
-		private DirectLightCSMData DirectLightShadowMapRun(DirectLight light, SceneNode root, Camera camera, bool isMain)
+		private DirectLightCSMData DirectLightShadowMapRun(DirectLight light, IRenderSource source, Camera camera, bool isMain)
 		{
 			var device = Nrs.GraphicsDevice;
 
@@ -362,7 +284,8 @@ namespace Nursia.Rendering
 				{
 					// Batch render jobs
 					var shadowCamera = result.Cameras[i];
-					BatchNodes(_batchShadowMap, root, shadowCamera);
+
+					_batchShadowMap.BatchScene(source, shadowCamera, null);
 
 					// Render the shadow map
 					device.Viewport = manager.GetCascadeViewport(i);
@@ -439,7 +362,7 @@ namespace Nursia.Rendering
 			RenderPass(batchStorage.Transparent, null, RenderPassType.Color);
 		}
 
-		private void RenderShadowMaps(SceneNode root, Camera camera, bool isMain)
+		private void RenderShadowMaps(IRenderSource source, Camera camera, bool isMain)
 		{
 			if (Nrs.GraphicsSettings.ShadowType == ShadowType.None)
 			{
@@ -460,7 +383,7 @@ namespace Nursia.Rendering
 				var asDirectLight = light as DirectLight;
 				if (asDirectLight != null)
 				{
-					var csm = DirectLightShadowMapRun(asDirectLight, root, camera, isMain);
+					var csm = DirectLightShadowMapRun(asDirectLight, source, camera, isMain);
 					var csms = GetDirectLightCSM(isMain);
 					asDirectLight.ShadowMapIndex = csms.Count;
 					csms.Add(csm);
@@ -468,11 +391,17 @@ namespace Nursia.Rendering
 			}
 		}
 
-		private bool InternalRenderToScreenBuffer(SceneNode root, Camera camera, RenderEnvironment environment, int width, int height)
+		void ILightsBatch.AddLight(BaseLight light)
 		{
-			if (root == null)
+			light.ShadowMapIndex = null;
+			Lights.Add(light);
+		}
+
+		private bool InternalRenderToScreenBuffer(IRenderSource source, Camera camera, RenderEnvironment environment, int width, int height)
+		{
+			if (source == null)
 			{
-				throw new ArgumentNullException(nameof(root));
+				throw new ArgumentNullException(nameof(source));
 			}
 
 			if (camera == null)
@@ -512,33 +441,15 @@ namespace Nursia.Rendering
 			camera.Height = height;
 
 			// Set lights
-			root.Iterate(node =>
-			{
-				if (!node.Visible)
-				{
-					return;
-				}
-
-				var asLight = node as BaseLight;
-				if (asLight == null)
-				{
-					return;
-				}
-
-				asLight.ShadowMapIndex = null;
-				Lights.Add(asLight);
-			});
+			source.QueryLights(camera, this);
 
 			Lights.Sort(LightsComparer.Instance);
 
 			// Shadow map runs
-			RenderShadowMaps(root, camera, true);
+			RenderShadowMaps(source, camera, true);
 
 			// Batch main
-			BatchNodes(_batchMain, root, camera);
-
-			// Batch SkyBox
-			environment.Sky?.Render(_batchMain);
+			_batchMain.BatchScene(source, camera, environment);
 
 			if (_batchMain.RequiresDepthBuffer)
 			{
@@ -585,13 +496,10 @@ namespace Nursia.Rendering
 				_tempCamera.ReflectionMatrix = Matrix.CreateReflection(plane);
 
 				// Shadow map runs
-				RenderShadowMaps(root, _tempCamera, false);
+				RenderShadowMaps(source, _tempCamera, false);
 
 				_batchReflection.ClipPlane = job.Flags.HasFlag(RenderJobFlags.ClipReflectionPlane) ? plane : (Plane?)null;
-				BatchNodes(_batchReflection, root, _tempCamera);
-
-				// Batch SkyBox
-				environment.Sky?.Render(_batchReflection);
+				_batchReflection.BatchScene(source, _tempCamera, environment);
 
 				// Create reflection texture and set as the render target
 				var reflectionTexture = _renderTargetPool2D.Get(null, "ReflectionTexture", 1024, 1024, depthFormat: DepthFormat.Depth24);
@@ -633,97 +541,12 @@ namespace Nursia.Rendering
 				InternalScenePass(_batchMain.SecondaryStorage, camera, true);
 			}
 
+			// Debug render
 			if (Nrs.DebugSettings.DrawBoundingBoxes)
 			{
 				foreach (var job in _batchMain.AllJobs)
 				{
-					if (job.Mesh == null)
-					{
-						continue;
-					}
-
-					var t = job.Transform;
-					var boundingBox = job.Mesh.BoundingBox.Transform(ref t);
-					DebugShapeRenderer.AddBoundingBox(boundingBox, Color.LightGreen);
-				}
-			}
-
-			// Debug render
-			if (Nrs.DebugSettings.DrawCamerasFrustums)
-			{
-				root.Iterate(n =>
-				{
-					var c = n as Camera;
-					if (c == null)
-					{
-						return;
-					}
-
-					DebugShapeRenderer.AddBoundingFrustum(c.Frustum, Color.Brown);
-				});
-
-				foreach (var job in _batchMain.Reflections)
-				{
-					// Calculate reflection matrix
-					var plane = job.ReflectionPlane.Value;
-					plane = Plane.Transform(plane, job.Transform);
-					var reflection = Matrix.CreateReflection(plane);
-
-					var frustum = new BoundingFrustum(reflection * camera.ViewProjection);
-					DebugShapeRenderer.AddBoundingFrustum(frustum, Color.Yellow);
-				}
-			}
-
-			if (Nrs.DebugSettings.DrawLightViewFrustrum)
-			{
-				DirectLight directLight = null;
-				if (Lights.Count > 0 && Lights[0] is DirectLight)
-				{
-					directLight = (DirectLight)Lights[0];
-				}
-
-				if (directLight != null)
-				{
-					root.Iterate(n =>
-					{
-						var c = n as Camera;
-						if (c == null)
-						{
-							return;
-						}
-
-						var nearPlane = c.NearPlane;
-						var shadowCamera = new Camera();
-
-						var manager = directLight.ShadowCascadeManager;
-						for (var i = 0; i < manager.Cascades; ++i)
-						{
-							var farPlane = manager.GetSplitDistance(i);
-
-							var proj = c.CalculateProjection(nearPlane, farPlane);
-
-							var sourceViewProj = c.View * proj;
-							var frustum = new BoundingFrustum(sourceViewProj);
-							DebugShapeRenderer.AddBoundingFrustum(frustum, Color.Green);
-
-							Mathematics.UpdateLightCamera(frustum, directLight.Direction, shadowCamera);
-
-							frustum = new BoundingFrustum(shadowCamera.ViewProjection);
-							DebugShapeRenderer.AddBoundingFrustum(frustum, CascadesColors[i]);
-
-							// Move to the next cascade
-							nearPlane = farPlane;
-						}
-					});
-				}
-
-				foreach (var light in Lights)
-				{
-					var asSpotLight = light as SpotLight;
-					if (asSpotLight != null)
-					{
-						DebugShapeRenderer.AddBoundingFrustum(asSpotLight.Frustum, Color.Green);
-					}
+					DebugShapeRenderer.AddBoundingBox(job.WorldBoundingBox, Color.LightGreen);
 				}
 			}
 
@@ -776,11 +599,6 @@ namespace Nursia.Rendering
 							terrain.DebugDrawBoundingBoxes(camera);
 						}*/
 
-			foreach (var bb in root.CustomBoxes)
-			{
-				DebugShapeRenderer.AddBoundingBox(bb, Color.LightGreen);
-			}
-
 			DebugShapeRenderer.Draw(camera.View, camera.Projection);
 
 			/*			using (var stream = File.Create(@"D:\Temp\refract.png"))
@@ -791,7 +609,7 @@ namespace Nursia.Rendering
 			return true;
 		}
 
-		private void InternalRender(SceneNode root, Camera camera, RenderEnvironment environment, int width, int height, bool renderToScreen = true)
+		private void InternalRender(IRenderSource root, Camera camera, RenderEnvironment environment, int width, int height, bool renderToScreen = true)
 		{
 			// Set state
 			StoreState();
@@ -874,41 +692,45 @@ namespace Nursia.Rendering
 
 				_renderTargetPool2D.Update();
 
-				_batchShadowMap.Clear();
-				_batchMain.Clear();
-				_batchReflection.Clear();
+				_batchShadowMap.Reset();
+				_batchMain.Reset();
+				_batchReflection.Reset();
 				_bindingContext.Reset();
 				Lights.Clear();
 			}
 		}
 
 		/// <summary>
-		/// Render the scene on the screen using any environment
+		/// Renders the scene on the screen using any environment
 		/// </summary>
 		/// <param name="root"></param>
 		/// <param name="camera"></param>
 		/// <param name="renderToScreen"></param>
-		public void Render(SceneNode root, Camera camera, RenderEnvironment env)
+		public void Render(IRenderSource root, Camera camera, RenderEnvironment env)
 		{
 			var vp = Nrs.GraphicsDevice.Viewport;
 			InternalRender(root, camera, env, vp.Width, vp.Height, true);
 		}
 
 		/// <summary>
-		/// Render the scene on the screen using default environment
+		/// Renders the scene on the screen using default environment
 		/// </summary>
 		/// <param name="root"></param>
 		/// <param name="camera"></param>
-		/// <param name="renderToScreen"></param>
-		public void Render(SceneNode root, Camera camera) => Render(root, camera, RenderEnvironment.Default);
+		public void Render(IRenderSource root, Camera camera) => Render(root, camera, RenderEnvironment.Default);
 
 		/// <summary>
-		/// Render the scene on the target using any environment
+		/// Renders the scene
+		/// </summary>
+		/// <param name="scene"></param>
+		public void Render(Scene scene) => Render(scene.Root, scene.Camera, scene.RenderEnvironment);
+
+		/// <summary>
+		/// Renders the scene on the target using any environment
 		/// </summary>
 		/// <param name="root"></param>
 		/// <param name="camera"></param>
-		/// <param name="renderToScreen"></param>
-		public RenderTarget2D RenderToTarget(SceneNode root, Camera camera, RenderEnvironment env, int width, int height)
+		public RenderTarget2D RenderToTarget(IRenderSource root, Camera camera, RenderEnvironment env, int width, int height)
 		{
 			InternalRender(root, camera, env, width, height, false);
 
@@ -916,12 +738,19 @@ namespace Nursia.Rendering
 		}
 
 		/// <summary>
-		/// Render the scene on the target using default environment
+		/// Renders the scene on the target using default environment
 		/// </summary>
 		/// <param name="root"></param>
 		/// <param name="camera"></param>
-		/// <param name="renderToScreen"></param>
-		public RenderTarget2D RenderToTarget(SceneNode root, Camera camera, int width, int height) =>
-			RenderToTarget(root, camera, RenderEnvironment.Default, width, height);
+		public RenderTarget2D RenderToTarget(IRenderSource root, Camera camera, int width, int height) => RenderToTarget(root, camera, RenderEnvironment.Default, width, height);
+
+		/// <summary>
+		/// Renders the scene
+		/// </summary>
+		/// <param name="scene"></param>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <returns></returns>
+		public RenderTarget2D RenderToTarget(Scene scene, int width, int height) => RenderToTarget(scene.Root, scene.Camera, scene.RenderEnvironment, width, height);
 	}
 }

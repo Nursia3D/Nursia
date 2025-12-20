@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
-	public abstract class PrimitiveMeshNode: MeshNodeBase
+	public abstract class PrimitiveMeshNode : MeshNodeBase
 	{
 		private bool _isLeftHanded;
 		private DrMeshPart _mesh;

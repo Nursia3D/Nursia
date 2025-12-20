@@ -3,11 +3,8 @@ using DigitalRiseModel.Animation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Nursia.Env;
-using Nursia.Env.Sky;
 using Nursia.Rendering;
 using Nursia.SceneGraph;
-using Nursia.SceneGraph.Lights;
 using StbImageSharp;
 using System;
 using System.IO;
@@ -21,7 +18,7 @@ namespace Nursia.Samples.ThirdPerson
 		private const float MovementSpeed = 0.05f;
 
 		private readonly GraphicsDeviceManager _graphics;
-		private SceneNode _scene;
+		private Scene _scene;
 		private SceneNode _cameraMount;
 		private Camera _mainCamera;
 		private NursiaModelNode _model;
@@ -30,7 +27,6 @@ namespace Nursia.Samples.ThirdPerson
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private SpriteBatch _spriteBatch;
 		private InputService _inputService;
-		private RenderEnvironment _environment;
 
 		public static string ExecutingAssemblyDirectory
 		{
@@ -80,20 +76,17 @@ namespace Nursia.Samples.ThirdPerson
 			Nrs.Game = this;
 
 			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(ExecutingAssemblyDirectory, "Assets"));
-			var storedScene = assetManager.LoadStoredScene("Scenes/Main.scene");
-			_scene = storedScene.Root;
+			_scene = assetManager.LoadStoredScene("Scenes/Main.scene");
 
-			_model = _scene.QueryFirstByType<NursiaModelNode>();
+			_model = _scene.Root.QueryFirstByType<NursiaModelNode>();
 			_player = new AnimationController(_model.ModelInstance);
 			_player.StartClip("idle");
 
-			_cameraMount = _scene.QueryFirstById("_cameraMount");
-			_mainCamera = _scene.QueryFirstByType<Camera>();
+			_cameraMount = _scene.Root.QueryFirstById("_cameraMount");
+			_mainCamera = _scene.Root.QueryFirstByType<Camera>();
 
 			_inputService = new InputService();
 			_inputService.MouseMoved += _inputService_MouseMoved;
-
-			_environment = storedScene.RenderEnvironment;
 
 			// Add reflection plane
 			var reflectionPlane = new ReflectionPlane
@@ -103,7 +96,7 @@ namespace Nursia.Samples.ThirdPerson
 				Rotation = new Vector3(0, 135, 0),
 				DiffuseColor = Color.LightBlue
 			};
-			_scene.Children.Add(reflectionPlane);
+			_scene.Root.Children.Add(reflectionPlane);
 
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -185,7 +178,7 @@ namespace Nursia.Samples.ThirdPerson
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render(_scene, _mainCamera, _environment);
+			_renderer.Render(_scene.Root, _mainCamera, _scene.RenderEnvironment);
 
 			_spriteBatch.Begin();
 

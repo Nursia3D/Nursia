@@ -1,10 +1,4 @@
-﻿using DigitalRiseModel;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Nursia.Materials;
-using Nursia.SceneGraph.Lights;
-using Nursia.Utilities;
-using System;
+﻿using Nursia.Materials;
 using System.Collections.Generic;
 
 namespace Nursia.Rendering
@@ -53,13 +47,12 @@ namespace Nursia.Rendering
 
 
 		private bool _jobsSorted = false;
-		private readonly ObjectPool<RenderJob> _renderJobsPool = new ObjectPool<RenderJob>(() => new RenderJob());
 
 		internal List<RenderJob> UnsortedJobs = new List<RenderJob>();
 
 		public int Count => UnsortedJobs.Count;
 
-		internal List<RenderJob> Jobs
+		public List<RenderJob> Jobs
 		{
 			get
 			{
@@ -78,54 +71,23 @@ namespace Nursia.Rendering
 			_comparer = new DefaultComparer(sortMethod);
 		}
 
-		/// <summary>
-		/// Gets a job from the render pool and adds it to the list
-		/// </summary>
-		public RenderJob AddJob(IMaterial material, Matrix transform, DrMeshPart mesh,
-			Action renderCallback, RenderJobFlags flags, BoundingBox boundingBox,
-			float squaredDistanceToViewer, Matrix[] bonesTransforms,
-			Plane? clipPlane, Plane? reflectionPlane, VertexBuffer instancesTransforms = null)
+		public RenderJob AddJob(RenderJob job)
 		{
-			if (material == null)
-			{
-				throw new ArgumentNullException(nameof(material));
-			}
-
-			if (mesh == null && renderCallback == null)
-			{
-				throw new ArgumentException("Either mesh or renderCallback shouldn't be null");
-			}
-
-			var job = _renderJobsPool.Get();
-
-			job.Material = material;
-			job.Transform = transform;
-			job.Mesh = mesh;
-			job.RenderCallback = renderCallback;
-			job.Flags = flags;
-			job.BoundingBox = boundingBox;
-			job.SquaredDistanceToCamera = squaredDistanceToViewer;
-			job.BonesTransforms = bonesTransforms;
-			job.ClipPlane = clipPlane;
-			job.ReflectionPlane = reflectionPlane;
-			job.InstancesTransforms = instancesTransforms;
-
 			UnsortedJobs.Add(job);
 			_jobsSorted = false;
 
 			return job;
 		}
 
-		public void Clear()
+		public void Reset()
 		{
-			foreach (var job in UnsortedJobs)
+			foreach(var job in UnsortedJobs)
 			{
-				// Return job to the object pool
-				job.Reset();
-				_renderJobsPool.Recycle(job);
+				job.Recycle();
 			}
 
 			UnsortedJobs.Clear();
+			_jobsSorted = false;
 		}
 
 		public void SetDepthTechnique()

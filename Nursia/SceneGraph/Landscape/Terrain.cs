@@ -178,6 +178,25 @@ namespace Nursia.Data.Landscape
 			}
 		}
 
+		private DirtyType Dirty
+		{
+			get => _dirty;
+
+			set
+			{
+				if (value == _dirty)
+				{
+					return;
+				}
+
+				_dirty = value;
+				Invalid?.Invoke(this, EventArgs.Empty);
+			}
+
+		}
+
+		public event EventHandler Invalid;
+
 		public Terrain()
 		{
 		}
@@ -295,7 +314,7 @@ namespace Nursia.Data.Landscape
 				}
 			}
 
-			_dirty = DirtyType.SomePatches;
+			Dirty = DirtyType.SomePatches;
 		}
 
 		private void UpdateSizes()
@@ -317,12 +336,12 @@ namespace Nursia.Data.Landscape
 
 		private void Update()
 		{
-			if (_dirty == DirtyType.None)
+			if (Dirty == DirtyType.None)
 			{
 				return;
 			}
 
-			if (_dirty == DirtyType.All)
+			if (Dirty == DirtyType.All)
 			{
 				// Rebuild everything
 				if (HeightField != null)
@@ -383,7 +402,7 @@ namespace Nursia.Data.Landscape
 
 			InvalidateBoundingBox();
 
-			_dirty = DirtyType.None;
+			Dirty = DirtyType.None;
 		}
 
 		private void UpdatePatchTree()
@@ -426,7 +445,7 @@ namespace Nursia.Data.Landscape
 
 		private void InvalidateAll()
 		{
-			_dirty = DirtyType.All;
+			Dirty = DirtyType.All;
 		}
 
 		private void InvalidateBoundingBox()

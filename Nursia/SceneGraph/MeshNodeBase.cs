@@ -5,13 +5,13 @@ using Nursia.Attributes;
 using Nursia.Materials;
 using Nursia.Rendering;
 using Nursia.Serialization;
-using Nursia.Utilities;
-using System.ComponentModel;
 
 namespace Nursia.SceneGraph
 {
 	public abstract class MeshNodeBase : SceneNode
 	{
+		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
+
 		protected abstract DrMeshPart RenderMesh { get; }
 
 		[DefaultMaterial]
@@ -19,16 +19,16 @@ namespace Nursia.SceneGraph
 
 		public override BoundingBox? BoundingBox => RenderMesh.BoundingBox;
 
-		protected internal override void Render(IRenderBatch batch)
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
-			base.Render(batch);
+			base.AddRenderJobs(camera, batch);
 
 			if (Material == null || RenderMesh == null)
 			{
 				return;
 			}
 
-			batch.BatchJob(Material, GlobalTransform, RenderMesh);
+			batch.AddMesh(RenderMesh, Material, GlobalTransform);
 		}
 
 		public override void Load(AssetManager assetManager)

@@ -6,13 +6,13 @@ namespace Nursia
 {
 	public static class NursiaAssetsExt
 	{
-		private readonly static AssetLoader<StoredScene> _sceneLoader = (manager, assetName, settings, tag) =>
+		private readonly static AssetLoader<Scene> _sceneLoader = (manager, assetName, settings, tag) =>
 		{
 			var data = manager.ReadAsString(assetName);
-			return StoredScene.ReadFromString(data, manager);
+			return Scene.ReadFromString(data, manager);
 		};
 
-		public static StoredScene LoadStoredScene(this AssetManager assetManager, string path) =>
+		public static Scene LoadStoredScene(this AssetManager assetManager, string path) =>
 			assetManager.UseLoader(_sceneLoader, path).Clone();
 
 		public static SceneNode LoadSceneNode(this AssetManager assetManager, string path) =>

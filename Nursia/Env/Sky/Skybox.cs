@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Materials;
 using Nursia.Rendering;
+using Nursia.SceneGraph;
 using Nursia.Serialization;
 using System;
 using System.ComponentModel;
@@ -38,12 +39,12 @@ namespace Nursia.Env.Sky
 				throw new NotImplementedException();
 			}
 
-			public EffectBinding GetShadowTechnique(DrMeshPart mesh, bool instancing)
+			public EffectBinding GetShadowTechnique(MaterialTechnique materialTechnique)
 			{
 				throw new NotImplementedException();
 			}
 
-			public EffectBinding GetColorTechnique(DrMeshPart mesh, LightTechnique technique, bool shadow, bool translucent, bool clipPlane, bool instancing)
+			public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
 			{
 				if (_binding == null)
 				{
@@ -111,7 +112,7 @@ namespace Nursia.Env.Sky
 			_mesh = mesh ?? throw new ArgumentNullException(nameof(mesh));
 		}
 
-		public void Render(IRenderBatch batch)
+		public void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
 			if (!Visible || _material.DiffuseTexture == null)
 			{
@@ -120,12 +121,12 @@ namespace Nursia.Env.Sky
 
 			// Calculate special world-view-project matrix with zero translation
 			// So the viewer is always in the center
-			var view = batch.Camera.View;
+			var view = camera.View;
 			view.Translation = Vector3.Zero;
 
-			_material.Transform = LocalTransform * view * batch.Camera.Projection;
+			_material.Transform = LocalTransform * view * camera.Projection;
 
-			batch.BatchJob(_material, Matrix.Identity, _mesh, cullByBoundingBox: false);
+			batch.AddMesh(_mesh, _material, Matrix.Identity, flags: RenderJobFlags.DontCullByCameraFrustum);
 		}
 
 		public void Load(AssetManager assetManager)
