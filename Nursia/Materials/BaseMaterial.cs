@@ -25,7 +25,7 @@ namespace Nursia.Materials
 			return UtilityEffects.GetShadowEffect(materialTechnique);
 		}
 
-		public abstract EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane);
+		public abstract EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane);
 		public abstract IMaterial Clone();
 	}
 }

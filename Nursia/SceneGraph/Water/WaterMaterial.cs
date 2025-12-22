@@ -111,7 +111,7 @@ namespace Nursia.SceneGraph.Water
 			throw new System.NotImplementedException();
 		}
 
-		public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
+		public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane)
 		{
 			return InternalGetBinding();
 		}

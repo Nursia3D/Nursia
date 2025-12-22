@@ -74,6 +74,7 @@ namespace Nursia.Rendering
 		public Plane? ClipPlane { get; set; }
 
 		internal abstract MaterialTechnique MaterialTechnique { get; }
+		internal abstract bool NormalMapping { get; }
 		internal RenderTarget2D ReflectionTexture { get; set; }
 		internal float SquaredDistanceToCamera { get; set; }
 		internal EffectBinding EffectBinding { get; private set; }
@@ -95,9 +96,9 @@ namespace Nursia.Rendering
 			EffectBinding = Material.GetShadowTechnique(MaterialTechnique);
 		}
 
-		public void SetTechnique(LightTechnique lightTechnique, bool shadow, bool translucent)
+		public void SetColorTechnique(LightTechnique lightTechnique, bool shadow, bool translucent)
 		{
-			EffectBinding = Material.GetColorTechnique(MaterialTechnique, lightTechnique, shadow && Material.Flags.HasFlag(MaterialFlags.AcceptsShadows), translucent, ClipPlane != null);
+			EffectBinding = Material.GetColorTechnique(MaterialTechnique, lightTechnique, shadow && Material.Flags.HasFlag(MaterialFlags.AcceptsShadows), translucent, NormalMapping, ClipPlane != null);
 		}
 
 		protected internal abstract void Render(GraphicsDevice graphicsDevice, ref RenderStatistics statistics);
@@ -133,8 +134,12 @@ namespace Nursia.Rendering
 			}
 		}
 
+
 		public Matrix[] BonesTransforms { get; set; }
+
 		internal override MaterialTechnique MaterialTechnique => BonesTransforms != null ? MaterialTechnique.Skinned : MaterialTechnique.Ordinary;
+
+		internal override bool NormalMapping => _mesh != null && _mesh.TangentsFormat == VertexElementFormat.Vector4;
 
 		private RenderJobMesh()
 		{
@@ -167,6 +172,8 @@ namespace Nursia.Rendering
 
 		internal override MaterialTechnique MaterialTechnique => MaterialTechnique.Instanced;
 
+		internal override bool NormalMapping => Mesh != null && Mesh.TangentsFormat == VertexElementFormat.Vector4;
+
 		private RenderJobMeshInstanced()
 		{
 		}
@@ -187,7 +194,7 @@ namespace Nursia.Rendering
 #if MONOGAME
 				device.DrawInstancedPrimitives(Mesh.PrimitiveType, Mesh.VertexOffset, Mesh.StartIndex, Mesh.PrimitiveCount, InstancesTransforms.VertexCount);
 #else
-				device.DrawInstancedPrimitives(mesh.PrimitiveType, mesh.VertexOffset, 0, mesh.NumVertices, mesh.StartIndex, mesh.PrimitiveCount, instancesTransforms.VertexCount);
+				device.DrawInstancedPrimitives(Mesh.PrimitiveType, Mesh.VertexOffset, 0, Mesh.NumVertices, Mesh.StartIndex, Mesh.PrimitiveCount, InstancesTransforms.VertexCount);
 #endif
 			}
 
@@ -233,6 +240,8 @@ namespace Nursia.Rendering
 		}
 
 		internal override MaterialTechnique MaterialTechnique => MaterialTechnique.Ordinary;
+
+		internal override bool NormalMapping => _levels != null && _levels.Count > 0 && _levels[0].TangentsFormat == VertexElementFormat.Vector4;
 
 		private RenderJobMeshLOD()
 		{

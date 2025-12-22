@@ -44,7 +44,7 @@ namespace Nursia.Env.Sky
 				throw new NotImplementedException();
 			}
 
-			public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
+			public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane)
 			{
 				if (_binding == null)
 				{

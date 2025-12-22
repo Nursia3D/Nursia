@@ -263,9 +263,9 @@ namespace Nursia.Materials
 			return binding;
 		}
 
-		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
+		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane)
 		{
-			return InternalGetBinding(materialTechnique, lightTechnique, shadow, translucent, !Nrs.DebugSettings.DisableNormalMap && NormalTexture != null, clipPlane);
+			return InternalGetBinding(materialTechnique, lightTechnique, shadow, translucent, normalMapping && !Nrs.DebugSettings.DisableNormalMap && NormalTexture != null, clipPlane);
 		}
 	}
 }

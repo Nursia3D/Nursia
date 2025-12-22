@@ -1,5 +1,4 @@
-﻿using DigitalRiseModel;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nursia.Materials;
 using Nursia.Rendering;
@@ -55,7 +54,8 @@ namespace Nursia.Samples.ThirdPerson.Materials
 			throw new System.NotImplementedException();
 		}
 
-		public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
+
+		public EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane)
 		{
 			if (_binding != null)
 			{

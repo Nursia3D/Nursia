@@ -48,8 +48,8 @@ namespace Nursia.Materials
 
 		EffectBinding GetShadowTechnique(MaterialTechnique materialTechnique);
 
-		EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane);
-		
+		EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane);
+
 		IMaterial Clone();
 	}
 }

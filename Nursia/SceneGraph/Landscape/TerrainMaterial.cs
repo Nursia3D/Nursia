@@ -261,7 +261,7 @@ namespace Nursia.SceneGraph.Landscape
 			return binding;
 		}
 
-		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool clipPlane)
+		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane)
 		{
 			return InternalGetBinding(lightTechnique, shadow, translucent, Nrs.EditorSettings.TerrainMarkerPosition != null, clipPlane);
 		}

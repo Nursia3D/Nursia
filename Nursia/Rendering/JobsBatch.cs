@@ -110,7 +110,7 @@ namespace Nursia.Rendering
 		{
 			foreach (var job in UnsortedJobs)
 			{
-				job.SetTechnique(lightTechnique, shadow, translucent);
+				job.SetColorTechnique(lightTechnique, shadow, translucent);
 			}
 		}
 	}
