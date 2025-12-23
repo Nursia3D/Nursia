@@ -16,7 +16,7 @@ namespace Nursia.Samples.Primives
 	public class TutorialGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
-		private readonly ForwardRenderer _renderer = new ForwardRenderer();
+		private SceneRenderer _renderer;
 		private Scene _scene;
 		private CameraInputController _controller;
 		private FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
@@ -131,6 +131,8 @@ namespace Nursia.Samples.Primives
 			};
 			root.Children.Add(capsule);
 
+			_renderer = new SceneRenderer(_scene);
+
 			// Shadows settings
 			Nrs.GraphicsSettings.ShadowMapSize = Shadows.ShadowMapSize.Size4096;
 			Nrs.GraphicsSettings.MaxShadowDistance = 200.0f;
@@ -144,6 +146,7 @@ namespace Nursia.Samples.Primives
 		{
 			base.Update(gameTime);
 
+			_scene.Update(gameTime);
 			_controller.Update();
 		}
 
@@ -154,7 +157,7 @@ namespace Nursia.Samples.Primives
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render(_scene);
+			_renderer.Render();
 
 			_spriteBatch.Begin();
 

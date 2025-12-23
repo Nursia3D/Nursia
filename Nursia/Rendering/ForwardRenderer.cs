@@ -720,12 +720,6 @@ namespace Nursia.Rendering
 		public void Render(IRenderSource root, Camera camera) => Render(root, camera, RenderEnvironment.Default);
 
 		/// <summary>
-		/// Renders the scene
-		/// </summary>
-		/// <param name="scene"></param>
-		public void Render(Scene scene) => Render(scene.Root, scene.Camera, scene.RenderEnvironment);
-
-		/// <summary>
 		/// Renders the scene on the target using any environment
 		/// </summary>
 		/// <param name="root"></param>
@@ -743,14 +737,5 @@ namespace Nursia.Rendering
 		/// <param name="root"></param>
 		/// <param name="camera"></param>
 		public RenderTarget2D RenderToTarget(IRenderSource root, Camera camera, int width, int height) => RenderToTarget(root, camera, RenderEnvironment.Default, width, height);
-
-		/// <summary>
-		/// Renders the scene
-		/// </summary>
-		/// <param name="scene"></param>
-		/// <param name="width"></param>
-		/// <param name="height"></param>
-		/// <returns></returns>
-		public RenderTarget2D RenderToTarget(Scene scene, int width, int height) => RenderToTarget(scene.Root, scene.Camera, scene.RenderEnvironment, width, height);
 	}
 }

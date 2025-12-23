@@ -466,22 +466,5 @@ namespace Nursia.SceneGraph
 		public virtual void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
 		}
-
-		/// <summary>
-		/// Updates only this node
-		/// </summary>
-		/// <param name="gameTime"></param>
-		public virtual void Update(GameTime gameTime)
-		{
-			UpdateHandler?.Invoke(gameTime);
-		}
-
-		private static readonly Action<SceneNode, GameTime> _updateHandler = new Action<SceneNode, GameTime>((n, t) => n.Update(t));
-
-		/// <summary>
-		/// Updates this node and its children
-		/// </summary>
-		/// <param name="gameTime"></param>
-		public virtual void UpdateTree(GameTime gameTime) => Traverse(_updateHandler, gameTime);
 	}
 }

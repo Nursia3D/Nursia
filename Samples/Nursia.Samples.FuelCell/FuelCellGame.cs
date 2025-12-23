@@ -54,7 +54,7 @@ namespace FuelCell
 		private TimeSpan startTime, roundTimer, roundTime;
 		private float aspectRatio;
 		private IInputState inputState;
-		private ForwardRenderer _renderer;
+		private SceneRenderer _renderer;
 		private Scene _scene;
 		private DirectLight _light;
 
@@ -77,8 +77,6 @@ namespace FuelCell
 			boundingSphere = new GameObject();
 			aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
-			_renderer = new ForwardRenderer();
-
 			_scene = new Scene
 			{
 				Root = new SceneNode(),
@@ -89,6 +87,8 @@ namespace FuelCell
 					FarPlane = GameConstants.FarClip
 				}
 			};
+
+			_renderer = new SceneRenderer(_scene);
 
 
 			_light = new DirectLight
@@ -289,7 +289,7 @@ namespace FuelCell
 			// Draw the player fuelcarrier on the map
 			root.Children.Add(fuelCarrier.Model);
 
-			_renderer.Render(_scene);
+			_renderer.Render();
 
 			DrawStats();
 		}
@@ -306,7 +306,7 @@ namespace FuelCell
 			Vector2 strInstructionsSize = statsFont.MeasureString(GameConstants.StrInstructions1);
 			Vector2 strPosition;
 			strCenter = new Vector2(strInstructionsSize.X / 2, strInstructionsSize.Y / 2);
-
+			
 			yOffsetText = (viewportSize.Y / 2 - strCenter.Y);
 			xOffsetText = (viewportSize.X / 2 - strCenter.X);
 			strPosition = new Vector2(xOffsetText, yOffsetText);

@@ -19,7 +19,7 @@ namespace Nursia.Samples.Primives
 	public class WaterGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
-		private readonly ForwardRenderer _renderer = new ForwardRenderer();
+		private SceneRenderer _renderer;
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private Scene _scene;
 		private CameraInputController _controller;
@@ -101,6 +101,7 @@ namespace Nursia.Samples.Primives
 
 			// Set new root
 			_scene.Root = root;
+			_renderer = new SceneRenderer(_scene);
 
 			_controller = new CameraInputController(_scene.Camera);
 
@@ -121,6 +122,7 @@ namespace Nursia.Samples.Primives
 		{
 			base.Update(gameTime);
 
+			_scene.Update(gameTime);
 			_controller.Update();
 		}
 
@@ -131,7 +133,7 @@ namespace Nursia.Samples.Primives
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render(_scene);
+			_renderer.Render();
 
 			_spriteBatch.Begin();
 

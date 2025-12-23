@@ -77,5 +77,13 @@ namespace Nursia.SceneGraph
 			Camera?.Load(assetManager);
 			RenderEnvironment?.Load(assetManager);
 		}
+
+		private static Action<SceneNode, GameTime> _updateHandler = new Action<SceneNode, GameTime>((n, t) => n.UpdateHandler?.Invoke(t));
+
+
+		public void Update(GameTime gameTime)
+		{
+			Root.Traverse(_updateHandler, gameTime);
+		}
 	}
 }

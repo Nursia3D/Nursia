@@ -23,7 +23,7 @@ namespace Nursia.Samples.ThirdPerson
 		private Camera _mainCamera;
 		private NursiaModelNode _model;
 		private AnimationController _player;
-		private readonly ForwardRenderer _renderer = new ForwardRenderer();
+		private SceneRenderer _renderer;
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private SpriteBatch _spriteBatch;
 		private InputService _inputService;
@@ -98,6 +98,8 @@ namespace Nursia.Samples.ThirdPerson
 			};
 			_scene.Root.Children.Add(reflectionPlane);
 
+			_renderer = new SceneRenderer(_scene);
+
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// Nrs.DebugSettings.VisualizeBuffer = DebugVisualizeBuffer.ReflectionShadowMap;
@@ -169,6 +171,8 @@ namespace Nursia.Samples.ThirdPerson
 			_model.Translation += velocity;
 
 			_player.Update(gameTime.ElapsedGameTime);
+
+			_scene.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
@@ -178,7 +182,7 @@ namespace Nursia.Samples.ThirdPerson
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render(_scene.Root, _mainCamera, _scene.RenderEnvironment);
+			_renderer.Render(_mainCamera);
 
 			_spriteBatch.Begin();
 
