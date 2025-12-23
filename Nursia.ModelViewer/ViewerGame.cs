@@ -26,9 +26,9 @@ namespace Nursia.ModelViewer
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private bool _isAnimating;
 		private string _path;
-		private SceneRenderer _renderer;
+		private readonly ForwardRenderer _renderer = new ForwardRenderer();
 		private readonly NursiaModelNode _modelNode = new NursiaModelNode();
-		private readonly SceneNode _scene = new SceneNode();
+		private readonly Scene _scene = new Scene();
 
 		public ViewerGame(string path)
 		{
@@ -181,14 +181,16 @@ namespace Nursia.ModelViewer
 			Nrs.Game = this;
 
 			// Front light
-			_scene.Children.Add(new DirectLight { Rotation = new Vector3(45, 45, 0), CastsShadow = false });
+			var root = new SceneNode();
+
+			root.Children.Add(new DirectLight { Rotation = new Vector3(45, 45, 0), CastsShadow = false });
 
 			// Back light
-			_scene.Children.Add(new DirectLight { Rotation = new Vector3(225, 45, 0), CastsShadow = false });
+			root.Children.Add(new DirectLight { Rotation = new Vector3(225, 45, 0), CastsShadow = false });
 
-			_scene.Children.Add(_modelNode);
+			root.Children.Add(_modelNode);
 
-			_renderer = new SceneRenderer(_scene);
+			_scene.Root = root;
 
 			_controller = new CameraInputController(new Camera());
 
@@ -271,7 +273,7 @@ namespace Nursia.ModelViewer
 
 			GraphicsDevice.Clear(Color.Black);
 
-			_renderer.Render(_controller.Camera);
+			_scene.Render(_renderer, _controller.Camera);
 
 			_mainPanel._labelFPS.Text = $"FPS: {_fpsCounter.FramesPerSecond}";
 

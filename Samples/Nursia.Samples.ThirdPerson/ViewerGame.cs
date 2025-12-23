@@ -23,7 +23,7 @@ namespace Nursia.Samples.ThirdPerson
 		private Camera _mainCamera;
 		private NursiaModelNode _model;
 		private AnimationController _player;
-		private SceneRenderer _renderer;
+		private readonly ForwardRenderer _renderer = new ForwardRenderer();
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private SpriteBatch _spriteBatch;
 		private InputService _inputService;
@@ -97,8 +97,6 @@ namespace Nursia.Samples.ThirdPerson
 				DiffuseColor = Color.LightBlue
 			};
 			_scene.Root.Children.Add(reflectionPlane);
-
-			_renderer = new SceneRenderer(_scene);
 
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -182,7 +180,7 @@ namespace Nursia.Samples.ThirdPerson
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render(_mainCamera);
+			_scene.Render(_renderer, _mainCamera);
 
 			_spriteBatch.Begin();
 

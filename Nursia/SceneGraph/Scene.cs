@@ -10,7 +10,7 @@ using System.IO;
 namespace Nursia.SceneGraph
 {
 	/// <summary>
-	/// Class for storing a SceneNode
+	/// 3D Scene
 	/// </summary>
 	public partial class Scene : IHasExternalAssets
 	{
@@ -79,7 +79,6 @@ namespace Nursia.SceneGraph
 		}
 
 		private static Action<SceneNode, GameTime> _updateHandler = new Action<SceneNode, GameTime>((n, t) => n.UpdateHandler?.Invoke(t));
-
 
 		public void Update(GameTime gameTime)
 		{

@@ -34,6 +34,8 @@ namespace Nursia.Editor.UI
 		};
 
 		private Scene _scene;
+		private readonly Scene _sceneMain;
+		private readonly Scene _sceneAxises;
 		private readonly SceneNode _root = new SceneNode();
 		private CameraInputController _controller;
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
@@ -43,7 +45,7 @@ namespace Nursia.Editor.UI
 		private Vector3? _touchDownStart;
 		private readonly bool[] _keysDown = new bool[256];
 		private readonly SpriteBatch _spriteBatch;
-		private SceneRenderer _mainRenderer, _axisesRenderer;
+		private readonly ForwardRenderer _renderer = new ForwardRenderer();
 
 		public Scene Scene
 		{
@@ -119,8 +121,15 @@ namespace Nursia.Editor.UI
 
 			_spriteBatch = new SpriteBatch(Nrs.GraphicsDevice);
 
-			_mainRenderer = new SceneRenderer(_root);
-			_axisesRenderer = new SceneRenderer(Editor.Resources.ModelAxises);
+			_sceneMain = new Scene
+			{
+				Root = _root
+			};
+
+			_sceneAxises = new Scene
+			{
+				Root = Editor.Resources.ModelAxises
+			};
 		}
 
 		private Vector3? CalculateTerrainMarkerPosition()
@@ -247,16 +256,16 @@ namespace Nursia.Editor.UI
 				Scene.Root.Traverse(AddGizmos);
 
 				// Draw main target
-				var target = _mainRenderer.RenderToTarget(camera, _scene.RenderEnvironment, bounds.Width, bounds.Height);
+				var target = _scene.RenderToTarget(_renderer, camera, bounds.Width, bounds.Height);
 				_spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.Opaque);
 				_spriteBatch.Draw(target, bounds, Color.White);
 				_spriteBatch.End();
 
 				DebugShapeRenderer.Draw(camera.View, camera.Projection);
 
-				RenderStatistics = _mainRenderer.Statistics;
+				RenderStatistics = _renderer.Statistics;
 
-				var m = _axisesRenderer.Root;
+				var m = _sceneAxises.Root;
 				var c = (Camera)Scene.Camera.Clone();
 
 				// Make the gizmo placed always in front of the camera
@@ -266,7 +275,7 @@ namespace Nursia.Editor.UI
 				m.Translation = direction * 2.5f;
 
 				// Draw axises
-				target = _axisesRenderer.RenderToTarget(c, 160, 160);
+				target = _sceneAxises.RenderToTarget(_renderer, c, 160, 160);
 				_spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
 				_spriteBatch.Draw(target, new Rectangle(bounds.Right - 160, bounds.Top, 160, 160), Color.White);
 				_spriteBatch.End();

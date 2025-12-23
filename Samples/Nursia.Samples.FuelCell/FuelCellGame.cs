@@ -54,7 +54,7 @@ namespace FuelCell
 		private TimeSpan startTime, roundTimer, roundTime;
 		private float aspectRatio;
 		private IInputState inputState;
-		private SceneRenderer _renderer;
+		private readonly ForwardRenderer _renderer = new ForwardRenderer();
 		private Scene _scene;
 		private DirectLight _light;
 
@@ -87,9 +87,6 @@ namespace FuelCell
 					FarPlane = GameConstants.FarClip
 				}
 			};
-
-			_renderer = new SceneRenderer(_scene);
-
 
 			_light = new DirectLight
 			{
@@ -289,7 +286,7 @@ namespace FuelCell
 			// Draw the player fuelcarrier on the map
 			root.Children.Add(fuelCarrier.Model);
 
-			_renderer.Render();
+			_scene.Render(_renderer);
 
 			DrawStats();
 		}

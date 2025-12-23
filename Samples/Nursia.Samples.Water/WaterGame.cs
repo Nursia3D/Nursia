@@ -3,7 +3,6 @@ using DigitalRiseModel;
 using DigitalRiseModel.Primitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Nursia.Env;
 using Nursia.Materials;
 using Nursia.Rendering;
 using Nursia.SceneGraph;
@@ -19,7 +18,7 @@ namespace Nursia.Samples.Primives
 	public class WaterGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
-		private SceneRenderer _renderer;
+		private readonly ForwardRenderer _renderer = new ForwardRenderer();
 		private readonly FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private Scene _scene;
 		private CameraInputController _controller;
@@ -101,7 +100,6 @@ namespace Nursia.Samples.Primives
 
 			// Set new root
 			_scene.Root = root;
-			_renderer = new SceneRenderer(_scene);
 
 			_controller = new CameraInputController(_scene.Camera);
 
@@ -133,7 +131,7 @@ namespace Nursia.Samples.Primives
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render();
+			_scene.Render(_renderer);
 
 			_spriteBatch.Begin();
 

@@ -4,19 +4,19 @@ using Microsoft.Xna.Framework.Graphics;
 using Nursia.SceneGraph.Lights;
 using Nursia.Materials;
 using Nursia.SceneGraph.Primitives;
-using Nursia.Rendering;
 using Nursia.SceneGraph;
 using Nursia.Utilities;
 using System;
 using System.IO;
 using System.Reflection;
+using Nursia.Rendering;
 
 namespace Nursia.Samples.Primives
 {
 	public class TutorialGame : Game
 	{
 		private readonly GraphicsDeviceManager _graphics;
-		private SceneRenderer _renderer;
+		private readonly ForwardRenderer _renderer = new ForwardRenderer();
 		private Scene _scene;
 		private CameraInputController _controller;
 		private FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
@@ -131,8 +131,6 @@ namespace Nursia.Samples.Primives
 			};
 			root.Children.Add(capsule);
 
-			_renderer = new SceneRenderer(_scene);
-
 			// Shadows settings
 			Nrs.GraphicsSettings.ShadowMapSize = Shadows.ShadowMapSize.Size4096;
 			Nrs.GraphicsSettings.MaxShadowDistance = 200.0f;
@@ -157,7 +155,7 @@ namespace Nursia.Samples.Primives
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_renderer.Render();
+			_scene.Render(_renderer);
 
 			_spriteBatch.Begin();
 
