@@ -98,7 +98,7 @@ namespace Nursia.Rendering
 
 		public void SetColorTechnique(LightTechnique lightTechnique, bool shadow, bool translucent)
 		{
-			EffectBinding = Material.GetColorTechnique(MaterialTechnique, lightTechnique, shadow && Material.Flags.HasFlag(MaterialFlags.AcceptsShadows), translucent, NormalMapping, ClipPlane != null);
+			EffectBinding = Material.GetColorTechnique(MaterialTechnique, lightTechnique, shadow && Material.Flags.HasFlag(MaterialFlags.AcceptsShadows), translucent, NormalMapping && !Nrs.DebugSettings.DisableNormalMap, ClipPlane != null);
 		}
 
 		protected internal abstract void Render(GraphicsDevice graphicsDevice, ref RenderStatistics statistics);
