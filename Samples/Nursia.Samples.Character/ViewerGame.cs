@@ -66,9 +66,12 @@ namespace DigitalRiseModel.Samples.Character
 
 			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(AppContext.BaseDirectory, "Assets"));
 			_scene = assetManager.LoadStoredScene("Scenes/Main.scene");
+			var characterModel = _scene.Root.QueryFirstByType<NursiaModelNode>();
 
-			var model = _scene.Root.QueryFirstByType<NursiaModelNode>();
-			_controllerService = new CharacterService(model, GraphicsDevice, assetManager);
+			var swordScene = assetManager.LoadStoredScene("Scenes/Sword.scene");
+			var swordModel = swordScene.Root.QueryFirstByType<NursiaModelNode>();
+
+			_controllerService = new CharacterService(characterModel, swordModel);
 
 			_cameraMount = _scene.Root.QueryFirstById("_cameraMount");
 			_mainCamera = _scene.Root.QueryFirstByType<Camera>();

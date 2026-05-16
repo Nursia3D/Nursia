@@ -36,8 +36,8 @@ namespace DigitalRiseModel
 
 		private readonly AnimationController _player;
 
-		private readonly NursiaModelNode _modelNode = new NursiaModelNode();
-		private readonly ModelBoneAttachment _weaponAttachment = new ModelBoneAttachment();
+		private readonly NursiaModelNode _modelNode;
+		private readonly ModelBoneAttachment _weaponAttachment;
 
 		public NursiaModelNode ModelNode => _modelNode;
 
@@ -70,23 +70,29 @@ namespace DigitalRiseModel
 		}
 
 		/// <summary>Initializes character model, animations, and weapon attachment.</summary>
-		public CharacterService(NursiaModelNode modelNode, GraphicsDevice graphicsDevice, AssetManager assetManager)
+		public CharacterService(NursiaModelNode characterModelNode, NursiaModelNode swordModelNode)
 		{
-			if (assetManager == null)
-				throw new ArgumentNullException(nameof(assetManager));
+			if (characterModelNode == null)
+			{
+				throw new ArgumentNullException(nameof(characterModelNode));
+			}
 
-			_modelNode = modelNode ?? throw new ArgumentNullException(nameof(modelNode));
-			var characterModel = modelNode.Model;
+			if (swordModelNode == null)
+			{
+				throw new ArgumentNullException(nameof(swordModelNode));
+			}
 
-			var swordModel = assetManager.LoadModel(graphicsDevice, "Models/sword.gltf");
-			_weaponAttachment.ModelInstance = new DrModelInstance(swordModel);
+			_modelNode = characterModelNode ?? throw new ArgumentNullException(nameof(characterModelNode));
+
+			_weaponAttachment = ModelBoneAttachment.CreateFromModelNode(swordModelNode);
 			_modelNode.BonesAttachments.Add(_weaponAttachment);
 			SetSheathedTransform();
 
-			_player = new AnimationController(_modelNode.ModelInstance);
+			_player = new AnimationController(_modelNode.Skeleton);
 			_player.StartClip("Idle", true);
 			_modelNode.Translation = new Vector3(0, DefaultY, 0);
 
+			var characterModel = _modelNode.Model;
 			var topFilter = characterModel.CreateBoneFilter("mixamorig:Spine");
 			var bottomFilter = characterModel.CreateInverseBoneFilter(topFilter);
 
@@ -105,7 +111,7 @@ namespace DigitalRiseModel
 
 		private void SetSheathedTransform()
 		{
-			_weaponAttachment.Bone = _modelNode.ModelInstance.Model.FindBoneByName("mixamorig:Spine");
+			_weaponAttachment.Bone = _modelNode.Model.FindBoneByName("mixamorig:Spine");
 
 			var transform = new SrtTransform
 			{
@@ -118,7 +124,7 @@ namespace DigitalRiseModel
 
 		private void SetDrawnTransform()
 		{
-			_weaponAttachment.Bone = _modelNode.ModelInstance.Model.FindBoneByName("mixamorig:RightHand");
+			_weaponAttachment.Bone = _modelNode.Model.FindBoneByName("mixamorig:RightHand");
 
 			var transform = new SrtTransform
 			{

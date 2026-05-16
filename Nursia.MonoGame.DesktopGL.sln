@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.6.11806.211 stable
+VisualStudioVersion = 18.6.11806.211
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nursia.Samples.ThirdPerson.MonoGame.DesktopGL", "Samples\Nursia.Samples.ThirdPerson\Nursia.Samples.ThirdPerson.MonoGame.DesktopGL.csproj", "{58E19901-5DBA-270F-F848-08C9CE211221}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nursia.Samples.Tutorial.MonoGame.DesktopGL", "Samples\Nursia.Samples.Tutorial\Nursia.Samples.Tutorial.MonoGame.DesktopGL.csproj", "{BDDE7A81-778C-9D70-9CFB-8D1FED5343B4}"
 EndProject
@@ -29,10 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{58E19901-5DBA-270F-F848-08C9CE211221}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58E19901-5DBA-270F-F848-08C9CE211221}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58E19901-5DBA-270F-F848-08C9CE211221}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58E19901-5DBA-270F-F848-08C9CE211221}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BDDE7A81-778C-9D70-9CFB-8D1FED5343B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BDDE7A81-778C-9D70-9CFB-8D1FED5343B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDDE7A81-778C-9D70-9CFB-8D1FED5343B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,7 +64,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{58E19901-5DBA-270F-F848-08C9CE211221} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{BDDE7A81-778C-9D70-9CFB-8D1FED5343B4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D457DCB7-806A-EFED-26DF-2B6C3FEA71D4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C9F2412A-03AE-3E8A-52CB-66BBAF319616} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}

@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ThirdPerson.FNA.Core": {
-      "commandName": "Project",
-      "commandLineArgs": "/gldevice:D3D11"
-    }
-  }
-}

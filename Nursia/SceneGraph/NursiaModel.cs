@@ -15,17 +15,7 @@ namespace Nursia.SceneGraph
 	/// </summary>
 	public class ModelBoneAttachment
 	{
-		internal NursiaModel InternalModel { get; } = new NursiaModel();
-
-		/// <summary>
-		/// Gets or sets the model instance to attach.
-		/// </summary>
-		public DrModelInstance ModelInstance
-		{
-			get => InternalModel.ModelInstance;
-
-			set => InternalModel.ModelInstance = value;
-		}
+		internal NursiaModel NursiaModel { get; } = new NursiaModel();
 
 		/// <summary>
 		/// Gets or sets the target bone on the parent model to attach to.
@@ -37,27 +27,32 @@ namespace Nursia.SceneGraph
 		/// Default is identity (no additional transform).
 		/// </summary>
 		public Matrix Transform { get; set; } = Matrix.Identity;
+
+		private ModelBoneAttachment()
+		{
+		}
+
+		public static ModelBoneAttachment CreateFromModelNode(NursiaModelNode node)
+		{
+			if (node == null)
+			{
+				throw new ArgumentNullException(nameof(node));
+			}
+
+			var result = new ModelBoneAttachment();
+
+			result.NursiaModel.CopyFrom(node.NursiaModel);
+			result.Transform = node.LocalTransform;
+
+			return result;
+		}
 	}
 
 	internal class NursiaModel
 	{
-		private DrModelInstance _modelInstance;
-
 		public IMaterial[][] Materials { get; set; }
 
-		public DrModelInstance ModelInstance
-		{
-			get => _modelInstance;
-
-			set
-			{
-				_modelInstance = value;
-				if (value != null)
-				{
-					SetMaterialsFromModel();
-				}
-			}
-		}
+		public DrModelInstance ModelInstance { get; } = new DrModelInstance();
 
 		public DrModel Model
 		{
@@ -74,6 +69,14 @@ namespace Nursia.SceneGraph
 		/// Gets the collection of models attached to bones of this model instance.
 		/// </summary>
 		public List<ModelBoneAttachment> BonesAttachments { get; } = new List<ModelBoneAttachment>();
+
+		public NursiaModel()
+		{
+			/*			ModelInstance.ModelChanged += (s, a) =>
+						{
+
+						};*/
+		}
 
 		public IMaterial GetMaterial(int meshIndex, int meshPartIndex) => Materials[meshIndex][meshPartIndex];
 
@@ -182,6 +185,26 @@ namespace Nursia.SceneGraph
 					batch.AddMesh(part, material, transform, bonesTransforms: bonesTransforms);
 				}
 			}
+		}
+
+		public void CopyFrom(NursiaModel model)
+		{
+			if (model.Materials != null)
+			{
+				Materials = new IMaterial[model.Materials.Length][];
+				for (var i = 0; i < model.Materials.Length; ++i)
+				{
+					Materials[i] = new IMaterial[model.Materials[i].Length];
+
+					for (var j = 0; j < model.Materials[i].Length; ++j)
+					{
+						Materials[i][j] = model.Materials[i][j]?.Clone();
+					}
+				}
+			}
+
+			SetModel(model.Model, false);
+			ModelPath = model.ModelPath;
 		}
 	}
 }

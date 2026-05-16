@@ -1,5 +1,6 @@
 ﻿using AssetManagementBase;
 using DigitalRiseModel;
+using DigitalRiseModel.Animation;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Nursia.Attributes;
@@ -18,10 +19,7 @@ namespace Nursia.SceneGraph
 		/// </summary>
 		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
 
-		internal NursiaModel NursiaModel { get; } = new NursiaModel
-		{
-			ModelInstance = new DrModelInstance()
-		};
+		internal NursiaModel NursiaModel { get; } = new NursiaModel();
 
 		[Browsable(false)]
 		public IMaterial[][] Materials
@@ -33,7 +31,7 @@ namespace Nursia.SceneGraph
 
 		[Browsable(false)]
 		[JsonIgnore]
-		public DrModelInstance ModelInstance => NursiaModel.ModelInstance;
+		public ISkeleton Skeleton => NursiaModel.ModelInstance;
 
 		[JsonIgnore]
 		[Category("Resources")]
@@ -74,13 +72,13 @@ namespace Nursia.SceneGraph
 
 			foreach (var attachment in BonesAttachments)
 			{
-				if (attachment.ModelInstance == null || attachment.Bone == null)
+				if (attachment.Bone == null)
 				{
 					continue;
 				}
 
-				var transform = attachment.Transform * ModelInstance.GetBoneGlobalTransform(attachment.Bone.Index) * GlobalTransform;
-				attachment.InternalModel.AddRenderJobs(camera, batch, transform);
+				var transform = attachment.Transform * NursiaModel.ModelInstance.GetBoneGlobalTransform(attachment.Bone.Index) * GlobalTransform;
+				attachment.NursiaModel.AddRenderJobs(camera, batch, transform);
 			}
 		}
 
@@ -102,22 +100,7 @@ namespace Nursia.SceneGraph
 			base.CopyFrom(node);
 
 			var model = (NursiaModelNode)node;
-			if (model.Materials != null)
-			{
-				Materials = new IMaterial[model.Materials.Length][];
-				for (var i = 0; i < model.Materials.Length; ++i)
-				{
-					Materials[i] = new IMaterial[model.Materials[i].Length];
-
-					for (var j = 0; j < model.Materials[i].Length; ++j)
-					{
-						Materials[i][j] = model.Materials[i][j]?.Clone();
-					}
-				}
-			}
-
-			NursiaModel.SetModel(model.Model, false);
-			ModelPath = model.ModelPath;
+			NursiaModel.CopyFrom(model.NursiaModel);
 		}
 	}
 }

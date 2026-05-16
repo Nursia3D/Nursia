@@ -107,7 +107,7 @@
 
 #ifdef SKINNED
 
-#define MAXBONES 128
+#define MAXBONES 72
 
 #endif
 

@@ -16,6 +16,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DigitalRiseModel\Source\DigitalRiseModel.FNA.Core.csproj" />
+    <ProjectReference Include="..\..\DigitalRiseModel\DigitalRiseModel\DigitalRiseModel.FNA.Core.csproj" />
   </ItemGroup>
 </Project>
