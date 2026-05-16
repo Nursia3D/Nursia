@@ -3,9 +3,9 @@
     "ViewAngle": 90.0,
     "NearPlane": 0.1,
     "FarPlane": 1000.0,
-    "Translation": "-6.1163106, 0.06683208, 10.345116",
+    "Translation": "-2.1689467, 0.23677522, 21.90822",
     "Scale": "1, 1, 1",
-    "Rotation": "2.8102217, 340.3138, 0",
+    "Rotation": "356.28043, 7.567531, 0",
     "Children": []
   },
   "RenderEnvironment": {
@@ -16,18 +16,6 @@
   },
   "Root": {
     "$type": "Nursia.SceneGraph.NursiaModelNode, Nursia",
-    "Materials": [
-      [
-        {
-          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
-          "AmbientColor": "Black",
-          "DiffuseColor": "White",
-          "SpecularColor": "Black",
-          "SpecularPower": 250.0,
-          "EmissiveColor": "Black"
-        }
-      ]
-    ],
     "ModelPath": "../Models/sword.gltf",
     "Scale": "1, 1, 1",
     "Children": []

@@ -22,6 +22,7 @@ namespace Nursia.SceneGraph
 		internal NursiaModel NursiaModel { get; } = new NursiaModel();
 
 		[Browsable(false)]
+		[JsonIgnore]
 		public IMaterial[][] Materials
 		{
 			get => NursiaModel.Materials;

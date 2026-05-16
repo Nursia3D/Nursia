@@ -1,4 +1,5 @@
 ﻿using AssetManagementBase;
+using DigitalRiseModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -267,5 +268,22 @@ namespace Nursia.Materials
 		{
 			return InternalGetBinding(materialTechnique, lightTechnique, shadow, translucent, normalMapping && NormalTexture != null, clipPlane);
 		}
+
+		public static BlinnPhongMaterial FromDrMaterial(DrMaterial source)
+		{
+			var result = new BlinnPhongMaterial
+			{
+				DiffuseColor = source.DiffuseColor,
+				SpecularColor = source.SpecularColor,
+				SpecularPower = source.Shininess,
+				EmissiveColor = source.EmissiveColor,
+				DiffuseTexture = source.DiffuseTexture,
+				SpecularTexture = source.SpecularTexture,
+				NormalTexture = source.NormalTexture,
+			};
+
+			return result;
+		}
+
 	}
 }

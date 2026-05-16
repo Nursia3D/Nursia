@@ -3,7 +3,6 @@ using DigitalRiseModel;
 using Microsoft.Xna.Framework;
 using Nursia.Materials;
 using Nursia.Rendering;
-using Nursia.Serialization;
 using System;
 using System.Collections.Generic;
 
@@ -58,7 +57,11 @@ namespace Nursia.SceneGraph
 		{
 			get => ModelInstance.Model;
 
-			set => SetModel(value, true);
+			set
+			{
+				ModelInstance.Model = value;
+				SetMaterialsFromModel();
+			}
 		}
 
 		public string ModelPath { get; set; }
@@ -84,23 +87,7 @@ namespace Nursia.SceneGraph
 		{
 			if (!string.IsNullOrEmpty(ModelPath))
 			{
-				var model = assetManager.LoadModel(Nrs.GraphicsDevice, ModelPath, ModelLoadFlags.EnsureUVs);
-				SetModel(model, false);
-			}
-
-			if (Materials != null)
-			{
-				for (var i = 0; i < Materials.Length; ++i)
-				{
-					for (var j = 0; j < Materials[i].Length; ++j)
-					{
-						var external = Materials[i][j] as IHasExternalAssets;
-						if (external != null)
-						{
-							external.Load(assetManager);
-						}
-					}
-				}
+				Model = assetManager.LoadModel(Nrs.GraphicsDevice, ModelPath, ModelLoadFlags.EnsureUVs);
 			}
 		}
 
@@ -127,23 +114,8 @@ namespace Nursia.SceneGraph
 						continue;
 					}
 
-					Materials[i][j] = new BlinnPhongMaterial
-					{
-						DiffuseColor = meshPart.Material.DiffuseColor,
-						DiffuseTexture = meshPart.Material.DiffuseTexture,
-						NormalTexture = meshPart.Material.NormalTexture
-					};
+					Materials[i][j] = BlinnPhongMaterial.FromDrMaterial(meshPart.Material);
 				}
-			}
-		}
-
-		public void SetModel(DrModel model, bool setMaterials)
-		{
-			ModelInstance.Model = model;
-
-			if (setMaterials)
-			{
-				SetMaterialsFromModel();
 			}
 		}
 
@@ -189,21 +161,7 @@ namespace Nursia.SceneGraph
 
 		public void CopyFrom(NursiaModel model)
 		{
-			if (model.Materials != null)
-			{
-				Materials = new IMaterial[model.Materials.Length][];
-				for (var i = 0; i < model.Materials.Length; ++i)
-				{
-					Materials[i] = new IMaterial[model.Materials[i].Length];
-
-					for (var j = 0; j < model.Materials[i].Length; ++j)
-					{
-						Materials[i][j] = model.Materials[i][j]?.Clone();
-					}
-				}
-			}
-
-			SetModel(model.Model, false);
+			Model = model.Model;
 			ModelPath = model.ModelPath;
 		}
 	}
