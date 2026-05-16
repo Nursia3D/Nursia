@@ -1,0 +1,30 @@
+<Project>
+  <Project.ExportOptions Namespace="DigitalRiseModel.Samples.Character.UI" Class="MainPanel" OutputPath="D:\Projects\DigitalRiseModel\Samples\DigitalRiseModel.Samples.Character\UI" />
+  <Panel>
+    <VerticalStackPanel>
+      <Label Text="WASD - Move" />
+      <Label Text="Space - Jump" />
+      <Label Text="R - Draw/Sheath Weapon" />
+      <Label Text="Left Shift - Slash Weapon" />
+      <Label Text="Escape - Turn Mouse Lock On/Off" />
+    </VerticalStackPanel>
+    <Label Text="FPS:" Left="-4" HorizontalAlignment="Right" Id="_labelFPS" />
+    <Grid ColumnSpacing="8" HorizontalAlignment="Right" VerticalAlignment="Bottom" Left="-4" Id="_panelStatistics">
+      <Grid.DefaultRowProportion Type="Auto" />
+      <Grid.ColumnsProportions>
+        <Proportion Type="Auto" />
+        <Proportion Type="Fill" />
+      </Grid.ColumnsProportions>
+      <Label Text="Effects Switches:" />
+      <Label Text="Draw Calls:" Grid.Row="1" />
+      <Label Text="Vertices Drawn:" Grid.Row="2" />
+      <Label Text="Primitives Drawn:" Grid.Row="3" />
+      <Label Text="Meshes Drawn:" Grid.Row="4" />
+      <Label Text="10" Id="_labelEffectsSwitches" Grid.Column="1" />
+      <Label Text="10" Id="_labelDrawCalls" Grid.Column="1" Grid.Row="1" />
+      <Label Text="10" Id="_labelVerticesDrawn" Grid.Column="1" Grid.Row="2" />
+      <Label Text="10" Id="_labelPrimitivesDrawn" Grid.Column="1" Grid.Row="3" />
+      <Label Text="10" Id="_labelMeshesDrawn" Grid.Column="1" Grid.Row="4" />
+    </Grid>
+  </Panel>
+</Project>

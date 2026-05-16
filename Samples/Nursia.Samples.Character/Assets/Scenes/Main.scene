@@ -1,0 +1,132 @@
+{
+  "Camera": {
+    "ViewAngle": 60.0,
+    "Width": 1518.0,
+    "Height": 1297.0,
+    "NearPlane": 0.1,
+    "FarPlane": 1000.0,
+    "Translation": "2.0995681, 5.416637, 2.0473413",
+    "Scale": "0.9999998, 0.9999998, 0.9999998",
+    "Rotation": "312.34, 51.046837, 0",
+    "Children": []
+  },
+  "RenderEnvironment": {
+    "AmbientLightColor": "Black",
+    "FogColor": "LightGray",
+    "FogStart": 100.0,
+    "FogEnd": 1000.0,
+    "Sky": {
+      "DiffuseColor": "White",
+      "DiffuseTexturePath": "../Textures/SkyCubeMap.dds"
+    }
+  },
+  "Root": {
+    "Id": "Root",
+    "Scale": "1, 1, 1",
+    "Children": [
+      {
+        "$type": "Nursia.SceneGraph.Lights.DirectLight, Nursia",
+        "ShadowFadeStart": 0.8,
+        "ShadowIntensity": 0.6,
+        "Color": "#FFCC01FF",
+        "MaxShadowDistance": 100.0,
+        "Id": "_mainLight",
+        "Translation": "-5, 25, 6",
+        "Scale": "1, 1, 1",
+        "Rotation": "325, 23, 0",
+        "Children": []
+      },
+      {
+        "$type": "Nursia.SceneGraph.Primitives.Plane, Nursia",
+        "Size": "1, 1",
+        "Tessellation": "1, 1",
+        "NormalDirection": "UpY",
+        "UScale": 50.0,
+        "VScale": 50.0,
+        "Material": {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "CastsShadows": false,
+          "AmbientColor": "Black",
+          "DiffuseColor": "White",
+          "SpecularColor": "Black",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black",
+          "DiffuseTexturePath": "../Textures/checker.dds"
+        },
+        "Id": "plane",
+        "Scale": "200, 1, 200",
+        "Children": []
+      },
+      {
+        "$type": "Nursia.SceneGraph.NursiaModelNode, Nursia",
+        "Materials": [
+          [
+            {
+              "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+              "AmbientColor": "Black",
+              "DiffuseColor": "White",
+              "SpecularColor": "Black",
+              "SpecularPower": 250.0,
+              "EmissiveColor": "Black"
+            }
+          ],
+          [
+            {
+              "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+              "AmbientColor": "Black",
+              "DiffuseColor": "White",
+              "SpecularColor": "Black",
+              "SpecularPower": 250.0,
+              "EmissiveColor": "Black"
+            }
+          ]
+        ],
+        "ModelPath": "../Models/mixamo.gltf",
+        "Id": "player",
+        "Scale": "1, 1, 1",
+        "Children": [
+          {
+            "Id": "_cameraMount",
+            "Translation": "0, 1.3, 0",
+            "Scale": "1, 1, 1",
+            "Children": [
+              {
+                "$type": "Nursia.SceneGraph.Camera, Nursia",
+                "ViewAngle": 60.0,
+                "Width": 1200.0,
+                "Height": 800.0,
+                "NearPlane": 0.1,
+                "FarPlane": 1000.0,
+                "Id": "_mainCamera",
+                "Translation": "0, 0, -5",
+                "Scale": "1, 1, 1",
+                "Rotation": "0, 180, 0",
+                "Children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "$type": "Nursia.SceneGraph.Primitives.Capsule, Nursia",
+        "Length": 1.0,
+        "Radius": 0.5,
+        "Tessellation": 8,
+        "UScale": 1.0,
+        "VScale": 1.0,
+        "Material": {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "AmbientColor": "Black",
+          "DiffuseColor": "#0379FFFF",
+          "SpecularColor": "White",
+          "SpecularPower": 250.0,
+          "EmissiveColor": "Black"
+        },
+        "Id": "c",
+        "Translation": "0, 1, 25",
+        "Scale": "1, 1, 1",
+        "Children": []
+      }
+    ]
+  }
+}
