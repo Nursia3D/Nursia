@@ -32,7 +32,7 @@ namespace Nursia.SceneGraph
 
 		[Browsable(false)]
 		[JsonIgnore]
-		public ISkeleton Skeleton => NursiaModel.ModelInstance;
+		public DrModelInstance ModelInstance => NursiaModel.ModelInstance;
 
 		[JsonIgnore]
 		[Category("Resources")]

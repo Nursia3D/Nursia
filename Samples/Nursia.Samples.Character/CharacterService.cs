@@ -1,7 +1,5 @@
-﻿using AssetManagementBase;
-using DigitalRiseModel.Animation;
+﻿using DigitalRiseModel.Animation;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Nursia.SceneGraph;
 using System;
 
@@ -88,7 +86,7 @@ namespace DigitalRiseModel
 			_modelNode.BonesAttachments.Add(_weaponAttachment);
 			SetSheathedTransform();
 
-			_player = new AnimationController(_modelNode.Skeleton);
+			_player = new AnimationController(_modelNode.ModelInstance);
 			_player.StartClip("Idle", true);
 			_modelNode.Translation = new Vector3(0, DefaultY, 0);
 
@@ -115,7 +113,7 @@ namespace DigitalRiseModel
 
 			var transform = new SrtTransform
 			{
-				Translation = new Vector3(-0.6f, 0, -1.4f),
+				Translation = new Vector3(-12f, 0, -20f),
 				Scale = new Vector3(16),
 				Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, MathHelper.ToRadians(180.0f))
 			};
@@ -128,7 +126,7 @@ namespace DigitalRiseModel
 
 			var transform = new SrtTransform
 			{
-				Translation = new Vector3(3.5f, 0f, 0f),
+				Translation = new Vector3(50f, 0f, 0f),
 				Scale = new Vector3(16),
 				Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, MathHelper.ToRadians(270.0f))
 			};

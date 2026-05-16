@@ -57,11 +57,7 @@ namespace Nursia.SceneGraph
 		{
 			get => ModelInstance.Model;
 
-			set
-			{
-				ModelInstance.Model = value;
-				SetMaterialsFromModel();
-			}
+			set => ModelInstance.Model = value;
 		}
 
 		public string ModelPath { get; set; }
@@ -75,10 +71,7 @@ namespace Nursia.SceneGraph
 
 		public NursiaModel()
 		{
-			/*			ModelInstance.ModelChanged += (s, a) =>
-						{
-
-						};*/
+			ModelInstance.ModelChanged += (s, a) => SetMaterialsFromModel();
 		}
 
 		public IMaterial GetMaterial(int meshIndex, int meshPartIndex) => Materials[meshIndex][meshPartIndex];

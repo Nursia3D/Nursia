@@ -13,7 +13,7 @@
     <MonoGameVersion>3.8.0.1641</MonoGameVersion>
     <AppMonoGameVersion>3.8.4.1</AppMonoGameVersion>
     <MyraVersion>1.5.11</MyraVersion>
-    <DigitalRiseModelVersion>0.7.0</DigitalRiseModelVersion>
+    <DigitalRiseModelVersion>0.7.1</DigitalRiseModelVersion>
     <XNAssetsVersion>0.8.4</XNAssetsVersion>
     <StbImageWriteSharpVersion>1.16.7</StbImageWriteSharpVersion>
   </PropertyGroup>

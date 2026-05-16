@@ -256,7 +256,7 @@ namespace Nursia.Editor.UI
 				Scene.Root.Traverse(AddGizmos);
 
 				// Draw main target
-				var target = _scene.RenderToTarget(_renderer, camera, bounds.Width, bounds.Height);
+				var target = _sceneMain.RenderToTarget(_renderer, camera, bounds.Width, bounds.Height);
 				_spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.Opaque);
 				_spriteBatch.Draw(target, bounds, Color.White);
 				_spriteBatch.End();

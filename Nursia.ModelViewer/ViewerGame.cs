@@ -145,7 +145,14 @@ namespace Nursia.ModelViewer
 			_mainPanel._comboPlaybackMode.SelectedIndex = 0;
 			_mainPanel._comboPlaybackMode.SelectedIndexChanged += (s, a) =>
 			{
-				_player.PlaybackMode = (PlaybackMode)_mainPanel._comboPlaybackMode.SelectedIndex.Value;
+				if (_player.RootNode != null)
+				{
+					bool isBackward = _mainPanel._comboPlaybackMode.SelectedIndex.Value == 1;
+					if (isBackward)
+						_player.RootNode.Flags |= AnimationFlags.PlayBackwards;
+					else
+						_player.RootNode.Flags &= ~AnimationFlags.PlayBackwards;
+				}
 			};
 
 			_mainPanel._sliderSpeed.ValueChanged += (s, a) =>
@@ -197,12 +204,12 @@ namespace Nursia.ModelViewer
 			_player = new AnimationController(_modelNode.ModelInstance);
 			_player.TimeChanged += (s, a) =>
 			{
-				if (_player.AnimationClip == null)
+				if (_player.RootNode == null)
 				{
 					return;
 				}
 
-				var k = (float)(_player.Time / _player.AnimationClip.Duration);
+				var k = (float)(_player.Time / _player.RootNode.Duration);
 
 				var slider = _mainPanel._sliderTime;
 				slider.Value = slider.Minimum + k * (slider.Maximum - slider.Minimum);
@@ -229,7 +236,7 @@ namespace Nursia.ModelViewer
 			}
 
 			var k = (e.NewValue - _mainPanel._sliderTime.Minimum) / (_mainPanel._sliderTime.Maximum - _mainPanel._sliderTime.Minimum);
-			var passed = _player.AnimationClip.Duration * k;
+			var passed = _player.RootNode.Duration * k;
 			_player.Time = passed;
 		}
 
@@ -242,13 +249,20 @@ namespace Nursia.ModelViewer
 			else
 			{
 				var clip = (AnimationClip)((Label)_mainPanel._comboAnimations.SelectedItem).Tag;
+
+				var flags = AnimationFlags.Looped;
+				if (_mainPanel._comboPlaybackMode.SelectedIndex == 1)
+				{
+					flags |= AnimationFlags.PlayBackwards;
+				}
+
 				if (_mainPanel._checkCrossfade.IsChecked)
 				{
-					_player.CrossFade(clip.Name, TimeSpan.FromSeconds(0.5f));
+					_player.CrossfadeToClip(clip, TimeSpan.FromSeconds(0.5f), flags);
 				}
 				else
 				{
-					_player.StartClip(clip.Name);
+					_player.StartClip(clip, flags);
 				}
 			}
 
