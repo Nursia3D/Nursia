@@ -93,6 +93,7 @@ namespace DigitalRiseModel.Samples.Character
 
 			// Nrs.DebugSettings.VisualizeBuffer = DebugVisualizeBuffer.ReflectionShadowMap;
 			Nrs.GraphicsSettings.ShadowType = ShadowType.PCF;
+			Nrs.GraphicsSettings.MaxShadowDistance = 100.0f;
 			// Nrs.DebugSettings.DrawCamerasFrustums = true;
 
 			// UI panel
