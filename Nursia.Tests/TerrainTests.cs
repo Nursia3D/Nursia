@@ -2,13 +2,13 @@
 using Nursia.Data.Landscape;
 using Nursia.SceneGraph.Landscape;
 using System.IO;
+using Xunit;
 
 namespace Nursia.Tests
 {
-	[TestClass]
 	public sealed class TerrainTests
 	{
-		[TestMethod]
+		[Fact]
 		public void TestLoadR16()
 		{
 			var assetManager = Utility.CreateAssetManager();
@@ -19,13 +19,13 @@ namespace Nursia.Tests
 				heightField = HeightField.FromStreamR16(stream, 256, 256);
 			}
 
-			Assert.AreEqual(256, heightField.Columns);
-			Assert.AreEqual(256, heightField.Rows);
-			Assert.AreEqual(0.3343862f, heightField.CalculateInterpolatedHeight(0, 0), Utility.ZeroTolerance);
-			Assert.AreEqual(0.106050201f, heightField.CalculateInterpolatedHeight(128, 0), Utility.ZeroTolerance);
+			Assert.Equal(256, heightField.Columns);
+			Assert.Equal(256, heightField.Rows);
+			Assert.Equal(0.3343862f, heightField.CalculateInterpolatedHeight(0, 0), Utility.ZeroTolerance);
+			Assert.Equal(0.106050201f, heightField.CalculateInterpolatedHeight(128, 0), Utility.ZeroTolerance);
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TestLoadSaveHF()
 		{
 			var assetManager = Utility.CreateAssetManager();
@@ -52,19 +52,19 @@ namespace Nursia.Tests
 				heightField2 = HeightField.FromStreamHf(stream);
 			}
 
-			Assert.AreEqual(heightField.Columns, heightField2.Columns);
-			Assert.AreEqual(heightField.Rows, heightField2.Columns);
+			Assert.Equal(heightField.Columns, heightField2.Columns);
+			Assert.Equal(heightField.Rows, heightField2.Columns);
 
 			for (var x = 0; x < heightField.Columns; ++x)
 			{
 				for (var y = 0; y < heightField.Rows; ++y)
 				{
-					Assert.AreEqual(heightField.GetHeight(x, y), heightField2.GetHeight(x, y), Utility.ZeroTolerance);
+					Assert.Equal(heightField.GetHeight(x, y), heightField2.GetHeight(x, y), Utility.ZeroTolerance);
 				}
 			}
 		}
 
-		[TestMethod]
+		[Fact]
 		public void TestTerrain()
 		{
 			var assetManager = Utility.CreateAssetManager();
@@ -81,8 +81,8 @@ namespace Nursia.Tests
 			};
 
 			Utility.AssertAreEqual(new BoundingBox(new Vector3(-5000f, -125.337585f, -5000f), new Vector3(5000f, 2948.5315f, 5000f)), terrain.BoundingBox.Value);
-			Assert.AreEqual(8, terrain.PatchesColumns);
-			Assert.AreEqual(8, terrain.PatchesRows);
+			Assert.Equal(8, terrain.PatchesColumns);
+			Assert.Equal(8, terrain.PatchesRows);
 
 			TerrainPatch patch;
 			for (var row = 0; row < terrain.PatchesRows; ++row)
@@ -90,17 +90,17 @@ namespace Nursia.Tests
 				for (var col = 0; col < terrain.PatchesColumns; ++col)
 				{
 					patch = terrain.Patches[row, col];
-					Assert.AreEqual(3, patch.Levels.Count);
-					Assert.AreEqual(361, patch.Levels[1].NumVertices);
-					Assert.AreEqual(121, patch.Levels[2].NumVertices);
+					Assert.Equal(3, patch.Levels.Count);
+					Assert.Equal(361, patch.Levels[1].NumVertices);
+					Assert.Equal(121, patch.Levels[2].NumVertices);
 				}
 			}
 
 			patch = terrain.Patches[0, 0];
-			Assert.AreEqual(1225, patch.Levels[0].NumVertices);
+			Assert.Equal(1225, patch.Levels[0].NumVertices);
 
 			patch = terrain.Patches[7, 0];
-			Assert.AreEqual(1190, patch.Levels[0].NumVertices);
+			Assert.Equal(1190, patch.Levels[0].NumVertices);
 		}
 	}
 }

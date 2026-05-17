@@ -1,12 +1,12 @@
-﻿namespace Nursia.Tests
+﻿using System.Runtime.CompilerServices;
+
+namespace Nursia.Tests;
+
+internal static class TestAssemblyInitializer
 {
-	[TestClass]
-	public class TestsEnvironment
+	[ModuleInitializer]
+	public static void Initialize()
 	{
-		[AssemblyInitialize]
-		public static void SetUp(TestContext testContext)
-		{
-			Nrs.SetGame(new TestGame(), false);
-		}
+		Nrs.SetGame(new TestGame(), false);
 	}
 }
