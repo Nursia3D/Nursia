@@ -21,11 +21,11 @@ jobs:
     - name: Generate effects build scripts
       run: efscriptgen.exe Nursia/Effects
     - name: Generate effects build scripts 2
-      run: efscriptgen.exe Samples/Nursia.Samples.ThirdPerson/Effects
+      run: efscriptgen.exe Samples/Nursia.Samples.Character/Effects
     - name: Build effects
       run: Nursia/Effects/MonoGameOGL/compile_all.bat
     - name: Build effects 2
-      run: Samples/Nursia.Samples.ThirdPerson/Effects/MonoGameOGL/compile_all.bat
+      run: Samples/Nursia.Samples.Character/Effects/MonoGameOGL/compile_all.bat
     - name: Build solution
       run: dotnet build Nursia.MonoGame.DesktopGL.sln --configuration Release
     - name: Test

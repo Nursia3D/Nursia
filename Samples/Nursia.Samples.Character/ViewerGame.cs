@@ -1,17 +1,16 @@
 using AssetManagementBase;
-using DigitalRiseModel.Samples.Character.UI;
+using Nursia.Samples.Character.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Myra;
 using Myra.Graphics2D.UI;
-using Nursia;
 using Nursia.Rendering;
 using Nursia.SceneGraph;
 using System;
 using System.IO;
 
-namespace DigitalRiseModel.Samples.Character
+namespace Nursia.Samples.Character
 {
 	public class ViewerGame : Game
 	{
@@ -21,7 +20,7 @@ namespace DigitalRiseModel.Samples.Character
 		private readonly GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
 		private InputService _inputService;
-		private CharacterService _controllerService;
+		private Character _controllerService;
 		private Scene _scene;
 		private SceneNode _cameraMount = new SceneNode();
 		private Camera _mainCamera = new Camera();
@@ -66,12 +65,23 @@ namespace DigitalRiseModel.Samples.Character
 
 			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(AppContext.BaseDirectory, "Assets"));
 			_scene = assetManager.LoadStoredScene("Scenes/Main.scene");
-			var characterModel = _scene.Root.QueryFirstByType<NursiaModelNode>();
 
+			// Add reflection plane
+			var reflectionPlane = new ReflectionPlane
+			{
+				Scale = new Vector3(64, 64, 1),
+				Translation = new Vector3(-16, 0, 32),
+				Rotation = new Vector3(0, 135, 0),
+				DiffuseColor = Color.LightBlue
+			};
+			_scene.Root.Children.Add(reflectionPlane);
+
+
+			// Add character
+			var characterModel = _scene.Root.QueryFirstByType<NursiaModelNode>();
 			var swordScene = assetManager.LoadStoredScene("Scenes/Sword.scene");
 			var swordModel = swordScene.Root.QueryFirstByType<NursiaModelNode>();
-
-			_controllerService = new CharacterService(characterModel, swordModel);
+			_controllerService = new Character(characterModel, swordModel);
 
 			_cameraMount = _scene.Root.QueryFirstById("_cameraMount");
 			_mainCamera = _scene.Root.QueryFirstByType<Camera>();
@@ -81,16 +91,6 @@ namespace DigitalRiseModel.Samples.Character
 			_inputService.MouseMoved += _inputService_MouseMoved;
 			_inputService.KeyDown += _inputService_KeyDown;
 			_inputService.MouseLocked = true;
-
-			/*			// Add reflection plane
-						var reflectionPlane = new ReflectionPlane
-						{
-							Scale = new Vector3(64, 64, 1),
-							Translation = new Vector3(-16, 0, 32),
-							Rotation = new Vector3(0, 135, 0),
-							DiffuseColor = Color.LightBlue
-						};
-						_scene.Root.Children.Add(reflectionPlane);*/
 
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -196,21 +196,16 @@ namespace DigitalRiseModel.Samples.Character
 			// Render the scene
 			_scene.Render(_renderer, _mainCamera);
 
-			_spriteBatch.Begin();
+			// Update UI statistics
+			_mainPanel._labelFPS.Text = $"FPS: {_fpsCounter.FramesPerSecond}";
+			var stats = _renderer.Statistics;
+			_mainPanel._labelEffectsSwitches.Text = stats.EffectsSwitches.ToString();
+			_mainPanel._labelDrawCalls.Text = stats.DrawCalls.ToString();
+			_mainPanel._labelVerticesDrawn.Text = stats.VerticesDrawn.ToString();
+			_mainPanel._labelPrimitivesDrawn.Text = stats.PrimitivesDrawn.ToString();
+			_mainPanel._labelPassesDrawn.Text = stats.Passes.ToString();
 
-			var font = Nrs.DebugFont;
-			_spriteBatch.DrawString(font, $"FPS: {_fpsCounter.FramesPerSecond}", new Vector2(0, 0), Color.White);
-			_spriteBatch.DrawString(font, $"Effect Switches: {_renderer.Statistics.EffectsSwitches}", new Vector2(0, 24), Color.White);
-			_spriteBatch.DrawString(font, $"Draw Calls: {_renderer.Statistics.DrawCalls}", new Vector2(0, 48), Color.White);
-			_spriteBatch.DrawString(font, $"Vertices Drawn: {_renderer.Statistics.VerticesDrawn}", new Vector2(0, 72), Color.White);
-			_spriteBatch.DrawString(font, $"Primitives Drawn: {_renderer.Statistics.PrimitivesDrawn}", new Vector2(0, 96), Color.White);
-			_spriteBatch.DrawString(font, $"Passes: {_renderer.Statistics.Passes}", new Vector2(0, 120), Color.White);
-
-			/*			_spriteBatch.Draw(_light.ShadowMap, 
-							new Rectangle(0, 0, 256, 256), 
-							Color.White);*/
-
-			_spriteBatch.End();
+			_desktop.Render();
 
 			_fpsCounter.OnFrameDrawn();
 		}

@@ -1,4 +1,4 @@
-namespace DigitalRiseModel.Samples.Character
+namespace Nursia.Samples.Character
 {
 	/// <summary>
 	/// Static configuration class for the Character sample application.

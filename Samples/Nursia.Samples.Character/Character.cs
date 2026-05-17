@@ -1,12 +1,13 @@
-﻿using DigitalRiseModel.Animation;
+﻿using DigitalRiseModel;
+using DigitalRiseModel.Animation;
 using Microsoft.Xna.Framework;
 using Nursia.SceneGraph;
 using System;
 
-namespace DigitalRiseModel
+namespace Nursia.Samples.Character
 {
 	/// <summary>Manages character animation, physics, and weapon state.</summary>
-	internal class CharacterService
+	internal class Character
 	{
 		private const float Gravity = 0.015f;
 		private const float DefaultY = 0.0f;
@@ -68,7 +69,7 @@ namespace DigitalRiseModel
 		}
 
 		/// <summary>Initializes character model, animations, and weapon attachment.</summary>
-		public CharacterService(NursiaModelNode characterModelNode, NursiaModelNode swordModelNode)
+		public Character(NursiaModelNode characterModelNode, NursiaModelNode swordModelNode)
 		{
 			if (characterModelNode == null)
 			{

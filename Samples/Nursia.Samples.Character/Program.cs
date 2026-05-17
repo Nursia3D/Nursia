@@ -1,7 +1,7 @@
 using AssetManagementBase;
 using System;
 
-namespace DigitalRiseModel.Samples.Character
+namespace Nursia.Samples.Character
 {
 	class Program
 	{

@@ -3,9 +3,14 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>$(AppMonoGameTargetFramework)</TargetFramework>
+    <RootNamespace>Nursia.Samples.Character</RootNamespace>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Effects\MonoGameOGL\bin\ReflectionPlane.efb" />
+  </ItemGroup>  
 
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(AppMonoGameVersion)" />

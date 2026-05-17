@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace DigitalRiseModel.Samples.Character
+namespace Nursia.Samples.Character
 {
 	/// <summary>
 	/// Event args for input value changes, containing the old and new values.
