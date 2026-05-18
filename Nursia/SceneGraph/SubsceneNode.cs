@@ -57,6 +57,7 @@ namespace Nursia.SceneGraph
 				return base.BoundingBox;
 			}
 		}
+
 		protected internal override IReadOnlyCollection<SceneNode> ActualChildren
 		{
 			get

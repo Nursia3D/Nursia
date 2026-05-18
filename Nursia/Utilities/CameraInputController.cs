@@ -16,7 +16,9 @@ namespace Nursia.Utilities
 		public CameraInputController(Camera camera)
 		{
 			Camera = camera;
-			_lastMousePosition = Mouse.GetState().Position;
+
+			var mouse = Mouse.GetState();
+			_lastMousePosition = new Point(mouse.X, mouse.Y);
 		}
 
 		public void Update()
@@ -56,11 +58,12 @@ namespace Nursia.Utilities
 
 		private void UpdateRotation()
 		{
-			var mouseState = Mouse.GetState();
+			var mouse = Mouse.GetState();
+			var mousePosition = new Point(mouse.X, mouse.Y);
 
-			if (mouseState.RightButton == ButtonState.Pressed)
+			if (mouse.RightButton == ButtonState.Pressed)
 			{
-				var mouseDelta = _lastMousePosition - mouseState.Position;
+				var mouseDelta = _lastMousePosition - mousePosition;
 
 				var rotation = Camera.Rotation;
 				rotation.X += mouseDelta.Y * RotationSpeed;
@@ -69,7 +72,7 @@ namespace Nursia.Utilities
 				Camera.Rotation = rotation;
 			}
 
-			_lastMousePosition = mouseState.Position;
+			_lastMousePosition = mousePosition;
 		}
 
 	}
