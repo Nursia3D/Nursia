@@ -28,7 +28,7 @@ Use following resources if you need help with Nursia or have other questions:
 ## Screenshots
 <img width="1873" height="1040" alt="image" src="https://github.com/user-attachments/assets/f574c09a-9ec0-4d09-843b-45fe84af0f43" />
 <img width="1602" height="932" alt="image" src="https://github.com/user-attachments/assets/18ffcec2-79b9-48f5-95bd-5c8a5aa4a2d3" />
-<img width="1202" height="832" alt="image" src="https://github.com/user-attachments/assets/90e03a78-797e-4e1d-a44a-6d8ff33758df" />
+<img width="1202" height="832" alt="image" src="https://github.com/user-attachments/assets/eee4b4c0-0d45-4bc2-a780-ec2d02c183c7" />
 
 ## Credits
 * [U3D](https://u3d.io/) (shaders were borrowed from there)
