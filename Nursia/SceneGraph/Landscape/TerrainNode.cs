@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Nursia.Attributes;
+using Nursia.Materials;
 using Nursia.Serialization;
 using Nursia.Utilities;
 using System;
@@ -146,6 +147,8 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		public IMaterial Material { get; set; } = new TerrainMaterial();
+
 		protected internal override IReadOnlyCollection<SceneNode> ActualChildren
 		{
 			get
@@ -198,6 +201,12 @@ namespace Nursia.SceneGraph.Landscape
 
 				HeightField = heightField;
 			}
+
+			var hasExternalAssets = Material as IHasExternalAssets;
+			if (hasExternalAssets != null)
+			{
+				hasExternalAssets.Load(assetManager);
+			}
 		}
 
 		protected override SceneNode CreateInstanceCore() => new TerrainNode();
@@ -214,6 +223,11 @@ namespace Nursia.SceneGraph.Landscape
 			DetailLevels = terrainNode.DetailLevels;
 			PatchSize = terrainNode.PatchSize;
 			VerticalSkirtScale = terrainNode.VerticalSkirtScale;
+
+			if (terrainNode.Material != null)
+			{
+				Material = terrainNode.Material.Clone();
+			}
 		}
 
 		public float GetHeight(Vector3 worldPos)

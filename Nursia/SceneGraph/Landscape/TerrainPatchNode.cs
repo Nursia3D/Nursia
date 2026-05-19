@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Nursia.Materials;
 using Nursia.Utilities;
 using System;
 using System.Collections.Generic;
@@ -233,6 +234,8 @@ namespace Nursia.SceneGraph.Landscape
 			{
 				Mesh = meshPart
 			};
+
+			meshNode.Material = Terrain.Material;
 
 			LodLevels.Add(new LodEntry(meshNode, LodLevels.Count * 10));
 		}
