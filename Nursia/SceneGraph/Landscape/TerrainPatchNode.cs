@@ -1,10 +1,5 @@
-﻿// This code had been borrowed from https://github.com/gameplay3d/gameplay
-// And ported to C#
-
-using DigitalRiseModel;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Nursia.Data.Landscape;
 using Nursia.Utilities;
 using System;
 using System.Collections.Generic;
@@ -12,16 +7,12 @@ using System.Diagnostics;
 
 namespace Nursia.SceneGraph.Landscape
 {
-	/// <summary>
-	/// Defines a single patch for a Terrain.
-	/// </summary>
-	public partial class TerrainPatch : DrDisposable
+	internal class TerrainPatchNode : LevelOfDetailNode
 	{
 		private bool _dirty = true;
-		private readonly List<DrMeshPart> _levels = new List<DrMeshPart>();
 		private int _maxStepShift = 0;
 
-		private Terrain Terrain { get; }
+		private TerrainNode Terrain { get; }
 
 		public int X1 { get; }
 		public int X2 { get; }
@@ -29,21 +20,19 @@ namespace Nursia.SceneGraph.Landscape
 		public int Z2 { get; }
 		public int MaxStep { get; }
 
-
-		public List<DrMeshPart> Levels
+		protected internal override IReadOnlyCollection<SceneNode> ActualChildren
 		{
 			get
 			{
 				Update();
 
-				return _levels;
+				return base.ActualChildren;
 			}
 		}
 
-		public BoundingBox BoundingBox => Levels[0].BoundingBox;
 		public DateTime InvalidateTime { get; private set; }
 
-		public TerrainPatch(Terrain terrain,
+		public TerrainPatchNode(TerrainNode terrain,
 							int x1, int z1, int x2, int z2,
 							int maxStep)
 		{
@@ -55,33 +44,18 @@ namespace Nursia.SceneGraph.Landscape
 			MaxStep = maxStep;
 		}
 
-		public override void Dispose(bool disposing)
-		{
-			if (!disposing)
-			{
-				return;
-			}
-
-			foreach (var level in _levels)
-			{
-				level.Dispose();
-			}
-
-			_levels.Clear();
-		}
-
-		internal bool PositionAffectsPatch(int x, int z)
+		public bool PositionAffectsPatch(int x, int z)
 		{
 			return X1 - _maxStepShift <= x && x <= X2 + _maxStepShift && Z1 - _maxStepShift <= z && z <= Z2 + _maxStepShift;
 		}
 
-		internal void Invalidate()
+		public void Invalidate()
 		{
 			_dirty = true;
 			InvalidateTime = DateTime.Now;
 		}
 
-		internal void Update()
+		public void Update()
 		{
 			if (!_dirty)
 			{
@@ -89,12 +63,12 @@ namespace Nursia.SceneGraph.Landscape
 			}
 
 			// Destroy previous lods
-			foreach (var level in _levels)
+			foreach (var child in LodLevels)
 			{
-				level.Dispose();
+				child.Node.Dispose();
 			}
 
-			_levels.Clear();
+			LodLevels.Clear();
 
 			// Create new ones
 			_maxStepShift = 0;
@@ -254,7 +228,13 @@ namespace Nursia.SceneGraph.Landscape
 			var meshPart = meshBuilder.CreateMeshPart(Nrs.GraphicsDevice);
 			// meshPart.Tag = _levels.Count;
 			// meshPart.Tag = InvalidateTime;
-			_levels.Add(meshPart);
+
+			var meshNode = new MeshNode
+			{
+				Mesh = meshPart
+			};
+
+			LodLevels.Add(new LodEntry(meshNode, LodLevels.Count * 10));
 		}
 	}
 }

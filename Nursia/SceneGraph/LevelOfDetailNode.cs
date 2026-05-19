@@ -13,8 +13,34 @@ namespace Nursia.SceneGraph
 {
 	public class LodEntry
 	{
-		public SceneNode Node { get; set; }
+		private SceneNode _node;
+
+		public SceneNode Node
+		{
+			get => _node;
+
+			set
+			{
+				if (value == null)
+				{
+					throw new ArgumentNullException(nameof(value));
+				}
+
+				_node = value;
+			}
+		}
+
 		public float MaxScreenSpaceSize { get; set; }
+
+		public LodEntry()
+		{
+		}
+
+		public LodEntry(SceneNode node, float maxScreenSpaceSize)
+		{
+			Node = node;
+			MaxScreenSpaceSize = maxScreenSpaceSize;
+		}
 	}
 
 	/// <summary>
