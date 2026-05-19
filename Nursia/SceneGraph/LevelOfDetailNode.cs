@@ -4,7 +4,6 @@ using Nursia.Attributes;
 using Nursia.Rendering;
 using Nursia.Utilities;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -51,17 +50,48 @@ namespace Nursia.SceneGraph
 	{
 		private readonly List<SceneNode> _actualChildren = new List<SceneNode>();
 		private bool _childrenDirty = true;
+		private LodEntry _visibleLodEntry = null;
 
 		[Browsable(false)]
 		[JsonIgnore]
 		public ObservableCollection<LodEntry> LodLevels { get; } = new ObservableCollection<LodEntry>();
+
+		public LodEntry VisibleLodEntry
+		{
+			get => _visibleLodEntry;
+
+			set
+			{
+				if (ReferenceEquals(value, _visibleLodEntry))
+				{
+					return;
+				}
+
+				_visibleLodEntry = value;
+
+				InvalidateChildren();
+
+			}
+		}
 
 		[Browsable(false)]
 		protected internal override IReadOnlyCollection<SceneNode> ActualChildren
 		{
 			get
 			{
-				UpdateActualChildren();
+				if (_childrenDirty)
+				{
+					_actualChildren.Clear();
+
+					if (_visibleLodEntry != null)
+					{
+						_actualChildren.Add(_visibleLodEntry.Node);
+					}
+
+					_actualChildren.AddRange(Children);
+					_childrenDirty = false;
+				}
+
 				return _actualChildren;
 			}
 		}
@@ -106,23 +136,23 @@ namespace Nursia.SceneGraph
 				}
 			}
 
-			SceneNode selectedLod = null;
+			LodEntry visibleLodEntry = null;
 			for (int i = LodLevels.Count - 1; i >= 0; i--)
 			{
 				var entry = LodLevels[i];
 				if (screenSpaceSize > entry.MaxScreenSpaceSize)
 				{
-					selectedLod = entry.Node;
+					visibleLodEntry = entry;
 					break;
 				}
 			}
 
-			if (selectedLod == null && LodLevels.Count > 0)
+			if (visibleLodEntry == null && LodLevels.Count > 0)
 			{
-				selectedLod = LodLevels[LodLevels.Count - 1].Node;
+				visibleLodEntry = LodLevels[LodLevels.Count - 1];
 			}
 
-			selectedLod.AddRenderJobs(camera, batch);
+			VisibleLodEntry = visibleLodEntry;
 		}
 
 
@@ -166,23 +196,15 @@ namespace Nursia.SceneGraph
 			}
 		}
 
-		private void UpdateActualChildren()
-		{
-			if (!_childrenDirty)
-			{
-				return;
-			}
-
-			_actualChildren.Clear();
-			_actualChildren.AddRange(from e in LodLevels select e.Node);
-			_actualChildren.AddRange(Children);
-			_childrenDirty = false;
-		}
-
 		protected override void OnChildrenChanged()
 		{
 			base.OnChildrenChanged();
 
+			InvalidateChildren();
+		}
+
+		private void InvalidateChildren()
+		{
 			_childrenDirty = true;
 		}
 	}
