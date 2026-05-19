@@ -29,13 +29,13 @@ namespace Nursia.SceneGraph
 			}
 		}
 
-		public float MaxScreenSpaceSize { get; set; }
+		public float? MaxScreenSpaceSize { get; set; }
 
 		public LodEntry()
 		{
 		}
 
-		public LodEntry(SceneNode node, float maxScreenSpaceSize)
+		public LodEntry(SceneNode node, float? maxScreenSpaceSize = null)
 		{
 			Node = node;
 			MaxScreenSpaceSize = maxScreenSpaceSize;
@@ -56,7 +56,9 @@ namespace Nursia.SceneGraph
 		[JsonIgnore]
 		public ObservableCollection<LodEntry> LodLevels { get; } = new ObservableCollection<LodEntry>();
 
-		public LodEntry VisibleLodEntry
+		public float LodLevelSize { get; set; } = 0.5f;
+
+		private LodEntry VisibleLodEntry
 		{
 			get => _visibleLodEntry;
 
@@ -122,37 +124,38 @@ namespace Nursia.SceneGraph
 
 			if (LodLevels.Count == 0)
 			{
+				VisibleLodEntry = null;
 				return;
 			}
 
-			float screenSpaceSize = float.MaxValue;
-
-			if (camera != null)
+			var bbox = GetBoundingBoxRecursive();
+			if (bbox == null)
 			{
-				var bbox = GetBoundingBoxRecursive();
-				if (bbox.HasValue)
-				{
-					screenSpaceSize = CalculateScreenSpaceSize(bbox.Value, camera);
-				}
+				VisibleLodEntry = null;
+				return;
 			}
 
-			LodEntry visibleLodEntry = null;
+			var screenSpaceSize = CalculateScreenSpaceSize(bbox.Value, camera);
+
+			int? lodLevel = null;
 			for (int i = LodLevels.Count - 1; i >= 0; i--)
 			{
 				var entry = LodLevels[i];
-				if (screenSpaceSize > entry.MaxScreenSpaceSize)
+
+				var maxScreenSpaceSize = entry.MaxScreenSpaceSize ?? (float)Math.Pow(LodLevelSize, i + 1);
+				if (screenSpaceSize <= maxScreenSpaceSize)
 				{
-					visibleLodEntry = entry;
+					lodLevel = i;
 					break;
 				}
 			}
 
-			if (visibleLodEntry == null && LodLevels.Count > 0)
+			if (lodLevel == null)
 			{
-				visibleLodEntry = LodLevels[LodLevels.Count - 1];
+				lodLevel = 0;
 			}
 
-			VisibleLodEntry = visibleLodEntry;
+			VisibleLodEntry = LodLevels[lodLevel.Value];
 		}
 
 

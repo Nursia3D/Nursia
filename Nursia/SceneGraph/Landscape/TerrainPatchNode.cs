@@ -237,7 +237,7 @@ namespace Nursia.SceneGraph.Landscape
 
 			meshNode.Material = Terrain.Material;
 
-			LodLevels.Add(new LodEntry(meshNode, LodLevels.Count * 10));
+			LodLevels.Add(new LodEntry(meshNode));
 		}
 	}
 }
