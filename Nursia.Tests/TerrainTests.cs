@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Nursia.Data.Landscape;
+using Nursia.SceneGraph;
 using Nursia.SceneGraph.Landscape;
 using System.IO;
 using Xunit;
@@ -14,7 +14,7 @@ namespace Nursia.Tests
 			var assetManager = Utility.CreateAssetManager();
 
 			HeightField heightField;
-			using (var stream = assetManager.Open("heightMap.r16"))
+			using (var stream = assetManager.Open("heightmap.r16"))
 			{
 				heightField = HeightField.FromStreamR16(stream, 256, 256);
 			}
@@ -32,7 +32,7 @@ namespace Nursia.Tests
 
 			// Load
 			HeightField heightField;
-			using (var stream = assetManager.Open("heightMap.hf"))
+			using (var stream = assetManager.Open("heightmap.hf"))
 			{
 				heightField = HeightField.FromStreamHf(stream);
 			}
@@ -72,35 +72,32 @@ namespace Nursia.Tests
 			var data = assetManager.ReadAsByteArray("heightmap.hf");
 			var heightField = HeightField.FromHfBytes(data);
 
-			var terrain = new Terrain
+			var terrain = new TerrainNode
 			{
 				HeightField = heightField,
-				Size = new Vector3(10000, 4000, 10000),
+				TerrainSize = new Vector3(10000, 4000, 10000),
 				DetailLevels = 3,
 				VerticalSkirtScale = 0.1f
 			};
 
 			Utility.AssertAreEqual(new BoundingBox(new Vector3(-5000f, -125.337585f, -5000f), new Vector3(5000f, 2948.5315f, 5000f)), terrain.BoundingBox.Value);
-			Assert.Equal(8, terrain.PatchesColumns);
-			Assert.Equal(8, terrain.PatchesRows);
+			Assert.Equal(64, terrain.Patches.Count);
 
-			TerrainPatch patch;
-			for (var row = 0; row < terrain.PatchesRows; ++row)
+			MeshNode level;
+			foreach (var patch in terrain.Patches)
 			{
-				for (var col = 0; col < terrain.PatchesColumns; ++col)
-				{
-					patch = terrain.Patches[row, col];
-					Assert.Equal(3, patch.Levels.Count);
-					Assert.Equal(361, patch.Levels[1].NumVertices);
-					Assert.Equal(121, patch.Levels[2].NumVertices);
-				}
+				Assert.Equal(3, patch.Children.Count);
+
+				level = (MeshNode)patch.Children[1];
+				Assert.Equal(361, level.Mesh.NumVertices);
+
+				level = (MeshNode)patch.Children[2];
+				Assert.Equal(121, level.Mesh.NumVertices);
 			}
 
-			patch = terrain.Patches[0, 0];
-			Assert.Equal(1225, patch.Levels[0].NumVertices);
+			level = (MeshNode)terrain.Patches[0].Children[0];
 
-			patch = terrain.Patches[7, 0];
-			Assert.Equal(1190, patch.Levels[0].NumVertices);
+			Assert.Equal(1225, level.Mesh.NumVertices);
 		}
 	}
 }

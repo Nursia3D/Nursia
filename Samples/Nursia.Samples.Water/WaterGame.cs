@@ -24,17 +24,6 @@ namespace Nursia.Samples.Primives
 		private CameraInputController _controller;
 		private SpriteBatch _spriteBatch;
 
-		public static string ExecutingAssemblyDirectory
-		{
-			get
-			{
-				string codeBase = Assembly.GetExecutingAssembly().Location;
-				UriBuilder uri = new UriBuilder(codeBase);
-				string path = Uri.UnescapeDataString(uri.Path);
-				return Path.GetDirectoryName(path);
-			}
-		}
-
 		public WaterGame()
 		{
 			_graphics = new GraphicsDeviceManager(this)
@@ -64,7 +53,7 @@ namespace Nursia.Samples.Primives
 			var root = new SceneNode();
 
 			// Create the asset manager
-			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(ExecutingAssemblyDirectory, "Assets"));
+			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(AppContext.BaseDirectory, "Assets"));
 			_scene = assetManager.LoadStoredScene("Scenes/Main.scene");
 
 			root.Children.Add(_scene.Root);

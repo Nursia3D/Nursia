@@ -185,6 +185,16 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		internal IReadOnlyList<TerrainPatchNode> Patches
+		{
+			get
+			{
+				Update();
+
+				return _patches;
+			}
+		}
+
 		public event EventHandler Invalid;
 
 		public override void Load(AssetManager assetManager)

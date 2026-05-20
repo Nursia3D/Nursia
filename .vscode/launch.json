@@ -1,0 +1,30 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Character.MonoGame.DesktopGL",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Character.MonoGame.DesktopGL",
+            "program": "${workspaceFolder}/Samples/Nursia.Samples.Character/bin/MonoGame/Debug/net8.0/Nursia.Samples.Character.MonoGame.DesktopGL",
+            "args": [],
+            "cwd": "${workspaceFolder}/Samples/Nursia.Samples.Character",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Water.MonoGame.DesktopGL",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Water.MonoGame.DesktopGL",
+            "program": "${workspaceFolder}/Samples/Nursia.Samples.Water/bin/MonoGame.DesktopGL/Debug/net8.0/Nursia.Samples.Water.MonoGame.DesktopGL",
+            "args": [],
+            "cwd": "${workspaceFolder}/Samples/Nursia.Samples.Water",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}

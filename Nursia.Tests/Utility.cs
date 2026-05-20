@@ -14,20 +14,9 @@ namespace Nursia.Tests
 		/// </summary>
 		public const float ZeroTolerance = 1e-6f;
 
-		public static string ExecutingAssemblyDirectory
-		{
-			get
-			{
-				string codeBase = Assembly.GetExecutingAssembly().Location;
-				UriBuilder uri = new UriBuilder(codeBase);
-				string path = Uri.UnescapeDataString(uri.Path);
-				return Path.GetDirectoryName(path);
-			}
-		}
-
 		public static AssetManager CreateAssetManager()
 		{
-			return AssetManager.CreateFileAssetManager(Path.Combine(ExecutingAssemblyDirectory, "Assets"));
+			return AssetManager.CreateFileAssetManager(Path.Combine(AppContext.BaseDirectory, "Assets"));
 		}
 
 		public static void AssertAreEqual(float expected, float actual, float epsilon = ZeroTolerance)
