@@ -418,5 +418,7 @@ namespace Nursia.SceneGraph.Landscape
 		}
 
 		protected override IEnumerable<SceneNode> GetCustomChildren() => Patches;
+
+		public Vector3? FindPosition(Ray ray) => default(Vector3?);
 	}
 }

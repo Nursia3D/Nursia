@@ -416,8 +416,8 @@ namespace Nursia.Editor.UI
 			markerPos = Vector3.Transform(markerPos, terrain.InverseGlobalTransform);
 
 			// Now determine top left and bottom right in weightmap space
-			var topLeft = terrain.Terrain.WorldToHeightField(new Vector2(markerPos.X - radius, markerPos.Z - radius));
-			var bottomRight = terrain.Terrain.WorldToHeightField(new Vector2(markerPos.X + radius, markerPos.Z + radius));
+			var topLeft = terrain.WorldToHeightField(new Vector2(markerPos.X - radius, markerPos.Z - radius));
+			var bottomRight = terrain.WorldToHeightField(new Vector2(markerPos.X + radius, markerPos.Z + radius));
 
 			var rect = new Rectangle((int)Math.Min(topLeft.X, bottomRight.X),
 				(int)Math.Min(topLeft.Y, bottomRight.Y),
@@ -500,8 +500,8 @@ namespace Nursia.Editor.UI
 			markerPos = Vector3.Transform(markerPos, terrain.InverseGlobalTransform);
 
 			// Now determine top left and bottom right in weightmap space
-			var topLeft = terrain.Terrain.WorldToWeightMapNormalized(new Vector2(markerPos.X - radius, markerPos.Z - radius));
-			var bottomRight = terrain.Terrain.WorldToWeightMapNormalized(new Vector2(markerPos.X + radius, markerPos.Z + radius));
+			var topLeft = terrain.WorldToWeightMapNormalized(new Vector2(markerPos.X - radius, markerPos.Z - radius));
+			var bottomRight = terrain.WorldToWeightMapNormalized(new Vector2(markerPos.X + radius, markerPos.Z + radius));
 
 			var rect = new Rectangle((int)(Math.Min(topLeft.X, bottomRight.X) * instrument.SplatWidth),
 				(int)(Math.Min(topLeft.Y, bottomRight.Y) * instrument.SplatHeight),

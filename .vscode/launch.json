@@ -25,6 +25,17 @@
             "cwd": "${workspaceFolder}/Samples/Nursia.Samples.Water",
             "console": "internalConsole",
             "stopAtEntry": false
+        },
+        {
+            "name": "Editor.MonoGame.DesktopGL",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Editor.MonoGame.DesktopGL",
+            "program": "${workspaceFolder}/Nursia.Editor/bin/MonoGame.DesktopGL/Debug/net8.0/nrs-editor",
+            "args": [],
+            "cwd": "${workspaceFolder}/Nursia.Editor",
+            "console": "internalConsole",
+            "stopAtEntry": false
         }
     ]
 }

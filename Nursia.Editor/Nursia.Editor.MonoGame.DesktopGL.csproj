@@ -7,7 +7,7 @@
     <AssemblyName>nrs-editor</AssemblyName>
     <PackageId>nrs-editor</PackageId>
     <ToolCommandName>nrs-editor</ToolCommandName>
-    <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <OutputPath>bin\MonoGame.DesktopGL\$(Configuration)</OutputPath>
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
   </PropertyGroup>
 
