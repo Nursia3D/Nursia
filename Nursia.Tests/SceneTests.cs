@@ -29,7 +29,7 @@ namespace Nursia.Tests
 		}
 
 		[Fact]
-		public void TestSceme()
+		public void TestScene()
 		{
 			var assetManager = Utility.CreateAssetManager();
 

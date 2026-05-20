@@ -253,5 +253,25 @@ namespace Nursia.Utilities
 			result.NearPlane = -boxSize.Z * 16;
 			result.FarPlane = boxSize.Z * 16;
 		}
+
+		public static BoundingBox? Merge(this BoundingBox? a, BoundingBox? b)
+		{
+			if (a == null && b == null)
+			{
+				return null;
+			}
+
+			if (a != null && b == null)
+			{
+				return a;
+			}
+
+			if (a == null && b != null)
+			{
+				return b;
+			}
+
+			return BoundingBox.CreateMerged(a.Value, b.Value);
+		}
 	}
 }

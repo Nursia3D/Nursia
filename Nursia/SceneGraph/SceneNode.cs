@@ -26,6 +26,15 @@ namespace Nursia.SceneGraph
 	[EditorInfo("Base")]
 	public partial class SceneNode : DrDisposable
 	{
+		[Flags]
+		private enum DirtyFlags
+		{
+			None = 0,
+			ActualChildren = 1 << 0,
+			FullBoundingBox = 1 << 1,
+			All = ActualChildren | FullBoundingBox
+		}
+
 		private static int _lastId = 0;
 		private SceneNode _parent;
 		private Vector3 _translation = Vector3.Zero;
@@ -34,7 +43,8 @@ namespace Nursia.SceneGraph
 		private Matrix? _globalTransform = null, _localTransform = null, _inverseGlobalTransform = null;
 		private readonly List<SceneNode> _childrenCopy = new List<SceneNode>();
 		private readonly List<SceneNode> _actualChildren = new List<SceneNode>();
-		private bool _actualChildrenDirty = true;
+		private BoundingBox? _fullBoundingBox = null;
+		private DirtyFlags _dirtyFlags = DirtyFlags.All;
 
 		[Browsable(false)]
 		[JsonIgnore]
@@ -206,15 +216,37 @@ namespace Nursia.SceneGraph
 		[JsonIgnore]
 		public virtual BoundingBox? BoundingBox => null;
 
+		public BoundingBox? FullBoundingBox
+		{
+			get
+			{
+				if (_dirtyFlags.HasFlag(DirtyFlags.FullBoundingBox))
+				{
+					var result = BoundingBox;
+
+					foreach (var child in ActualChildren)
+					{
+						result = result.Merge(child.FullBoundingBox);
+					}
+
+					_fullBoundingBox = result;
+
+					_dirtyFlags &= ~DirtyFlags.FullBoundingBox;
+				}
+
+				return _fullBoundingBox;
+			}
+		}
+
 		[Browsable(false)]
 		public ObservableCollection<SceneNode> Children { get; } = new ObservableCollection<SceneNode>();
 
 		[Browsable(false)]
-		internal IReadOnlyCollection<SceneNode> ActualChildren
+		internal IReadOnlyList<SceneNode> ActualChildren
 		{
 			get
 			{
-				if (_actualChildrenDirty)
+				if (_dirtyFlags.HasFlag(DirtyFlags.ActualChildren))
 				{
 					_actualChildren.Clear();
 
@@ -230,7 +262,8 @@ namespace Nursia.SceneGraph
 						_actualChildren.AddRange(customChildren);
 					}
 					_actualChildren.AddRange(Children);
-					_actualChildrenDirty = false;
+
+					_dirtyFlags &= ~DirtyFlags.ActualChildren;
 				}
 
 				return _actualChildren;
@@ -495,9 +528,16 @@ namespace Nursia.SceneGraph
 		{
 		}
 
+		protected void InvalidateFullBoundingBox()
+		{
+			_dirtyFlags |= DirtyFlags.FullBoundingBox;
+			Parent?.InvalidateFullBoundingBox();
+		}
+
 		protected void InvalidateActualChildren()
 		{
-			_actualChildrenDirty = true;
+			_dirtyFlags |= DirtyFlags.ActualChildren;
+			InvalidateFullBoundingBox();
 		}
 
 		/// <summary>

@@ -392,8 +392,8 @@ namespace Nursia.SceneGraph.Landscape
 
 							// Create this patch
 							var patch = new TerrainPatchNode(this, x1, z1, x2, z2, maxStep);
-
 							patch.Update();
+
 							_patches.Add(patch);
 						}
 					}

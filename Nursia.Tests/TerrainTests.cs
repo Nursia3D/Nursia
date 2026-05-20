@@ -80,22 +80,23 @@ namespace Nursia.Tests
 				VerticalSkirtScale = 0.1f
 			};
 
-			Utility.AssertAreEqual(new BoundingBox(new Vector3(-5000f, -125.337585f, -5000f), new Vector3(5000f, 2948.5315f, 5000f)), terrain.BoundingBox.Value);
+			Assert.NotNull(terrain.FullBoundingBox);
+			Utility.AssertAreEqual(new BoundingBox(new Vector3(-5000f, -125.337585f, -5000f), new Vector3(5000f, 2948.5315f, 5000f)), terrain.FullBoundingBox.Value);
 			Assert.Equal(64, terrain.Patches.Count);
 
 			MeshNode level;
 			foreach (var patch in terrain.Patches)
 			{
-				Assert.Equal(3, patch.Children.Count);
+				Assert.Equal(3, patch.LodLevels.Count);
 
-				level = (MeshNode)patch.Children[1];
+				level = (MeshNode)patch.LodLevels[1].Node;
 				Assert.Equal(361, level.Mesh.NumVertices);
 
-				level = (MeshNode)patch.Children[2];
+				level = (MeshNode)patch.LodLevels[2].Node;
 				Assert.Equal(121, level.Mesh.NumVertices);
 			}
 
-			level = (MeshNode)terrain.Patches[0].Children[0];
+			level = (MeshNode)terrain.Patches[0].LodLevels[0].Node;
 
 			Assert.Equal(1225, level.Mesh.NumVertices);
 		}
