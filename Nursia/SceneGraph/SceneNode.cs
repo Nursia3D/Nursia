@@ -33,6 +33,8 @@ namespace Nursia.SceneGraph
 		private Vector3 _scale = Vector3.One;
 		private Matrix? _globalTransform = null, _localTransform = null, _inverseGlobalTransform = null;
 		private readonly List<SceneNode> _childrenCopy = new List<SceneNode>();
+		private readonly List<SceneNode> _actualChildren = new List<SceneNode>();
+		private bool _actualChildrenDirty = true;
 
 		[Browsable(false)]
 		[JsonIgnore]
@@ -41,7 +43,6 @@ namespace Nursia.SceneGraph
 		[Browsable(false)]
 		[JsonIgnore]
 		public virtual SceneFlags Flags => SceneFlags.None;
-
 
 		public string Id { get; set; }
 
@@ -209,7 +210,32 @@ namespace Nursia.SceneGraph
 		public ObservableCollection<SceneNode> Children { get; } = new ObservableCollection<SceneNode>();
 
 		[Browsable(false)]
-		protected internal virtual IReadOnlyCollection<SceneNode> ActualChildren => Children;
+		internal IReadOnlyCollection<SceneNode> ActualChildren
+		{
+			get
+			{
+				if (_actualChildrenDirty)
+				{
+					_actualChildren.Clear();
+
+					var customChild = GetCustomChild();
+					if (customChild != null)
+					{
+						_actualChildren.Add(customChild);
+					}
+
+					var customChildren = GetCustomChildren();
+					if (customChildren != null)
+					{
+						_actualChildren.AddRange(customChildren);
+					}
+					_actualChildren.AddRange(Children);
+					_actualChildrenDirty = false;
+				}
+
+				return _actualChildren;
+			}
+		}
 
 		[Browsable(false)]
 		[JsonIgnore]
@@ -275,6 +301,8 @@ namespace Nursia.SceneGraph
 		{
 			_childrenCopy.Clear();
 			_childrenCopy.AddRange(Children);
+
+			InvalidateActualChildren();
 		}
 
 		protected virtual void OnChildAdded(SceneNode n)
@@ -465,6 +493,29 @@ namespace Nursia.SceneGraph
 
 		public virtual void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
+		}
+
+		protected void InvalidateActualChildren()
+		{
+			_actualChildrenDirty = true;
+		}
+
+		/// <summary>
+		/// Should be overriden by nodes that may have one custom child
+		/// </summary>
+		/// <returns></returns>
+		protected virtual SceneNode GetCustomChild()
+		{
+			return null;
+		}
+
+		/// <summary>
+		/// Should be overriden by nodes that may have multiple custom children
+		/// </summary>
+		/// <returns></returns>
+		protected virtual IEnumerable<SceneNode> GetCustomChildren()
+		{
+			return null;
 		}
 	}
 }

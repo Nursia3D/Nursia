@@ -11,8 +11,6 @@ namespace Nursia.SceneGraph
 	public class SubsceneNode : SceneNode
 	{
 		private SceneNode _node;
-		private readonly List<SceneNode> _actualChildren = new List<SceneNode>();
-		private bool _childrenDirty = true;
 
 		[JsonIgnore]
 		[Category("Resources")]
@@ -33,7 +31,8 @@ namespace Nursia.SceneGraph
 				}
 
 				_node = value;
-				_childrenDirty = true;
+
+				InvalidateActualChildren();
 
 				if (_node != null)
 				{
@@ -58,16 +57,6 @@ namespace Nursia.SceneGraph
 			}
 		}
 
-		protected internal override IReadOnlyCollection<SceneNode> ActualChildren
-		{
-			get
-			{
-				UpdateActualChildren();
-
-				return _actualChildren;
-			}
-		}
-
 		public override void Load(AssetManager assetManager)
 		{
 			base.Load(assetManager);
@@ -76,34 +65,6 @@ namespace Nursia.SceneGraph
 			{
 				Node = assetManager.LoadSceneNode(NodePath);
 			}
-		}
-
-		private void UpdateActualChildren()
-		{
-			if (!_childrenDirty)
-			{
-				return;
-			}
-
-			_actualChildren.Clear();
-
-			// Add prefab first
-			if (_node != null)
-			{
-				_actualChildren.Add(_node);
-			}
-
-			// Then other children
-			_actualChildren.AddRange(Children);
-
-			_childrenDirty = false;
-		}
-
-		protected override void OnChildrenChanged()
-		{
-			base.OnChildrenChanged();
-
-			_childrenDirty = true;
 		}
 
 		protected override SceneNode CreateInstanceCore() => new SubsceneNode();
@@ -116,5 +77,7 @@ namespace Nursia.SceneGraph
 			Node = subscene.Node.Clone();
 			NodePath = subscene.NodePath;
 		}
+
+		protected override SceneNode GetCustomChild() => Node;
 	}
 }

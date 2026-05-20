@@ -5,7 +5,6 @@ using Nursia.Rendering;
 using Nursia.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Nursia.SceneGraph
@@ -48,13 +47,11 @@ namespace Nursia.SceneGraph
 	[EditorInfo("Optimization")]
 	public class LevelOfDetailNode : SceneNode
 	{
-		private readonly List<SceneNode> _actualChildren = new List<SceneNode>();
-		private bool _childrenDirty = true;
 		private LodEntry _visibleLodEntry = null;
 
 		[Browsable(false)]
 		[JsonIgnore]
-		public ObservableCollection<LodEntry> LodLevels { get; } = new ObservableCollection<LodEntry>();
+		public List<LodEntry> LodLevels { get; } = new List<LodEntry>();
 
 		public float LodLevelSize { get; set; } = 0.5f;
 
@@ -71,39 +68,11 @@ namespace Nursia.SceneGraph
 
 				_visibleLodEntry = value;
 
-				InvalidateChildren();
-
-			}
-		}
-
-		[Browsable(false)]
-		protected internal override IReadOnlyCollection<SceneNode> ActualChildren
-		{
-			get
-			{
-				if (_childrenDirty)
-				{
-					_actualChildren.Clear();
-
-					if (_visibleLodEntry != null)
-					{
-						_actualChildren.Add(_visibleLodEntry.Node);
-					}
-
-					_actualChildren.AddRange(Children);
-					_childrenDirty = false;
-				}
-
-				return _actualChildren;
+				InvalidateActualChildren();
 			}
 		}
 
 		public override BoundingBox? BoundingBox => GetBoundingBoxRecursive();
-
-		public LevelOfDetailNode()
-		{
-			LodLevels.CollectionChanged += (s, e) => _childrenDirty = true;
-		}
 
 		private BoundingBox? GetBoundingBoxRecursive()
 		{
@@ -199,16 +168,6 @@ namespace Nursia.SceneGraph
 			}
 		}
 
-		protected override void OnChildrenChanged()
-		{
-			base.OnChildrenChanged();
-
-			InvalidateChildren();
-		}
-
-		private void InvalidateChildren()
-		{
-			_childrenDirty = true;
-		}
+		protected override SceneNode GetCustomChild() => VisibleLodEntry?.Node;
 	}
 }

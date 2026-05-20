@@ -21,16 +21,6 @@ namespace Nursia.SceneGraph.Landscape
 		public int Z2 { get; }
 		public int MaxStep { get; }
 
-		protected internal override IReadOnlyCollection<SceneNode> ActualChildren
-		{
-			get
-			{
-				Update();
-
-				return base.ActualChildren;
-			}
-		}
-
 		public DateTime InvalidateTime { get; private set; }
 
 		public TerrainPatchNode(TerrainNode terrain,
