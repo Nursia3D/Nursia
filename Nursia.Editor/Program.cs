@@ -8,16 +8,14 @@ namespace Nursia.Editor
 	{
 		static void Main(string[] args)
 		{
-			Environment.SetEnvironmentVariable("FNA3D_FORCE_DRIVER", "D3D11");
-
 			AMBConfiguration.Logger = Console.WriteLine;
 			var path = string.Empty;
 			foreach(var arg in args)
 			{
-				if (arg == "/nf")
+				if (arg == "--nf")
 				{
 					Configuration.NoFixedStep = true;
-				} else if (!arg.StartsWith("/"))
+				} else
 				{
 					path = arg;
 				}

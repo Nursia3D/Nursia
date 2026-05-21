@@ -8,6 +8,7 @@ using Nursia.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Nursia.SceneGraph.Landscape
 {
@@ -419,6 +420,70 @@ namespace Nursia.SceneGraph.Landscape
 
 		protected override IEnumerable<SceneNode> GetCustomChildren() => Patches;
 
-		public Vector3? FindPosition(Ray ray) => default(Vector3?);
+		private bool IsAboveTerrain(Vector3 worldPos)
+		{
+			// From world pos to model
+			var pos = Vector3.Transform(worldPos, InverseGlobalTransform);
+
+			// Now y is supposed to be the point height
+			return pos.Y > GetHeight(worldPos);
+		}
+
+		public Vector3? FindPosition(Ray ray)
+		{
+			if (FullBoundingBox == null)
+			{
+				return null;
+			}
+
+			var bb = FullBoundingBox.Value;
+			Vector3? enterPoint, exitPoint;
+			Mathematics.RayBoxIntersection(ray, bb, out enterPoint, out exitPoint);
+			if (exitPoint == null)
+			{
+				return null;
+			}
+
+			var startPoint = ray.Position;
+			if (enterPoint != null)
+			{
+				startPoint = enterPoint.Value;
+			}
+
+			// Use binary search, until we find pair of points
+			// where first is above terrain and second is under
+			var toCheck = new Queue<Tuple<Vector3, Vector3>>();
+			toCheck.Enqueue(new Tuple<Vector3, Vector3>(startPoint, exitPoint.Value));
+
+			var steps = 0;
+			while(toCheck.Count > 0)
+			{
+				var pair = toCheck.Dequeue();
+
+				var center = (pair.Item1 + pair.Item2) / 2;
+
+				var dist = Vector3.Distance(pair.Item1, pair.Item2);
+				if (dist <= 2)
+				{
+					// We end the search here
+					if (IsAboveTerrain(pair.Item1) && !IsAboveTerrain(pair.Item2))
+					{
+						// Found
+						return center;
+					}
+				} else
+				{
+					// Split into two parts and queue both
+					toCheck.Enqueue(new Tuple<Vector3, Vector3>(pair.Item1, center));
+					toCheck.Enqueue(new Tuple<Vector3, Vector3>(center, pair.Item2));
+				}
+
+				++steps;
+			}
+
+			Debug.WriteLine($"TerrainNode.FindPosition Steps: {steps}");
+
+			return null;
+		}
 	}
 }

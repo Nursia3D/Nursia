@@ -273,5 +273,72 @@ namespace Nursia.Utilities
 
 			return BoundingBox.CreateMerged(a.Value, b.Value);
 		}
+
+		public static void RayBoxIntersection(
+			Ray ray,
+			BoundingBox box,
+			out Vector3? enterPoint,
+			out Vector3? exitPoint)
+		{
+			enterPoint = null;
+			exitPoint = null;
+
+			float tMin = float.NegativeInfinity;
+			float tMax = float.PositiveInfinity;
+
+			// X
+			if (Math.Abs(ray.Direction.X) < 1e-6f)
+			{
+				if (ray.Position.X < box.Min.X || ray.Position.X > box.Max.X)
+					return;
+			}
+			else
+			{
+				float tx1 = (box.Min.X - ray.Position.X) / ray.Direction.X;
+				float tx2 = (box.Max.X - ray.Position.X) / ray.Direction.X;
+
+				tMin = Math.Max(tMin, Math.Min(tx1, tx2));
+				tMax = Math.Min(tMax, Math.Max(tx1, tx2));
+			}
+
+			// Y
+			if (Math.Abs(ray.Direction.Y) < 1e-6f)
+			{
+				if (ray.Position.Y < box.Min.Y || ray.Position.Y > box.Max.Y)
+					return;
+			}
+			else
+			{
+				float ty1 = (box.Min.Y - ray.Position.Y) / ray.Direction.Y;
+				float ty2 = (box.Max.Y - ray.Position.Y) / ray.Direction.Y;
+
+				tMin = Math.Max(tMin, Math.Min(ty1, ty2));
+				tMax = Math.Min(tMax, Math.Max(ty1, ty2));
+			}
+
+			// Z
+			if (Math.Abs(ray.Direction.Z) < 1e-6f)
+			{
+				if (ray.Position.Z < box.Min.Z || ray.Position.Z > box.Max.Z)
+					return;
+			}
+			else
+			{
+				float tz1 = (box.Min.Z - ray.Position.Z) / ray.Direction.Z;
+				float tz2 = (box.Max.Z - ray.Position.Z) / ray.Direction.Z;
+
+				tMin = Math.Max(tMin, Math.Min(tz1, tz2));
+				tMax = Math.Min(tMax, Math.Max(tz1, tz2));
+			}
+
+			if (tMax < tMin || tMax < 0)
+				return;
+
+			if (tMin >= 0)
+				enterPoint = ray.Position + ray.Direction * tMin;
+
+			if (tMax >= 0)
+				exitPoint = ray.Position + ray.Direction * tMax;
+		}
 	}
 }

@@ -32,7 +32,7 @@
             "request": "launch",
             "preLaunchTask": "Editor.MonoGame.DesktopGL",
             "program": "${workspaceFolder}/Nursia.Editor/bin/MonoGame.DesktopGL/Debug/net8.0/nrs-editor",
-            "args": [],
+            "args": ["/home/rds/Projects/Nursia/Samples/Nursia.Samples.Water/Assets/Scenes"],
             "cwd": "${workspaceFolder}/Nursia.Editor",
             "console": "internalConsole",
             "stopAtEntry": false

@@ -55,7 +55,7 @@ namespace Nursia.Editor.Utility
 				return null;
 			}
 
-			var box = node.BoundingBox ?? Mathematics.DefaultBox;
+			var box = node.FullBoundingBox ?? Mathematics.DefaultBox;
 
 			var result = SelectionNode;
 
