@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Nursia.Attributes;
 using Nursia.Materials;
+using Nursia.Rendering;
 using Nursia.Serialization;
 using Nursia.Utilities;
 using System;
@@ -15,17 +16,10 @@ namespace Nursia.SceneGraph.Landscape
 	[EditorInfo("Base")]
 	public class TerrainNode : SceneNode, IHasExternalAssets
 	{
-		private enum DirtyType
-		{
-			None,
-			All,
-			SomePatches
-		}
-
 		private HeightField _heightfield;
 		internal Vector3 _localScale;
 		private Vector3 _terrainSize = new Vector3(1000, 500, 1000);
-		private DirtyType _dirty = DirtyType.All;
+		private bool _dirty = true;
 		private int _detailLevels = 3;
 		private int _patchSize = 32;
 		private float _verticalSkirtScale = 0.1f;
@@ -148,7 +142,7 @@ namespace Nursia.SceneGraph.Landscape
 
 		public IMaterial Material { get; set; } = new TerrainMaterial();
 
-		private DirtyType Dirty
+		private bool Dirty
 		{
 			get => _dirty;
 
@@ -313,7 +307,6 @@ namespace Nursia.SceneGraph.Landscape
 
 		public Vector2 WeightMapNormalizedToWorld(float x, float z)
 		{
-			Update();
 			return new Vector2((x * HeightField.Columns - _halfWidth) * _localScale.X, ((1.0f - z) * HeightField.Rows - _halfHeight) * _localScale.Z);
 		}
 
@@ -332,8 +325,6 @@ namespace Nursia.SceneGraph.Landscape
 					patch.Invalidate();
 				}
 			}
-
-			Dirty = DirtyType.SomePatches;
 		}
 
 		private void UpdateSizes()
@@ -353,68 +344,62 @@ namespace Nursia.SceneGraph.Landscape
 			_halfHeight = (height - 1) * 0.5f;
 		}
 
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
+		{
+			base.AddRenderJobs(camera, batch);
+
+			Update();
+		}
+
 		private void Update()
 		{
-			if (Dirty == DirtyType.None)
+			if (!_dirty)
 			{
 				return;
 			}
 
-			if (Dirty == DirtyType.All)
+			// Rebuild everything
+			_patches.Clear();
+			if (HeightField != null)
 			{
-				// Rebuild everything
-				if (HeightField != null)
+				UpdateSizes();
+
+				var width = HeightField.Columns;
+				var height = HeightField.Rows;
+
+				var columns = width / PatchSize;
+				var rows = height / PatchSize;
+
+				// Compute the maximum step size, which is a function of our lowest level of detail.
+				// This determines how many vertices will be skipped per triange/quad on the lowest
+				// level detail terrain patch.
+				int maxStep = (int)Math.Pow(2.0, DetailLevels - 1);
+
+				// Create terrain patches
+				for (var row = 0; row < rows; ++row)
 				{
-					UpdateSizes();
-
-					var width = HeightField.Columns;
-					var height = HeightField.Rows;
-
-					var columns = width / PatchSize;
-					var rows = height / PatchSize;
-
-					_patches.Clear();
-
-					// Compute the maximum step size, which is a function of our lowest level of detail.
-					// This determines how many vertices will be skipped per triange/quad on the lowest
-					// level detail terrain patch.
-					int maxStep = (int)Math.Pow(2.0, DetailLevels - 1);
-
-					// Create terrain patches
-					for (var row = 0; row < rows; ++row)
+					for (var col = 0; col < columns; ++col)
 					{
-						for (var col = 0; col < columns; ++col)
-						{
-							var x1 = col * PatchSize;
-							var x2 = Math.Min(x1 + PatchSize, width - 1);
+						var x1 = col * PatchSize;
+						var x2 = Math.Min(x1 + PatchSize, width - 1);
 
-							var z1 = row * PatchSize;
-							var z2 = Math.Min(z1 + PatchSize, height - 1);
+						var z1 = row * PatchSize;
+						var z2 = Math.Min(z1 + PatchSize, height - 1);
 
-							// Create this patch
-							var patch = new TerrainPatchNode(this, x1, z1, x2, z2, maxStep);
-							patch.Update();
+						// Create this patch
+						var patch = new TerrainPatchNode(this, x1, z1, x2, z2, maxStep);
 
-							_patches.Add(patch);
-						}
+						_patches.Add(patch);
 					}
 				}
 			}
-			else
-			{
-				// Just update patches
-				foreach (var patch in _patches)
-				{
-					patch.Update();
-				}
-			}
 
-			Dirty = DirtyType.None;
+			_dirty = false;
 		}
 
 		private void InvalidateAll()
 		{
-			Dirty = DirtyType.All;
+			_dirty = true;
 			InvalidateActualChildren();
 		}
 
@@ -456,7 +441,7 @@ namespace Nursia.SceneGraph.Landscape
 			toCheck.Enqueue(new Tuple<Vector3, Vector3>(startPoint, exitPoint.Value));
 
 			var steps = 0;
-			while(toCheck.Count > 0)
+			while (toCheck.Count > 0)
 			{
 				var pair = toCheck.Dequeue();
 
@@ -471,7 +456,8 @@ namespace Nursia.SceneGraph.Landscape
 						// Found
 						return center;
 					}
-				} else
+				}
+				else
 				{
 					// Split into two parts and queue both
 					toCheck.Enqueue(new Tuple<Vector3, Vector3>(pair.Item1, center));

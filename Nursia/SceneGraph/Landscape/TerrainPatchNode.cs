@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Nursia.Rendering;
 using Nursia.Utilities;
 using System;
 using System.Diagnostics;
@@ -44,7 +45,14 @@ namespace Nursia.SceneGraph.Landscape
 			InvalidateTime = DateTime.Now;
 		}
 
-		public void Update()
+		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
+		{
+			base.AddRenderJobs(camera, batch);
+
+			Update();
+		}
+
+		private void Update()
 		{
 			if (!_dirty)
 			{
