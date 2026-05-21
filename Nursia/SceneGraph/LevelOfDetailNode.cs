@@ -78,7 +78,7 @@ namespace Nursia.SceneGraph
 		{
 			foreach (var entry in LodLevels)
 			{
-				if (entry.Node?.BoundingBox.HasValue ?? false)
+				if (entry.Node?.BoundingBox != null)
 				{
 					return entry.Node.BoundingBox;
 				}
