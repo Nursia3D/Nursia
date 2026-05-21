@@ -422,54 +422,56 @@ namespace Nursia.SceneGraph.Landscape
 			}
 
 			var bb = FullBoundingBox.Value;
-			Vector3? enterPoint, exitPoint;
-			Mathematics.RayBoxIntersection(ray, bb, out enterPoint, out exitPoint);
-			if (exitPoint == null)
+			var pos = ray.Position;
+			if (bb.Contains(ray.Position) != ContainmentType.Contains)
 			{
-				return null;
+				// The ray starts outside of the box
+				var dist = bb.Intersects(ray);
+				if (dist == null)
+				{
+					// The ray doesn't intersects the box at all
+					return null;
+				}
+
+				// Move pos to the entry intersection point
+				pos = ray.Position + ray.Direction * dist.Value;
 			}
 
-			var startPoint = ray.Position;
-			if (enterPoint != null)
+			if (!IsAboveTerrain(pos))
 			{
-				startPoint = enterPoint.Value;
+				// The entry point is below terrain, hence it is the result
+				return pos;
 			}
-
-			// Use binary search, until we find pair of points
-			// where first is above terrain and second is under
-			var toCheck = new Queue<Tuple<Vector3, Vector3>>();
-			toCheck.Enqueue(new Tuple<Vector3, Vector3>(startPoint, exitPoint.Value));
 
 			var steps = 0;
-			while (toCheck.Count > 0)
+			Vector3? result = null;
+			while (steps < 50000)
 			{
-				var pair = toCheck.Dequeue();
-
-				var center = (pair.Item1 + pair.Item2) / 2;
-
-				var dist = Vector3.Distance(pair.Item1, pair.Item2);
-				if (dist <= 2)
+				// Check if we still inside
+				var dist = bb.Intersects(new Ray(pos, ray.Direction));
+				if (dist == null)
 				{
-					// We end the search here
-					if (IsAboveTerrain(pair.Item1) && !IsAboveTerrain(pair.Item2))
-					{
-						// Found
-						return center;
-					}
-				}
-				else
-				{
-					// Split into two parts and queue both
-					toCheck.Enqueue(new Tuple<Vector3, Vector3>(pair.Item1, center));
-					toCheck.Enqueue(new Tuple<Vector3, Vector3>(center, pair.Item2));
+					break;
 				}
 
+				// 2.0 is the step size
+				var newPos = pos + ray.Direction * 2.0f;
+
+				// We end the search here
+				if (!IsAboveTerrain(newPos))
+				{
+					// Found
+					result = (pos + newPos) / 2;
+					break;
+				}
+
+				pos = newPos;
 				++steps;
 			}
 
 			Debug.WriteLine($"TerrainNode.FindPosition Steps: {steps}");
 
-			return null;
+			return result;
 		}
 	}
 }
