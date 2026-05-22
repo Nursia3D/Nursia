@@ -42,6 +42,7 @@ namespace Nursia.SceneGraph
 		private Vector3 _scale = Vector3.One;
 		private Matrix? _globalTransform = null, _localTransform = null, _inverseGlobalTransform = null;
 		private readonly List<SceneNode> _childrenCopy = new List<SceneNode>();
+		private readonly List<SceneNode> _customChildren = new List<SceneNode>();
 		private readonly List<SceneNode> _actualChildren = new List<SceneNode>();
 		private BoundingBox? _fullBoundingBox = null;
 		private DirtyFlags _dirtyFlags = DirtyFlags.All;
@@ -216,6 +217,8 @@ namespace Nursia.SceneGraph
 		[JsonIgnore]
 		public virtual BoundingBox? BoundingBox => null;
 
+		[Browsable(false)]
+		[JsonIgnore]
 		public BoundingBox? FullBoundingBox
 		{
 			get
@@ -248,18 +251,31 @@ namespace Nursia.SceneGraph
 			{
 				if (_dirtyFlags.HasFlag(DirtyFlags.ActualChildren))
 				{
+					foreach (var child in _customChildren)
+					{
+						child.Parent = null;
+					}
+
 					_actualChildren.Clear();
+					_customChildren.Clear();
 
 					var customChild = GetCustomChild();
 					if (customChild != null)
 					{
+						customChild.Parent = this;
 						_actualChildren.Add(customChild);
+						_customChildren.Add(customChild);
 					}
 
 					var customChildren = GetCustomChildren();
 					if (customChildren != null)
 					{
+						foreach (var child in customChildren)
+						{
+							child.Parent = this;
+						}
 						_actualChildren.AddRange(customChildren);
+						_customChildren.AddRange(customChildren);
 					}
 					_actualChildren.AddRange(Children);
 
