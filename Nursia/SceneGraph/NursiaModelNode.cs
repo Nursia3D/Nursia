@@ -1,6 +1,5 @@
 ﻿using AssetManagementBase;
 using DigitalRiseModel;
-using DigitalRiseModel.Animation;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Nursia.Attributes;

@@ -95,29 +95,37 @@ namespace Nursia.SceneGraph
 
 		public void Load(AssetManager assetManager)
 		{
-			if (!string.IsNullOrEmpty(ModelPath))
+			if (string.IsNullOrEmpty(ModelPath))
 			{
-				var model = assetManager.LoadModel(Nrs.GraphicsDevice, ModelPath, ModelLoadFlags.EnsureUVs);
+				return;
+			}
+
+			// Make sure there are uvs and load only embedded textures(external materials will be loaded 
+			var model = assetManager.LoadModel(Nrs.GraphicsDevice, ModelPath, ModelLoadFlags.EnsureUVs | ModelLoadFlags.IgnoreExternalMaterials);
+
+			if (Materials != null)
+			{
 				SetModelWithoutMaterials(model);
 
-				if (Materials != null)
+				for (var i = 0; i < Materials.Length; ++i)
 				{
-					for (var i = 0; i < Materials.Length; ++i)
+					for (var j = 0; j < Materials[i].Length; ++j)
 					{
-						for (var j = 0; j < Materials[i].Length; ++j)
+						var material = Materials[i][j];
+
+						var hasExternalAssets = material as IHasExternalAssets;
+						if (hasExternalAssets == null)
 						{
-							var material = Materials[i][j];
-
-							var hasExternalAssets = material as IHasExternalAssets;
-							if (hasExternalAssets == null)
-							{
-								continue;
-							}
-
-							hasExternalAssets.Load(assetManager);
+							continue;
 						}
+
+						hasExternalAssets.Load(assetManager);
 					}
 				}
+			}
+			else
+			{
+				Model = model;
 			}
 		}
 
