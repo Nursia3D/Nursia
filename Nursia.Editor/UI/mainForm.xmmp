@@ -6,6 +6,7 @@
         <MenuItem Text="&amp;Save Current Item" Id="_menuItemSaveCurrentItem" />
         <MenuItem Text="Save &amp;Everything" Id="_menuItemSaveEverything" />
         <MenuItem Text="&amp;Reload Current Item" Id="_menuItemReloadCurrentItem" />
+        <MenuItem Text="&amp;Project References" Id="_menuItemProjectReferences" />
         <MenuItem Text="&amp;Quit" Id="_menuItemQuit" />
       </MenuItem>
       <MenuItem Text="&amp;Options">
@@ -20,8 +21,8 @@
     <Panel StackPanel.ProportionType="Fill">
       <HorizontalSplitPane Id="_topSplitPane">
         <VerticalSplitPane Id="_leftSplitPane">
-          <ScrollViewer ScrollMultiplier="10" Id="_panelSceneExplorer" />
-          <ScrollViewer ScrollMultiplier="10" Id="_panelSolution" />
+          <ScrollViewer Id="_panelSceneExplorer" />
+          <ScrollViewer Id="_panelSolution" />
         </VerticalSplitPane>
         <Panel>
           <VerticalStackPanel Id="_panelScenes">
@@ -68,7 +69,7 @@
         </Panel>
         <VerticalStackPanel Id="_rightPanel">
           <VerticalStackPanel Id="_panelProperties" StackPanel.ProportionType="Part">
-            <ScrollViewer ScrollMultiplier="10" ShowHorizontalScrollBar="False" StackPanel.ProportionType="Fill">
+            <ScrollViewer ShowHorizontalScrollBar="False" StackPanel.ProportionType="Fill">
               <PropertyGrid Id="_propertyGrid" />
             </ScrollViewer>
             <HorizontalStackPanel Id="_panelPropertiesButtons">

@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Nursia.Editor.UI
 {
@@ -215,6 +214,7 @@ namespace Nursia.Editor.UI
 			_menuItemSaveCurrentItem.Selected += (s, a) => SaveCurrentItem();
 			_menuItemSaveEverything.Selected += _menuItemSaveEverything_Selected;
 			_menuItemReloadCurrentItem.Selected += _menuItemReloadCurrentItem_Selected;
+			_menuItemProjectReferences.Selected += _menuItemProjectReferences_Selected;
 
 			_menuItemGraphicsSettings.Selected += _menuItemGraphicsSettings_Selected;
 			_menuItemRenderEnvironment.Selected += _menuItemRenderEnvironment_Selected;
@@ -272,6 +272,12 @@ namespace Nursia.Editor.UI
 			_buttonCameraPosition.IsToggledChanged += (s, a) => _labelCameraPosition.Visible = _buttonCameraPosition.IsToggled;
 
 			UpdateStackPanelEditor();
+		}
+
+		private void _menuItemProjectReferences_Selected(object sender, EventArgs e)
+		{
+			var window = new ProjectReferencesWindow();
+			window.ShowModal(Desktop);
 		}
 
 		private void _menuItemDebugSettings_Selected(object sender, EventArgs e)
@@ -526,12 +532,12 @@ namespace Nursia.Editor.UI
 				return selectCustomEditor;
 			}
 
-/*			// IMaterial gets special treatment
-			var materialEditor = CreateMaterialEditor(record, obj);
-			if (materialEditor != null)
-			{
-				return materialEditor;
-			}*/
+			/*			// IMaterial gets special treatment
+						var materialEditor = CreateMaterialEditor(record, obj);
+						if (materialEditor != null)
+						{
+							return materialEditor;
+						}*/
 
 			return null;
 		}
@@ -1311,7 +1317,8 @@ namespace Nursia.Editor.UI
 				};
 
 				dialog.ShowModal(Desktop);
-			} else
+			}
+			else
 			{
 				sceneWidget.LoadScene(tabInfo.FilePath, false);
 				RefreshExplorer(null);

@@ -14,13 +14,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nursia.Samples.FuelCell.Mon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nursia.Samples.Water.MonoGame.DesktopGL", "Samples\Nursia.Samples.Water\Nursia.Samples.Water.MonoGame.DesktopGL.csproj", "{C9F2412A-03AE-3E8A-52CB-66BBAF319616}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nursia.Editor", "Nursia.Editor", "{98DB794A-201F-CFCA-2353-6C586F245017}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nursia.Editor.MonoGame.DesktopGL", "Nursia.Editor\Nursia.Editor.MonoGame.DesktopGL.csproj", "{DF4743E9-7A18-4D42-B59C-0AB0B1536314}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nursia.Samples.Character.MonoGame.DesktopGL", "Samples\Nursia.Samples.Character\Nursia.Samples.Character.MonoGame.DesktopGL.csproj", "{DD057236-57A5-464B-A111-84E7A373EE52}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nursia", "Nursia", "{CD0EEEFA-88FA-E4AD-7D76-D9C867910EC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nursia.Tests", "Nursia.Tests\Nursia.Tests.csproj", "{1E44C7FE-3D79-4F2B-A55F-E2303106D3E0}"
 EndProject
@@ -70,7 +66,6 @@ Global
 		{BDDE7A81-778C-9D70-9CFB-8D1FED5343B4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D457DCB7-806A-EFED-26DF-2B6C3FEA71D4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C9F2412A-03AE-3E8A-52CB-66BBAF319616} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{DF4743E9-7A18-4D42-B59C-0AB0B1536314} = {98DB794A-201F-CFCA-2353-6C586F245017}
 		{DD057236-57A5-464B-A111-84E7A373EE52} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

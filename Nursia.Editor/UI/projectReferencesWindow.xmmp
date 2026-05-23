@@ -1,0 +1,19 @@
+<Project>
+  <Project.ExportOptions Namespace="Nursia.Editor.UI" Class="ProjectReferencesWindow" OutputPath="D:\Projects\Nursia\Nursia.Editor\UI" />
+  <Window Title="Project References" Left="464" Top="228" Width="600" Height="200">
+    <HorizontalStackPanel Spacing="8">
+      <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Id="_listReferences" StackPanel.ProportionType="Fill">
+        <Label Text="../../Reference/Reference1.dll" />
+        <Label Text="../References/Reference2.dll" />
+      </ListView>
+      <VerticalStackPanel Spacing="4" Width="100">
+        <Button HorizontalAlignment="Stretch" Id="_buttonAdd">
+          <Label Text="Add" />
+        </Button>
+        <Button HorizontalAlignment="Stretch" Id="_buttonRemove">
+          <Label Text="Remove" />
+        </Button>
+      </VerticalStackPanel>
+    </HorizontalStackPanel>
+  </Window>
+</Project>

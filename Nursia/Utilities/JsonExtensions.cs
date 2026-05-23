@@ -283,6 +283,7 @@ namespace Nursia.Utilities
 				Formatting = Formatting.Indented,
 				TypeNameHandling = TypeNameHandling.Auto,
 				DefaultValueHandling = DefaultValueHandling.Ignore,
+				SerializationBinder = new CustomSerializationBinder()
 			};
 
 			DefaultOptions.Converters.Add(new StringEnumConverter());

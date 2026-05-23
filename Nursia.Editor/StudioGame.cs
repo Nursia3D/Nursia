@@ -20,6 +20,7 @@ namespace Nursia.Editor
 		public static MainForm MainForm => Instance._mainForm;
 		public static GameTime GameTime => Instance._gameTime;
 
+
 		public StudioGame(string path)
 		{
 			Instance = this;
@@ -42,6 +43,11 @@ namespace Nursia.Editor
 				if (_state.DebugSettings != null)
 				{
 					Nrs.DebugSettings = _state.DebugSettings;
+				}
+
+				if (_state.ReferencedAssemblies != null && _state.ReferencedAssemblies.Length > 0)
+				{
+					AssemblyReferenceManager.LoadAssemblies(_state.ReferencedAssemblies);
 				}
 			}
 
@@ -135,10 +141,8 @@ namespace Nursia.Editor
 			_desktop.Render();
 		}
 
-		protected override void EndRun()
+		public void SaveProject()
 		{
-			base.EndRun();
-
 			var state = new State
 			{
 				Size = new Point(GraphicsDevice.PresentationParameters.BackBufferWidth,
@@ -150,10 +154,18 @@ namespace Nursia.Editor
 				DrawShadowMap = NursiaEditorOptions.DrawShadowMap,
 				ShowCameraPosition = _mainForm.ShowCameraPosition,
 				GraphicsSettings = Nrs.GraphicsSettings,
-				DebugSettings = Nrs.DebugSettings
+				DebugSettings = Nrs.DebugSettings,
+				ReferencedAssemblies = (from r in AssemblyReferenceManager.References select r.SourcePath).ToArray()
 			};
 
 			state.Save();
+		}
+
+		protected override void EndRun()
+		{
+			base.EndRun();
+
+			SaveProject();
 		}
 	}
 }

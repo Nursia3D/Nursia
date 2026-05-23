@@ -29,6 +29,7 @@ namespace Nursia.Editor
 		public bool ShowCameraPosition { get; set; }
 		public Nrs.GraphicsSettingsType GraphicsSettings { get; set; }
 		public Nrs.DebugSettingsType DebugSettings { get; set; }
+		public string[] ReferencedAssemblies { get; set; }
 
 		public State()
 		{
