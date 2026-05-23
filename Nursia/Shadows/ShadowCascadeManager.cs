@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nursia.SceneGraph;
-using Nursia.SceneGraph.Lights;
 using Nursia.Utilities;
 using System;
 

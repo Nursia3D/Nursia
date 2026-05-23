@@ -3,8 +3,10 @@ using DigitalRiseModel;
 using Microsoft.Xna.Framework;
 using Nursia.Materials;
 using Nursia.Rendering;
+using Nursia.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Nursia.SceneGraph
 {
@@ -49,6 +51,8 @@ namespace Nursia.SceneGraph
 
 	internal class NursiaModel
 	{
+		private bool _suppressSetMaterials = false;
+
 		public IMaterial[][] Materials { get; set; }
 
 		public DrModelInstance ModelInstance { get; } = new DrModelInstance();
@@ -76,16 +80,54 @@ namespace Nursia.SceneGraph
 
 		public IMaterial GetMaterial(int meshIndex, int meshPartIndex) => Materials[meshIndex][meshPartIndex];
 
+		private void SetModelWithoutMaterials(DrModel model)
+		{
+			try
+			{
+				_suppressSetMaterials = true;
+				Model = model;
+			}
+			finally
+			{
+				_suppressSetMaterials = false;
+			}
+		}
+
 		public void Load(AssetManager assetManager)
 		{
 			if (!string.IsNullOrEmpty(ModelPath))
 			{
-				Model = assetManager.LoadModel(Nrs.GraphicsDevice, ModelPath, ModelLoadFlags.EnsureUVs);
+				var model = assetManager.LoadModel(Nrs.GraphicsDevice, ModelPath, ModelLoadFlags.EnsureUVs);
+				SetModelWithoutMaterials(model);
+
+				if (Materials != null)
+				{
+					for (var i = 0; i < Materials.Length; ++i)
+					{
+						for (var j = 0; j < Materials[i].Length; ++j)
+						{
+							var material = Materials[i][j];
+
+							var hasExternalAssets = material as IHasExternalAssets;
+							if (hasExternalAssets == null)
+							{
+								continue;
+							}
+
+							hasExternalAssets.Load(assetManager);
+						}
+					}
+				}
 			}
 		}
 
 		public void SetMaterialsFromModel()
 		{
+			if (_suppressSetMaterials)
+			{
+				return;
+			}
+
 			if (Model == null)
 			{
 				Materials = null;
@@ -107,7 +149,7 @@ namespace Nursia.SceneGraph
 						continue;
 					}
 
-					Materials[i][j] = BlinnPhongMaterial.FromDrMaterial(meshPart.Material);
+					Materials[i][j] = BlinnPhongMaterial.FromDrMaterial(meshPart.Material, Path.GetDirectoryName(ModelPath));
 				}
 			}
 		}
@@ -154,8 +196,22 @@ namespace Nursia.SceneGraph
 
 		public void CopyFrom(NursiaModel model)
 		{
-			Model = model.Model;
+			SetModelWithoutMaterials(model.Model);
 			ModelPath = model.ModelPath;
+
+			if (model.Materials != null)
+			{
+				Materials = new IMaterial[model.Materials.Length][];
+				for (var i = 0; i < model.Materials.Length; ++i)
+				{
+					Materials[i] = new IMaterial[model.Materials[i].Length];
+
+					for (var j = 0; j < model.Materials[i].Length; ++j)
+					{
+						Materials[i][j] = model.Materials[i][j]?.Clone();
+					}
+				}
+			}
 		}
 	}
 }

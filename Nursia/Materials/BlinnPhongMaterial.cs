@@ -5,8 +5,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Nursia.Rendering;
 using Nursia.Serialization;
+using Nursia.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 
 namespace Nursia.Materials
 {
@@ -269,7 +272,17 @@ namespace Nursia.Materials
 			return InternalGetBinding(materialTechnique, lightTechnique, shadow, translucent, normalMapping && NormalTexture != null, clipPlane);
 		}
 
-		public static BlinnPhongMaterial FromDrMaterial(DrMaterial source)
+		private static string GetRelativePath(string path, string modelFolder)
+		{
+			if (!string.IsNullOrEmpty(modelFolder))
+			{
+				path = Path.Combine(modelFolder, path);
+			}
+
+			return path.NormalizeFilePath();
+		}
+
+		internal static BlinnPhongMaterial FromDrMaterial(DrMaterial source, string modelFolder)
 		{
 			var result = new BlinnPhongMaterial
 			{
@@ -281,6 +294,21 @@ namespace Nursia.Materials
 				SpecularTexture = source.SpecularTexture,
 				NormalTexture = source.NormalTexture,
 			};
+
+			if (source.DiffuseTexture != null)
+			{
+				result.DiffuseTexturePath = GetRelativePath(source.DiffuseTexture.Name, modelFolder);
+			}
+
+			if (source.SpecularTexture != null)
+			{
+				result.SpecularTexturePath = GetRelativePath(source.SpecularTexture.Name, modelFolder);
+			}
+
+			if (source.NormalTexture != null)
+			{
+				result.NormalTexturePath = GetRelativePath(source.NormalTexture.Name, modelFolder);
+			}
 
 			return result;
 		}

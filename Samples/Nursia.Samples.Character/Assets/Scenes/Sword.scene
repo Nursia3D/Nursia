@@ -16,6 +16,18 @@
   },
   "Root": {
     "$type": "Nursia.SceneGraph.NursiaModelNode, Nursia",
+    "Materials": [
+      [
+        {
+          "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+          "AmbientColor": "Black",
+          "DiffuseColor": "White",
+          "SpecularColor": "Black",
+          "EmissiveColor": "Black",
+          "DiffuseTexturePath": "../Models/sword2_final_cm.jpg"
+        }
+      ]
+    ],
     "ModelPath": "../Models/sword.gltf",
     "Scale": "1, 1, 1",
     "Children": []

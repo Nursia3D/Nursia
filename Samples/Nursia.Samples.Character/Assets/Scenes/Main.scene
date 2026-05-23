@@ -54,6 +54,26 @@
       },
       {
         "$type": "Nursia.SceneGraph.NursiaModelNode, Nursia",
+        "Materials": [
+          [
+            {
+              "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+              "AmbientColor": "Black",
+              "DiffuseColor": "#273638FF",
+              "SpecularColor": "Black",
+              "EmissiveColor": "Black"
+            }
+          ],
+          [
+            {
+              "$type": "Nursia.Materials.BlinnPhongMaterial, Nursia",
+              "AmbientColor": "Black",
+              "DiffuseColor": "#186B85FF",
+              "SpecularColor": "Black",
+              "EmissiveColor": "Black"
+            }
+          ]
+        ],
         "ModelPath": "../Models/mixamo.gltf",
         "Id": "player",
         "Scale": "1, 1, 1",
