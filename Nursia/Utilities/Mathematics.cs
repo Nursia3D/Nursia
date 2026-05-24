@@ -273,5 +273,10 @@ namespace Nursia.Utilities
 
 			return BoundingBox.CreateMerged(a.Value, b.Value);
 		}
+
+		public static Quaternion EulerAnglesToQuaternion(this Vector3 _rotation)
+		{
+			return Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(_rotation.Y), MathHelper.ToRadians(_rotation.X), MathHelper.ToRadians(_rotation.Z));
+		}
 	}
 }
