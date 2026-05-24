@@ -36,6 +36,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the height of the cone.
+		/// </summary>
 		[Category("Geometry")]
 		public float Height
 		{
@@ -53,6 +56,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of tessellation levels for the cone mesh.
+		/// </summary>
 		[Category("Geometry")]
 		public int Tessellation
 		{
@@ -70,10 +76,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the cone mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreateConeMeshPart(Nrs.GraphicsDevice, Radius, Height, Tessellation, UScale, VScale, IsLeftHanded);
 
+		/// <summary>
+		/// Creates a new instance of the Cone class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Cone();
 
+		/// <summary>
+		/// Copies all cone properties from another cone node.
+		/// </summary>
+		/// <param name="node">The source cone node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

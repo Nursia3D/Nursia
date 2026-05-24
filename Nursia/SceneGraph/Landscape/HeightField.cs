@@ -69,14 +69,20 @@ namespace Nursia.SceneGraph.Landscape
 			HeightChanged?.Invoke(new Point(column, row));
 		}
 
+		/// <summary>
+		/// Gets the height value at the specified column and row.
+		/// </summary>
+		/// <param name="column">The column index.</param>
+		/// <param name="row">The row index.</param>
+		/// <returns>The height value at the specified position.</returns>
 		public float GetHeight(int column, int row) => _array[column, row];
 
 		/// <summary>
-		/// Returns the height at the specified row and column.
+		/// Calculates the interpolated height at a float position using bilinear interpolation.
 		/// </summary>
-		/// <param name="col"></param>
-		/// <param name="row"></param>
-		/// <returns></returns>
+		/// <param name="column">The column index (supports fractional values).</param>
+		/// <param name="row">The row index (supports fractional values).</param>
+		/// <returns>The interpolated height value.</returns>
 		public float CalculateInterpolatedHeight(float column, float row)
 		{
 			// Clamp to heightfield boundaries
@@ -114,6 +120,17 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Loads a height field from an 8-bit raw stream.
+		/// </summary>
+		/// <param name="stream">The stream containing 8-bit height values.</param>
+		/// <param name="columns">The number of columns in the height field.</param>
+		/// <param name="rows">The number of rows in the height field.</param>
+		/// <param name="heightMin">The minimum height value to map to.</param>
+		/// <param name="heightMax">The maximum height value to map to.</param>
+		/// <param name="revertX">Whether to flip the X axis.</param>
+		/// <param name="revertZ">Whether to flip the Z axis.</param>
+		/// <returns>A new HeightField loaded from the stream.</returns>
 		public static HeightField FromStreamR8(Stream stream, int columns, int rows, float heightMin = 0.0f, float heightMax = 1.0f, bool revertX = false, bool revertZ = false)
 		{
 			Debug.Assert(heightMax >= heightMin);
@@ -140,7 +157,7 @@ namespace Nursia.SceneGraph.Landscape
 					{
 						dy = rows - 1 - y;
 					}
-					
+
 					result.SetHeight(dx, dy, value);
 				}
 			}
@@ -148,6 +165,15 @@ namespace Nursia.SceneGraph.Landscape
 			return result;
 		}
 
+		/// <summary>
+		/// Loads a height field from a 16-bit raw stream.
+		/// </summary>
+		/// <param name="stream">The stream containing 16-bit height values in little-endian format.</param>
+		/// <param name="columns">The number of columns in the height field.</param>
+		/// <param name="rows">The number of rows in the height field.</param>
+		/// <param name="heightMin">The minimum height value to map to.</param>
+		/// <param name="heightMax">The maximum height value to map to.</param>
+		/// <returns>A new HeightField loaded from the stream.</returns>
 		public static HeightField FromStreamR16(Stream stream, int columns, int rows, float heightMin = 0.0f, float heightMax = 1.0f)
 		{
 			Debug.Assert(heightMax >= heightMin);
@@ -170,6 +196,13 @@ namespace Nursia.SceneGraph.Landscape
 			return result;
 		}
 
+		/// <summary>
+		/// Loads a height field from an image stream. Supports single-channel grayscale images.
+		/// </summary>
+		/// <param name="stream">The image stream containing height data.</param>
+		/// <param name="heightMin">The minimum height value to map to.</param>
+		/// <param name="heightMax">The maximum height value to map to.</param>
+		/// <returns>A new HeightField loaded from the image.</returns>
 		public static HeightField FromStreamImage(Stream stream, float heightMin = 0.0f, float heightMax = 1.0f)
 		{
 			var imageResult = ImageResult.FromStream(stream);
@@ -199,6 +232,15 @@ namespace Nursia.SceneGraph.Landscape
 			return result;
 		}
 
+		/// <summary>
+		/// Loads a height field from 16-bit raw bytes.
+		/// </summary>
+		/// <param name="bytes">The byte array containing 16-bit height values.</param>
+		/// <param name="columns">The number of columns in the height field.</param>
+		/// <param name="rows">The number of rows in the height field.</param>
+		/// <param name="heightMin">The minimum height value to map to.</param>
+		/// <param name="heightMax">The maximum height value to map to.</param>
+		/// <returns>A new HeightField loaded from the bytes.</returns>
 		public static HeightField FromBytesR16(byte[] bytes, int columns, int rows, float heightMin = 0.0f, float heightMax = 1.0f)
 		{
 			using (var ms = new MemoryStream(bytes))
@@ -207,6 +249,11 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Loads a height field from a Nursia HF format stream.
+		/// </summary>
+		/// <param name="stream">The stream containing HF format height data.</param>
+		/// <returns>A new HeightField loaded from the stream.</returns>
 		public static HeightField FromStreamHf(Stream stream)
 		{
 			HeightField result;
@@ -229,6 +276,11 @@ namespace Nursia.SceneGraph.Landscape
 			return result;
 		}
 
+		/// <summary>
+		/// Loads a height field from HF format bytes.
+		/// </summary>
+		/// <param name="bytes">The byte array containing HF format height data.</param>
+		/// <returns>A new HeightField loaded from the bytes.</returns>
 		public static HeightField FromHfBytes(byte[] bytes)
 		{
 			using (var ms = new MemoryStream(bytes))
@@ -237,6 +289,10 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Saves this height field to a stream in HF format.
+		/// </summary>
+		/// <param name="stream">The stream to save the height field to.</param>
 		public void SaveToHf(Stream stream)
 		{
 			using (var output = new BinaryWriter(stream))

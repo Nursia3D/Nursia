@@ -288,7 +288,10 @@ namespace Nursia.Rendering
 			}
 		}
 
-		protected virtual void BindParameters()
+		/// <summary>
+		/// Binds shader parameters based on the current effect.
+		/// </summary>
+		protected void BindParameters()
 		{
 			_meshParameters.Clear();
 			_effectParameters.Clear();

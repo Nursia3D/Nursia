@@ -36,6 +36,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the radius of the capsule.
+		/// </summary>
 		[Category("Geometry")]
 		public float Radius
 		{
@@ -53,6 +56,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of tessellation levels for the capsule mesh.
+		/// </summary>
 		[Category("Geometry")]
 		public int Tessellation
 		{
@@ -70,10 +76,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the capsule mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreateCapsuleMeshPart(Nrs.GraphicsDevice, Length, Radius, Tessellation, UScale, VScale, IsLeftHanded);
 
+		/// <summary>
+		/// Creates a new instance of the Capsule class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Capsule();
 
+		/// <summary>
+		/// Copies all capsule properties from another capsule node.
+		/// </summary>
+		/// <param name="node">The source capsule node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

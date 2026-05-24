@@ -36,6 +36,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the minor radius (thickness) of the torus.
+		/// </summary>
 		[Category("Geometry")]
 		public float MinorRadius
 		{
@@ -53,6 +56,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of tessellation levels for the torus mesh.
+		/// </summary>
 		[Category("Geometry")]
 		public int Tessellation
 		{
@@ -70,10 +76,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the torus mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreateTorusMeshPart(Nrs.GraphicsDevice, MajorRadius, MinorRadius, Tessellation, UScale, VScale, IsLeftHanded);
 
+		/// <summary>
+		/// Creates a new instance of the Torus class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Torus();
 
+		/// <summary>
+		/// Copies all torus properties from another torus node.
+		/// </summary>
+		/// <param name="node">The source torus node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

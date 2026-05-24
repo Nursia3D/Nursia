@@ -49,10 +49,15 @@ namespace Nursia.SceneGraph.Billboards
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the path to the font asset.
+		/// </summary>
 		[Browsable(false)]
 		public string FontPath { get; set; }
 
-
+		/// <summary>
+		/// Gets or sets the sprite font used to render the text.
+		/// </summary>
 		[JsonIgnore]
 		public SpriteFont Font
 		{
@@ -111,8 +116,15 @@ namespace Nursia.SceneGraph.Billboards
 			_texture = null;
 		}
 
+		/// <summary>
+		/// Creates a new instance of the Text3DNode class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Text3DNode();
 
+		/// <summary>
+		/// Copies properties from another Text3DNode.
+		/// </summary>
+		/// <param name="node">The source node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);
@@ -124,6 +136,10 @@ namespace Nursia.SceneGraph.Billboards
 			Font = text.Font;
 		}
 
+		/// <summary>
+		/// Loads the font from the asset manager if FontPath is set.
+		/// </summary>
+		/// <param name="assetManager">The asset manager to load resources from.</param>
 		public override void Load(AssetManager assetManager)
 		{
 			base.Load(assetManager);

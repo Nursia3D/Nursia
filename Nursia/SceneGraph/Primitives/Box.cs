@@ -35,10 +35,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the box mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreateBoxMeshPart(Nrs.GraphicsDevice, Size, UScale, VScale, IsLeftHanded);
 
+		/// <summary>
+		/// Creates a new instance of the Box class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Box();
 
+		/// <summary>
+		/// Copies all box properties from another box node.
+		/// </summary>
+		/// <param name="node">The source box node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

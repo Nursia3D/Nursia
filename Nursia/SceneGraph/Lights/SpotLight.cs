@@ -136,6 +136,9 @@ namespace Nursia.SceneGraph.Lights
 			CastsShadow = false;
 		}
 
+		/// <summary>
+		/// Called when the global transform is updated.
+		/// </summary>
 		protected override void OnGlobalTransformUpdated()
 		{
 			base.OnGlobalTransformUpdated();
@@ -182,6 +185,9 @@ namespace Nursia.SceneGraph.Lights
 			_dirty = false;
 		}
 
+		/// <summary>
+		/// Called when the CastsShadow property changes.
+		/// </summary>
 		protected override void OnCastsShadowChanged()
 		{
 		}

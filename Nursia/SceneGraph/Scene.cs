@@ -134,6 +134,10 @@ namespace Nursia.SceneGraph
 
 		private static Action<SceneNode, GameTime> _updateHandler = new Action<SceneNode, GameTime>((n, t) => n.UpdateHandler?.Invoke(t));
 
+		/// <summary>
+		/// Updates the scene and all child nodes with the current game time.
+		/// </summary>
+		/// <param name="gameTime">The current game time.</param>
 		public void Update(GameTime gameTime)
 		{
 			Root.Traverse(_updateHandler, gameTime);

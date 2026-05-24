@@ -74,6 +74,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the distance to the near clipping plane.
+		/// </summary>
 		[Category("Camera")]
 		public float NearPlane
 		{
@@ -91,6 +94,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the distance to the far clipping plane.
+		/// </summary>
 		[Category("Camera")]
 		public float FarPlane
 		{
@@ -108,6 +114,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the optional reflection matrix for water/mirror effects.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix? ReflectionMatrix
@@ -157,6 +166,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the view matrix that transforms world coordinates to camera space.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix View
@@ -190,6 +202,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the inverse view matrix that transforms camera space to world coordinates.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix InverseView
@@ -205,6 +220,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the projection matrix that transforms camera space to normalized device coordinates.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix Projection
@@ -217,6 +235,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the combined view-projection matrix for rendering.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix ViewProjection
@@ -229,6 +250,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the camera's view frustum for visibility culling.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public BoundingFrustum Frustum
@@ -241,6 +265,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Invalidates the camera's transform and its derived matrices.
+		/// </summary>
 		public override void InvalidateTransform()
 		{
 			base.InvalidateTransform();
@@ -251,11 +278,20 @@ namespace Nursia.SceneGraph
 			Invalidate();
 		}
 
+		/// <summary>
+		/// Marks the projection matrix as dirty and requiring recalculation.
+		/// </summary>
 		protected void Invalidate()
 		{
 			_dirty = true;
 		}
 
+		/// <summary>
+		/// Calculates a projection matrix for the specified near and far planes.
+		/// </summary>
+		/// <param name="near">The distance to the near clipping plane.</param>
+		/// <param name="far">The distance to the far clipping plane.</param>
+		/// <returns>The calculated projection matrix.</returns>
 		public Matrix CalculateProjection(float near, float far)
 		{
 			if (_cameraType == CameraType.Perspective)
@@ -294,8 +330,15 @@ namespace Nursia.SceneGraph
 			_dirty = false;
 		}
 
+		/// <summary>
+		/// Creates a new instance of the Camera class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Camera();
 
+		/// <summary>
+		/// Copies all view parameters from another camera.
+		/// </summary>
+		/// <param name="source">The source camera to copy parameters from.</param>
 		public void CopyViewParams(Camera source)
 		{
 			View = source.View;
@@ -308,6 +351,10 @@ namespace Nursia.SceneGraph
 			ReflectionMatrix = source.ReflectionMatrix;
 		}
 
+		/// <summary>
+		/// Copies all camera properties from another camera.
+		/// </summary>
+		/// <param name="node">The source camera to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

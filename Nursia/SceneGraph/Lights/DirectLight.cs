@@ -62,6 +62,9 @@ namespace Nursia.SceneGraph.Lights
 		/// <returns>Always returns <c>true</c> for directional lights.</returns>
 		public override bool AffectsObject(BoundingBox boundingBox) => true;
 
+		/// <summary>
+		/// Called when the global transform is updated.
+		/// </summary>
 		protected override void OnGlobalTransformUpdated()
 		{
 			base.OnGlobalTransformUpdated();

@@ -68,14 +68,23 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Gets a string representation of the height field dimensions.
+		/// </summary>
 		[Category("Terrain")]
 		[JsonIgnore]
 		public string HeightFieldSize => HeightField != null ? $"{HeightField.Columns}x{HeightField.Rows}" : "null";
 
+		/// <summary>
+		/// Gets or sets the path to the height field asset.
+		/// </summary>
 		[Category("Terrain")]
 		[Browsable(false)]
 		public string HeightFieldPath { get; set; }
 
+		/// <summary>
+		/// Gets or sets the size of the terrain in world space (width, height, depth).
+		/// </summary>
 		[Category("Terrain")]
 		public Vector3 TerrainSize
 		{
@@ -95,6 +104,9 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of detail levels for terrain LOD.
+		/// </summary>
 		[Category("Terrain")]
 		public int DetailLevels
 		{
@@ -112,6 +124,9 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the size of individual terrain patches in vertices.
+		/// </summary>
 		[Category("Terrain")]
 		public int PatchSize
 		{
@@ -129,6 +144,9 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the scale factor for vertical skirts to prevent cracks between LOD levels.
+		/// </summary>
 		[Category("Terrain")]
 		public float VerticalSkirtScale
 		{
@@ -146,6 +164,9 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the material used to render the terrain.
+		/// </summary>
 		public IMaterial Material { get; set; } = new TerrainMaterial();
 
 		private bool Dirty
@@ -174,8 +195,15 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Occurs when the terrain needs to be re-rendered due to changes.
+		/// </summary>
 		public event EventHandler Invalid;
 
+		/// <summary>
+		/// Loads the height field from the asset manager if HeightFieldPath is set.
+		/// </summary>
+		/// <param name="assetManager">The asset manager to load resources from.</param>
 		public override void Load(AssetManager assetManager)
 		{
 			base.Load(assetManager);
@@ -198,8 +226,15 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Creates a new instance of the TerrainNode class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new TerrainNode();
 
+		/// <summary>
+		/// Copies all terrain properties from another terrain node.
+		/// </summary>
+		/// <param name="node">The source terrain node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);
@@ -219,6 +254,11 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Gets the height of the terrain at the specified world position.
+		/// </summary>
+		/// <param name="worldPos">The world position to sample height at.</param>
+		/// <returns>The height value at the specified position.</returns>
 		public float GetHeight(Vector3 worldPos)
 		{
 			// From world pos to model
@@ -230,6 +270,11 @@ namespace Nursia.SceneGraph.Landscape
 			return HeightField.CalculateInterpolatedHeight(hfPos.X, hfPos.Y) * _localScale.Y;
 		}
 
+		/// <summary>
+		/// Computes the surface normal at the specified world position.
+		/// </summary>
+		/// <param name="worldPos">The world position to compute the normal at.</param>
+		/// <returns>The computed surface normal vector.</returns>
 		public Vector3 ComputeNormal(Vector2 worldPos)
 		{
 			// From world pos to model
@@ -277,6 +322,11 @@ namespace Nursia.SceneGraph.Landscape
 
 		internal Vector3 ComputeNormal(int x, int z) => ComputeNormal(x, z, 1);
 
+		/// <summary>
+		/// Converts world space coordinates to height field coordinates.
+		/// </summary>
+		/// <param name="pos">The world space position.</param>
+		/// <returns>The corresponding position in height field space.</returns>
 		public Vector2 WorldToHeightField(Vector2 pos)
 		{
 			var result = new Vector2((pos.X / _localScale.X) + _halfWidth, (pos.Y / _localScale.Z) + _halfHeight);
@@ -292,7 +342,12 @@ namespace Nursia.SceneGraph.Landscape
 			return new Vector2((x - _halfWidth) * _localScale.X, (z - _halfHeight) * _localScale.Z);
 		}
 
-
+		/// <summary>
+		/// Converts height field coordinates to world space.
+		/// </summary>
+		/// <param name="x">The x coordinate in height field space.</param>
+		/// <param name="z">The z coordinate in height field space.</param>
+		/// <returns>The corresponding position in world space.</returns>
 		public Vector3 HeightFieldToWorld(float x, float z)
 		{
 			var pos = HeightFieldToWorld2D(x, z);
@@ -301,6 +356,11 @@ namespace Nursia.SceneGraph.Landscape
 			return new Vector3(pos.X, height, pos.Y);
 		}
 
+		/// <summary>
+		/// Converts world space coordinates to normalized weight map coordinates.
+		/// </summary>
+		/// <param name="pos">The world space position.</param>
+		/// <returns>The normalized weight map coordinates in the range [0,1].</returns>
 		public Vector2 WorldToWeightMapNormalized(Vector2 pos)
 		{
 			var result = new Vector2(((pos.X / _localScale.X) + _halfWidth) / HeightField.Columns, 1.0f - ((pos.Y / _localScale.Z) + _halfHeight) / HeightField.Rows);
@@ -311,6 +371,12 @@ namespace Nursia.SceneGraph.Landscape
 			return result;
 		}
 
+		/// <summary>
+		/// Converts normalized weight map coordinates to world space.
+		/// </summary>
+		/// <param name="x">The normalized x coordinate in the range [0,1].</param>
+		/// <param name="z">The normalized z coordinate in the range [0,1].</param>
+		/// <returns>The corresponding position in world space.</returns>
 		public Vector2 WeightMapNormalizedToWorld(float x, float z)
 		{
 			return new Vector2((x * HeightField.Columns - _halfWidth) * _localScale.X, ((1.0f - z) * HeightField.Rows - _halfHeight) * _localScale.Z);
@@ -350,6 +416,11 @@ namespace Nursia.SceneGraph.Landscape
 			_halfHeight = (height - 1) * 0.5f;
 		}
 
+		/// <summary>
+		/// Adds terrain render jobs to the specified batch for the given camera.
+		/// </summary>
+		/// <param name="camera">The camera used for rendering.</param>
+		/// <param name="batch">The render batch to add jobs to.</param>
 		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
 			base.AddRenderJobs(camera, batch);
@@ -409,6 +480,10 @@ namespace Nursia.SceneGraph.Landscape
 			InvalidateActualChildren();
 		}
 
+		/// <summary>
+		/// Gets the collection of terrain patch nodes that make up the terrain.
+		/// </summary>
+		/// <returns>An enumerable of terrain patch nodes.</returns>
 		protected override IEnumerable<SceneNode> GetCustomChildren() => Patches;
 
 		private bool IsAboveTerrain(Vector3 worldPos)
@@ -420,6 +495,11 @@ namespace Nursia.SceneGraph.Landscape
 			return pos.Y > GetHeight(worldPos);
 		}
 
+		/// <summary>
+		/// Finds the intersection point between a ray and the terrain surface.
+		/// </summary>
+		/// <param name="ray">The ray to test for intersection.</param>
+		/// <returns>The world position of the intersection point, or null if there is no intersection.</returns>
 		public Vector3? FindPosition(Ray ray)
 		{
 			if (FullBoundingBox == null)

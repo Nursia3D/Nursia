@@ -75,6 +75,11 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Adds render jobs for all instances to the specified batch.
+		/// </summary>
+		/// <param name="camera">The camera used for rendering.</param>
+		/// <param name="batch">The render batch to add jobs to.</param>
 		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
 			base.AddRenderJobs(camera, batch);

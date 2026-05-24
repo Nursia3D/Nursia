@@ -67,10 +67,16 @@ namespace Nursia.SceneGraph
 	{
 		private LodEntry _visibleLodEntry = null;
 
+		/// <summary>
+		/// Gets the list of LOD level entries.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public List<LodEntry> LodLevels { get; } = new List<LodEntry>();
 
+		/// <summary>
+		/// Gets or sets the size ratio between consecutive LOD levels.
+		/// </summary>
 		public float LodLevelSize { get; set; } = 0.5f;
 
 		private LodEntry VisibleLodEntry
@@ -90,6 +96,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the bounding box of the currently visible LOD level.
+		/// </summary>
 		public override BoundingBox? BoundingBox => GetBoundingBoxRecursive();
 
 		private BoundingBox? GetBoundingBoxRecursive()
@@ -105,6 +114,11 @@ namespace Nursia.SceneGraph
 			return null;
 		}
 
+		/// <summary>
+		/// Adds render jobs for the visible LOD level based on screen space size.
+		/// </summary>
+		/// <param name="camera">The camera used for rendering.</param>
+		/// <param name="batch">The render batch to add jobs to.</param>
 		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
 			base.AddRenderJobs(camera, batch);
@@ -146,6 +160,12 @@ namespace Nursia.SceneGraph
 		}
 
 
+		/// <summary>
+		/// Calculates the screen space size of a bounding box as seen from the camera.
+		/// </summary>
+		/// <param name="boundingBox">The bounding box to calculate size for.</param>
+		/// <param name="camera">The camera to calculate from.</param>
+		/// <returns>The screen space size (0 to 1 range).</returns>
 		private float CalculateScreenSpaceSize(BoundingBox boundingBox, Camera camera)
 		{
 			var size = boundingBox.Max - boundingBox.Min;
@@ -167,8 +187,15 @@ namespace Nursia.SceneGraph
 			return screenSpaceRadius;
 		}
 
+		/// <summary>
+		/// Creates a new instance of the LevelOfDetailNode class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new LevelOfDetailNode();
 
+		/// <summary>
+		/// Copies all LOD properties from another level of detail node.
+		/// </summary>
+		/// <param name="node">The source LOD node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);
@@ -186,6 +213,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the currently visible custom child node based on LOD selection.
+		/// </summary>
 		protected override SceneNode GetCustomChild() => VisibleLodEntry?.Node;
 	}
 }

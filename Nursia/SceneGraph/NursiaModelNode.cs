@@ -103,8 +103,18 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the material for a specific mesh part.
+		/// </summary>
+		/// <param name="meshIndex">The index of the mesh.</param>
+		/// <param name="meshPartIndex">The index of the mesh part.</param>
+		/// <returns>The material for the specified mesh part.</returns>
 		public IMaterial GetMaterial(int meshIndex, int meshPartIndex) => Materials[meshIndex][meshPartIndex];
 
+		/// <summary>
+		/// Loads the model and materials from the asset manager.
+		/// </summary>
+		/// <param name="assetManager">The asset manager to load resources from.</param>
 		public override void Load(AssetManager assetManager)
 		{
 			base.Load(assetManager);
@@ -112,10 +122,20 @@ namespace Nursia.SceneGraph
 			NursiaModel.Load(assetManager);
 		}
 
+		/// <summary>
+		/// Initializes materials for all mesh parts from the loaded model's default materials.
+		/// </summary>
 		public void SetMaterialsFromModel() => NursiaModel.SetMaterialsFromModel();
 
+		/// <summary>
+		/// Creates a new instance of the NursiaModelNode class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new NursiaModelNode();
 
+		/// <summary>
+		/// Copies all model properties from another model node.
+		/// </summary>
+		/// <param name="node">The source model node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

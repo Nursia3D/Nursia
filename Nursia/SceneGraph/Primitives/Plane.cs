@@ -38,6 +38,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of tessellation divisions for the plane.
+		/// </summary>
 		[Category("Geometry")]
 		public Point Tessellation
 		{
@@ -55,6 +58,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets whether to generate a back face for the plane.
+		/// </summary>
 		[Category("Geometry")]
 		public bool GenerateBackface
 		{
@@ -72,6 +78,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the direction of the plane normals.
+		/// </summary>
 		[Category("Geometry")]
 		public NormalDirection NormalDirection
 		{
@@ -89,10 +98,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the plane mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreatePlaneMeshPart(Nrs.GraphicsDevice, Size.X, Size.Y, Tessellation.X, Tessellation.Y, UScale, VScale, GenerateBackface, IsLeftHanded, NormalDirection);
 
+		/// <summary>
+		/// Creates a new instance of the Plane class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Plane();
 
+		/// <summary>
+		/// Copies all plane properties from another plane node.
+		/// </summary>
+		/// <param name="node">The source plane node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

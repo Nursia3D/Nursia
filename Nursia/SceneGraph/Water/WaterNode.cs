@@ -59,8 +59,15 @@ namespace Nursia.SceneGraph.Water
 				reflectionPlane: new Plane(Vector3.UnitY, 0));
 		}
 
+		/// <summary>
+		/// Creates a new instance of the WaterNode class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new WaterNode();
 
+		/// <summary>
+		/// Copies all properties from another water node to this node.
+		/// </summary>
+		/// <param name="node">The source node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

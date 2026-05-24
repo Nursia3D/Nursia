@@ -36,6 +36,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the radius of the cylinder.
+		/// </summary>
 		[Category("Geometry")]
 		public float Radius
 		{
@@ -53,6 +56,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of tessellation levels for the cylinder mesh.
+		/// </summary>
 		[Category("Geometry")]
 		public int Tessellation
 		{
@@ -70,10 +76,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the cylinder mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreateCylinderMeshPart(Nrs.GraphicsDevice, Height, Radius, Tessellation, UScale, VScale, IsLeftHanded);
 
+		/// <summary>
+		/// Creates a new instance of the Cylinder class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Cylinder();
 
+		/// <summary>
+		/// Copies all cylinder properties from another cylinder node.
+		/// </summary>
+		/// <param name="node">The source cylinder node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

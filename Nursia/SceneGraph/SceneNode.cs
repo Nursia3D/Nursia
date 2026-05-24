@@ -254,10 +254,16 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the bounding box of this node in local space.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public virtual BoundingBox? BoundingBox => null;
 
+		/// <summary>
+		/// Gets the bounding box of this node and all its children in local space.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public BoundingBox? FullBoundingBox
@@ -282,9 +288,15 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the collection of child nodes attached to this node.
+		/// </summary>
 		[Browsable(false)]
 		public ObservableCollection<SceneNode> Children { get; } = new ObservableCollection<SceneNode>();
 
+		/// <summary>
+		/// Gets the list of actual children including both user-added and custom children.
+		/// </summary>
 		[Browsable(false)]
 		internal IReadOnlyList<SceneNode> ActualChildren
 		{
@@ -327,14 +339,23 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets user-defined data associated with this node.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public object Tag { get; set; }
 
+		/// <summary>
+		/// Gets or sets a custom action to be called during scene updates.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Action<GameTime> UpdateHandler { get; set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SceneNode"/> class.
+		/// </summary>
 		public SceneNode()
 		{
 			UniqueId = _lastId;
@@ -348,10 +369,18 @@ namespace Nursia.SceneGraph
 			Children.CollectionChanged += ChildrenOnCollectionChanged;
 		}
 
+		/// <summary>
+		/// Releases unmanaged and optionally managed resources used by this node.
+		/// </summary>
+		/// <param name="disposing">True to release both unmanaged and managed resources; false to release only unmanaged resources.</param>
 		public override void Dispose(bool disposing)
 		{
 		}
 
+		/// <summary>
+		/// Loads all external assets referenced by this node and its children.
+		/// </summary>
+		/// <param name="assetManager">The asset manager to load resources from.</param>
 		public virtual void Load(AssetManager assetManager)
 		{
 			foreach (var child in ActualChildren)
@@ -387,6 +416,9 @@ namespace Nursia.SceneGraph
 			OnChildrenChanged();
 		}
 
+		/// <summary>
+		/// Called when the children collection has been modified.
+		/// </summary>
 		protected virtual void OnChildrenChanged()
 		{
 			_childrenCopy.Clear();
@@ -395,16 +427,27 @@ namespace Nursia.SceneGraph
 			InvalidateActualChildren();
 		}
 
+		/// <summary>
+		/// Called when a child node has been added to this node.
+		/// </summary>
+		/// <param name="n">The child node that was added.</param>
 		protected virtual void OnChildAdded(SceneNode n)
 		{
 			n.Parent = this;
 		}
 
+		/// <summary>
+		/// Called when a child node has been removed from this node.
+		/// </summary>
+		/// <param name="n">The child node that was removed.</param>
 		protected virtual void OnChildRemoved(SceneNode n)
 		{
 			n.Parent = null;
 		}
 
+		/// <summary>
+		/// Invalidates the transformation matrices for this node and all its children.
+		/// </summary>
 		public virtual void InvalidateTransform()
 		{
 			_localTransform = null;
@@ -417,6 +460,10 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Traverses the scene graph starting from this node, calling the handler for each node.
+		/// </summary>
+		/// <param name="handler">The action to invoke for each node in the tree.</param>
 		public void Traverse(Action<SceneNode> handler)
 		{
 			handler(this);
@@ -427,6 +474,12 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Traverses the scene graph starting from this node, calling the handler for each node with a parameter.
+		/// </summary>
+		/// <typeparam name="T">The type of the parameter to pass to the handler.</typeparam>
+		/// <param name="handler">The action to invoke for each node in the tree.</param>
+		/// <param name="param">A parameter to pass to the handler.</param>
 		public void Traverse<T>(Action<SceneNode, T> handler, T param)
 		{
 			handler(this, param);
@@ -437,6 +490,14 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Traverses the scene graph starting from this node, calling the handler for each node with two parameters.
+		/// </summary>
+		/// <typeparam name="T1">The type of the first parameter.</typeparam>
+		/// <typeparam name="T2">The type of the second parameter.</typeparam>
+		/// <param name="handler">The action to invoke for each node in the tree.</param>
+		/// <param name="param1">The first parameter to pass to the handler.</param>
+		/// <param name="param2">The second parameter to pass to the handler.</param>
 		public void Traverse<T1, T2>(Action<SceneNode, T1, T2> handler, T1 param1, T2 param2)
 		{
 			handler(this, param1, param2);
@@ -460,6 +521,11 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Queries the scene graph for all nodes matching the specified predicate.
+		/// </summary>
+		/// <param name="predicate">The condition to match against each node.</param>
+		/// <returns>A list of all nodes that satisfy the predicate.</returns>
 		public List<SceneNode> Query(Func<SceneNode, bool> predicate)
 		{
 			var result = new List<SceneNode>();
@@ -468,6 +534,11 @@ namespace Nursia.SceneGraph
 			return result;
 		}
 
+		/// <summary>
+		/// Queries the scene graph for the first node matching the specified predicate.
+		/// </summary>
+		/// <param name="predicate">The condition to match against each node.</param>
+		/// <returns>The first node that satisfies the predicate, or null if no match is found.</returns>
 		public SceneNode QueryFirst(Func<SceneNode, bool> predicate)
 		{
 			if (predicate(this))
@@ -487,7 +558,18 @@ namespace Nursia.SceneGraph
 			return null;
 		}
 
+		/// <summary>
+		/// Queries the scene graph for the first node of a specific type.
+		/// </summary>
+		/// <typeparam name="T">The type of node to find.</typeparam>
+		/// <returns>The first node of the specified type, or null if no match is found.</returns>
 		public T QueryFirstByType<T>() where T : SceneNode => (T)QueryFirst(s => s is T);
+
+		/// <summary>
+		/// Queries the scene graph for the first node with the specified identifier.
+		/// </summary>
+		/// <param name="id">The identifier to search for.</param>
+		/// <returns>The first node with the specified identifier, or null if no match is found.</returns>
 		public SceneNode QueryFirstById(string id) => QueryFirst(s => s.Id == id);
 
 
@@ -505,6 +587,11 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Queries the scene graph for all nodes of a specific type.
+		/// </summary>
+		/// <typeparam name="T">The type of nodes to find.</typeparam>
+		/// <returns>A list of all nodes of the specified type.</returns>
 		public List<T> QueryByType<T>() where T : SceneNode
 		{
 			var result = new List<T>();
@@ -514,6 +601,9 @@ namespace Nursia.SceneGraph
 			return result;
 		}
 
+		/// <summary>
+		/// Removes this node from its parent's children collection.
+		/// </summary>
 		public void RemoveFromParent()
 		{
 			if (Parent == null)
@@ -524,6 +614,10 @@ namespace Nursia.SceneGraph
 			Parent.Children.Remove(this);
 		}
 
+		/// <summary>
+		/// Creates a deep copy of this node and all its children.
+		/// </summary>
+		/// <returns>A new node that is a copy of this node.</returns>
 		public SceneNode Clone()
 		{
 			var result = CreateInstanceCore();
@@ -537,6 +631,9 @@ namespace Nursia.SceneGraph
 			return result;
 		}
 
+		/// <summary>
+		/// Updates the global transformation matrix for this node based on its parent's global transform.
+		/// </summary>
 		protected void UpdateGlobalTransform()
 		{
 			if (_globalTransform != null)
@@ -556,15 +653,26 @@ namespace Nursia.SceneGraph
 			OnGlobalTransformUpdated();
 		}
 
+		/// <summary>
+		/// Called after the global transformation matrix has been updated.
+		/// </summary>
 		protected virtual void OnGlobalTransformUpdated()
 		{
 		}
 
+		/// <summary>
+		/// Creates a new instance of this node type. Derived classes should override this method to create instances of their own type.
+		/// </summary>
+		/// <returns>A new instance of this node.</returns>
 		protected virtual SceneNode CreateInstanceCore()
 		{
 			return new SceneNode();
 		}
 
+		/// <summary>
+		/// Copies all properties from another node to this node.
+		/// </summary>
+		/// <param name="node">The source node to copy from.</param>
 		protected virtual void CopyFrom(SceneNode node)
 		{
 			Id = node.Id;
@@ -581,16 +689,27 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Adds render jobs for this node to the specified batch.
+		/// </summary>
+		/// <param name="camera">The camera used for rendering.</param>
+		/// <param name="batch">The render jobs batch to add jobs to.</param>
 		public virtual void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
 		}
 
+		/// <summary>
+		/// Invalidates the full bounding box for this node and all parent nodes.
+		/// </summary>
 		protected void InvalidateFullBoundingBox()
 		{
 			_dirtyFlags |= DirtyFlags.FullBoundingBox;
 			Parent?.InvalidateFullBoundingBox();
 		}
 
+		/// <summary>
+		/// Invalidates the cached list of actual children and the bounding box.
+		/// </summary>
 		protected void InvalidateActualChildren()
 		{
 			_dirtyFlags |= DirtyFlags.ActualChildren;

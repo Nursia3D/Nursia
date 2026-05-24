@@ -88,8 +88,14 @@ namespace Nursia.SceneGraph.Billboards
 			}
 		}
 
+		/// <summary>
+		/// Gets the texture to render on the billboard. Derived classes must provide this.
+		/// </summary>
 		protected abstract Texture2D RenderTexture { get; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BillboardNodeBase"/> class.
+		/// </summary>
 		protected BillboardNodeBase()
 		{
 			_material = new UnlitMaterial
@@ -98,6 +104,11 @@ namespace Nursia.SceneGraph.Billboards
 			};
 		}
 
+		/// <summary>
+		/// Adds render jobs for this billboard quad.
+		/// </summary>
+		/// <param name="camera">The camera used for rendering.</param>
+		/// <param name="batch">The render batch to add jobs to.</param>
 		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
 			base.AddRenderJobs(camera, batch);

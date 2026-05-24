@@ -35,6 +35,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of tessellation levels for the teapot mesh.
+		/// </summary>
 		[Category("Geometry")]
 		public int Tessellation
 		{
@@ -52,10 +55,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the teapot mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreateTeapotMeshPart(Nrs.GraphicsDevice, Size, Tessellation, UScale, VScale, IsLeftHanded);
 
+		/// <summary>
+		/// Creates a new instance of the Teapot class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Teapot();
 
+		/// <summary>
+		/// Copies all teapot properties from another teapot node.
+		/// </summary>
+		/// <param name="node">The source teapot node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

@@ -50,6 +50,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the U coordinate scale for texture mapping.
+		/// </summary>
 		[Category("Geometry")]
 		public float UScale
 		{
@@ -67,6 +70,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the V coordinate scale for texture mapping.
+		/// </summary>
 		[Category("Geometry")]
 		public float VScale
 		{
@@ -84,13 +90,24 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the mesh geometry for this primitive. Derived classes must implement this.
+		/// </summary>
+		/// <returns>A new mesh part for the primitive.</returns>
 		protected abstract DrMeshPart CreateMesh();
 
+		/// <summary>
+		/// Invalidates the cached mesh, causing it to be regenerated on next access.
+		/// </summary>
 		public void InvalidateMesh()
 		{
 			_mesh = null;
 		}
 
+		/// <summary>
+		/// Copies all properties from another primitive mesh node to this node.
+		/// </summary>
+		/// <param name="node">The source node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

@@ -81,6 +81,9 @@ namespace Nursia.SceneGraph.Lights
 			CastsShadow = false;
 		}
 
+		/// <summary>
+		/// Called when the CastsShadow property changes.
+		/// </summary>
 		protected override void OnCastsShadowChanged()
 		{
 		}

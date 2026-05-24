@@ -70,67 +70,122 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the ambient color of the terrain.
+		/// </summary>
 		[Category("Appearance")]
 		public Color AmbientColor { get; set; } = Color.Black;
 
+		/// <summary>
+		/// Gets or sets the diffuse color of the terrain.
+		/// </summary>
 		[Category("Appearance")]
 		public Color DiffuseColor { get; set; } = Color.White;
 
+		/// <summary>
+		/// Gets or sets the specular color for reflections on the terrain.
+		/// </summary>
 		[Category("Appearance")]
 		public Color SpecularColor { get; set; } = Color.Black;
 
+		/// <summary>
+		/// Gets or sets the power for specular highlights.
+		/// </summary>
 		[Category("Appearance")]
 		public float SpecularPower { get; set; } = 250.0f;
 
+		/// <summary>
+		/// Gets or sets the emissive color of the terrain.
+		/// </summary>
 		[Category("Appearance")]
 		public Color EmissiveColor { get; set; } = Color.Black;
 
+		/// <summary>
+		/// Gets or sets the tiling factor for detail maps.
+		/// </summary>
 		[Category("Appearance")]
 		public Vector2 DetailTiling { get; set; } = new Vector2(32, 32);
 
+		/// <summary>
+		/// Gets or sets the weight map texture used to blend detail layers.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D WeightMap1 { get; set; }
 
+		/// <summary>
+		/// Gets a string representation of the weight map dimensions.
+		/// </summary>
 		[JsonIgnore]
 		public string WeightMap1Size => WeightMap1 != null ? $"{WeightMap1.Width}x{WeightMap1.Height}" : "null";
 
+		/// <summary>
+		/// Gets or sets the path to the weight map asset.
+		/// </summary>
 		[Category("Appearance")]
 		[Browsable(false)]
 		public string WeightMap1Path { get; set; }
 
+		/// <summary>
+		/// Gets or sets the first detail map texture.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D DetailMap1 { get; set; }
 
+		/// <summary>
+		/// Gets or sets the path to the first detail map asset.
+		/// </summary>
 		[Category("Appearance")]
 		[Browsable(false)]
 		public string DetailMap1Path { get; set; }
 
+		/// <summary>
+		/// Gets or sets the second detail map texture.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D DetailMap2 { get; set; }
 
+		/// <summary>
+		/// Gets or sets the path to the second detail map asset.
+		/// </summary>
 		[Category("Appearance")]
 		[Browsable(false)]
 		public string DetailMap2Path { get; set; }
 
+		/// <summary>
+		/// Gets or sets the third detail map texture.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D DetailMap3 { get; set; }
 
+		/// <summary>
+		/// Gets or sets the path to the third detail map asset.
+		/// </summary>
 		[Category("Appearance")]
 		[Browsable(false)]
 		public string DetailMap3Path { get; set; }
 
+		/// <summary>
+		/// Gets or sets the fourth detail map texture.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D DetailMap4 { get; set; }
 
+		/// <summary>
+		/// Gets or sets the path to the fourth detail map asset.
+		/// </summary>
 		[Category("Appearance")]
 		[Browsable(false)]
 		public string DetailMap4Path { get; set; }
 
+		/// <summary>
+		/// Creates a copy of this terrain material.
+		/// </summary>
+		/// <returns>A new TerrainMaterial with the same properties as this material.</returns>
 		public override IMaterial Clone()
 		{
 			var result = new TerrainMaterial
@@ -273,11 +328,25 @@ namespace Nursia.SceneGraph.Landscape
 			return binding;
 		}
 
+		/// <summary>
+		/// Gets the appropriate shader technique for rendering this material under the specified conditions.
+		/// </summary>
+		/// <param name="materialTechnique">The material rendering technique.</param>
+		/// <param name="lightTechnique">The light type technique.</param>
+		/// <param name="shadow">Whether shadows are enabled.</param>
+		/// <param name="translucent">Whether the material is translucent.</param>
+		/// <param name="normalMapping">Whether normal mapping is enabled.</param>
+		/// <param name="clipPlane">Whether clip plane is enabled.</param>
+		/// <returns>The effect binding for the specified technique.</returns>
 		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane)
 		{
 			return InternalGetBinding(lightTechnique, shadow, translucent, Nrs.EditorSettings.TerrainMarkerPosition != null, clipPlane);
 		}
 
+		/// <summary>
+		/// Loads external texture assets for this material.
+		/// </summary>
+		/// <param name="assetManager">The asset manager to load resources from.</param>
 		public void Load(AssetManager assetManager)
 		{
 			if (!string.IsNullOrEmpty(WeightMap1Path))

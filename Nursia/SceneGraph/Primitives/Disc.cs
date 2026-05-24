@@ -37,6 +37,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the sector angle in degrees for the disc.
+		/// </summary>
 		[Category("Geometry")]
 		public float SectorAngle
 		{
@@ -54,6 +57,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of tessellation levels for the disc mesh.
+		/// </summary>
 		[Category("Geometry")]
 		public int Tessellation
 		{
@@ -71,10 +77,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the disc mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreateDiscMeshPart(Nrs.GraphicsDevice, Radius, MathHelper.ToRadians(SectorAngle), Tessellation, UScale, VScale, IsLeftHanded);
 
+		/// <summary>
+		/// Creates a new instance of the Disc class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new Disc();
 
+		/// <summary>
+		/// Copies all disc properties from another disc node.
+		/// </summary>
+		/// <param name="node">The source disc node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

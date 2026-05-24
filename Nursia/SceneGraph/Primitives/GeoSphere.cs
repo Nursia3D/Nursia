@@ -35,6 +35,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the number of tessellation levels for the geodesic sphere mesh.
+		/// </summary>
 		[Category("Geometry")]
 		public int Tessellation
 		{
@@ -52,10 +55,20 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Creates the geodesic sphere mesh.
+		/// </summary>
 		protected override DrMeshPart CreateMesh() => MeshPrimitives.CreateGeoSphereMeshPart(Nrs.GraphicsDevice, Radius, Tessellation, UScale, VScale, IsLeftHanded);
 
+		/// <summary>
+		/// Creates a new instance of the GeoSphere class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new GeoSphere();
 
+		/// <summary>
+		/// Copies all geodesic sphere properties from another geosphere node.
+		/// </summary>
+		/// <param name="node">The source geosphere node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);

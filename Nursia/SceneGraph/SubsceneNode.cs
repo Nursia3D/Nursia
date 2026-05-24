@@ -47,9 +47,15 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the asset path to load the subscene from.
+		/// </summary>
 		[Browsable(false)]
 		public string NodePath { get; set; }
 
+		/// <summary>
+		/// Gets the bounding box of the subscene or its node.
+		/// </summary>
 		public override BoundingBox? BoundingBox
 		{
 			get
@@ -63,6 +69,10 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Loads the subscene node from the asset manager if NodePath is set.
+		/// </summary>
+		/// <param name="assetManager">The asset manager to load resources from.</param>
 		public override void Load(AssetManager assetManager)
 		{
 			base.Load(assetManager);
@@ -73,8 +83,15 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Creates a new instance of the SubsceneNode class.
+		/// </summary>
 		protected override SceneNode CreateInstanceCore() => new SubsceneNode();
 
+		/// <summary>
+		/// Copies all properties from another subscene node to this node.
+		/// </summary>
+		/// <param name="node">The source node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);
@@ -84,6 +101,9 @@ namespace Nursia.SceneGraph
 			NodePath = subscene.NodePath;
 		}
 
+		/// <summary>
+		/// Gets the custom child node for this subscene.
+		/// </summary>
 		protected override SceneNode GetCustomChild() => Node;
 	}
 }
