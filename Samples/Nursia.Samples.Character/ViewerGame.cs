@@ -66,17 +66,6 @@ namespace Nursia.Samples.Character
 			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(AppContext.BaseDirectory, "Assets"));
 			_scene = assetManager.LoadStoredScene("Scenes/Main.scene");
 
-			// Add reflection plane
-			var reflectionPlane = new ReflectionPlane
-			{
-				Scale = new Vector3(64, 64, 1),
-				Translation = new Vector3(-16, 0, 32),
-				Rotation = new Vector3(0, 135, 0),
-				DiffuseColor = Color.LightBlue
-			};
-			_scene.Root.Children.Add(reflectionPlane);
-
-
 			// Add character
 			var characterModel = _scene.Root.QueryFirstByType<NursiaModelNode>();
 			var swordScene = assetManager.LoadStoredScene("Scenes/Sword.scene");

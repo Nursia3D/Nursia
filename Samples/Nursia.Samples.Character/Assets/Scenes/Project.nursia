@@ -3,8 +3,18 @@
   "TopSplitterPosition": 0.2,
   "LeftSplitterPosition": 0.5,
   "OpenFiles": [
-    "D:\\Projects\\Nursia\\Samples\\Nursia.Samples.ThirdPerson\\Assets\\Scenes\\Main.scene"
+    "D:\\Projects\\Nursia\\Samples\\Nursia.Samples.Character\\Assets\\Scenes\\Main.scene",
+    "D:\\Projects\\Nursia\\Samples\\Nursia.Samples.Character\\Assets\\Scenes\\Sword.scene"
   ],
-  "GraphicsSettings": {},
-  "DebugSettings": {}
+  "GraphicsSettings": {
+    "ShadowMapSize": "Size4096",
+    "ShadowIntensity": 0.6,
+    "ShadowFadeStart": 0.8,
+    "Cascades": 4,
+    "MaxShadowDistance": 200.0
+  },
+  "DebugSettings": {},
+  "ReferencedAssemblies": [
+    "../../bin/MonoGame.DesktopGL/Debug/net8.0/Nursia.Samples.Character.dll"
+  ]
 }

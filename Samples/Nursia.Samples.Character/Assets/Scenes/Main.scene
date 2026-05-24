@@ -3,9 +3,9 @@
     "ViewAngle": 60.0,
     "NearPlane": 0.1,
     "FarPlane": 1000.0,
-    "Translation": "6.079611, 9.958334, 7.3445344",
+    "Translation": "17.75175, 33.590015, -29.246897",
     "Scale": "0.9999998, 0.9999998, 0.9999998",
-    "Rotation": "319.6484, 46.575855, 0",
+    "Rotation": "338.04825, 143.87573, 0",
     "Children": []
   },
   "RenderEnvironment": {
@@ -61,6 +61,7 @@
               "AmbientColor": "Black",
               "DiffuseColor": "#273638FF",
               "SpecularColor": "Black",
+              "SpecularPower": 250.0,
               "EmissiveColor": "Black"
             }
           ],
@@ -70,6 +71,7 @@
               "AmbientColor": "Black",
               "DiffuseColor": "#186B85FF",
               "SpecularColor": "Black",
+              "SpecularPower": 250.0,
               "EmissiveColor": "Black"
             }
           ]
@@ -116,6 +118,14 @@
         "Id": "c",
         "Translation": "0, 1, 25",
         "Scale": "1, 1, 1",
+        "Children": []
+      },
+      {
+        "$type": "Nursia.Samples.Character.ReflectionPlane, Nursia.Samples.Character",
+        "DiffuseColor": "#5BC6FAFF",
+        "Translation": "-16, 0, 32",
+        "Scale": "64, 64, 1",
+        "Rotation": "0, 135, 0",
         "Children": []
       }
     ]

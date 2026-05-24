@@ -2,6 +2,7 @@ using Myra.Graphics2D.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Nursia.Editor.UI
 {
@@ -37,38 +38,68 @@ namespace Nursia.Editor.UI
 		{
 			_treeType.RemoveAllSubNodes();
 			var filter = _textFilter.Text;
-			foreach (var pair in NodesRegistry.NodesByCategories)
+
+			// Add custom nodes from referenced assemblies first
+			var customAssemblies = NodesRegistry.NodesByAssembly;
+			if (customAssemblies != null && customAssemblies.Count > 0)
 			{
-				List<Type> types;
-				if (string.IsNullOrEmpty(filter))
+				foreach (var assemblyPair in customAssemblies)
 				{
-					types = pair.Value;
-				}
-				else
-				{
-					// Apply filter
-					types = (from t in pair.Value where t.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase) select t).ToList();
-				}
-
-				if (types == null || types.Count == 0)
-				{
-					continue;
-				}
-
-				var categoryNode = _treeType.AddSubNode(new Label
-				{
-					Text = pair.Key
-				});
-
-				categoryNode.IsExpanded = true;
-				foreach (var nodeType in types)
-				{
-					var node = categoryNode.AddSubNode(new Label
+					List<Type> types;
+					if (string.IsNullOrEmpty(filter))
 					{
-						Text = nodeType.Name
-					});
+						types = assemblyPair.Value;
+					}
+					else
+					{
+						// Apply filter
+						types = (from t in assemblyPair.Value where t.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase) select t).ToList();
+					}
 
-					node.Tag = nodeType;
+					if (types == null || types.Count == 0)
+					{
+						continue;
+					}
+
+					// Create assembly node
+					var assemblyNode = _treeType.AddSubNode(new Label
+					{
+						Text = $"[{assemblyPair.Key}]"
+					});
+					assemblyNode.IsExpanded = true;
+
+					// Group types by category within this assembly
+					var typesByCategory = new Dictionary<string, List<Type>>();
+					foreach (var nodeType in types)
+					{
+						var attr = nodeType.GetCustomAttribute<Nursia.Attributes.EditorInfoAttribute>(false);
+						var category = attr?.Category ?? "Other";
+
+						if (!typesByCategory.ContainsKey(category))
+						{
+							typesByCategory[category] = new List<Type>();
+						}
+						typesByCategory[category].Add(nodeType);
+					}
+
+					// Add categories and types under assembly node
+					foreach (var categoryPair in typesByCategory.OrderBy(p => p.Key))
+					{
+						var categoryNode = assemblyNode.AddSubNode(new Label
+						{
+							Text = categoryPair.Key
+						});
+						categoryNode.IsExpanded = true;
+
+						foreach (var nodeType in categoryPair.Value)
+						{
+							var node = categoryNode.AddSubNode(new Label
+							{
+								Text = nodeType.Name
+							});
+							node.Tag = nodeType;
+						}
+					}
 				}
 			}
 

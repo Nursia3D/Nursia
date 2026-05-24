@@ -6,10 +6,10 @@
     "D:\\Projects\\Nursia\\Samples\\Nursia.Samples.Water\\Assets\\Scenes\\Main.scene"
   ],
   "GraphicsSettings": {
+    "ShadowMapSize": "Size4096",
     "ShadowIntensity": 0.6,
     "ShadowFadeStart": 0.8,
-    "CascadesCount": 4,
-    "MinShadowDistance": 0.1,
+    "Cascades": 4,
     "MaxShadowDistance": 100.0
   },
   "DebugSettings": {}

@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Water
 {
-	public class WaterMaterial : IMaterial
+	internal class WaterMaterial : IMaterial
 	{
 		private static EffectBinding _binding;
 

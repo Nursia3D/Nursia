@@ -2,14 +2,15 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>$(FNATargetFramework)</TargetFramework>
+    <AssemblyName>Nursia.Samples.Character</AssemblyName>
     <RootNamespace>Nursia.Samples.Character</RootNamespace>
     <DefineConstants>$(DefineConstants);FNA</DefineConstants>
     <OutputPath>bin\FNA\$(Configuration)</OutputPath>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <None Remove="Effects\FNA\bin\ReflectionPlane.efb" />
-  </ItemGroup>
+    <EmbeddedResource Include="Effects\MonoGameOGL\bin\ReflectionPlane.efb" />
+  </ItemGroup>  
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Myra\src\Myra\Myra.FNA.Core.csproj" />
