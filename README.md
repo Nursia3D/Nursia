@@ -18,7 +18,7 @@ It has following features:
 * Scene Editor
 
 ## Documentation
-[https://github.com/Nursia3D/Nursia/wiki](https://nursia3d.github.io/Nursia/)
+https://nursia3d.github.io/Nursia/
 
 ## Support
 Use following resources if you need help with Nursia or have other questions:
