@@ -5,12 +5,21 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph
 {
+	/// <summary>
+	/// Specifies the type of camera projection.
+	/// </summary>
 	public enum CameraType
 	{
+		/// <summary>Perspective projection (3D view).</summary>
 		Perspective,
+
+		/// <summary>Orthographic projection (2D view).</summary>
 		Orthographic
 	}
 
+	/// <summary>
+	/// Represents a camera in a Nursia 3D scene.
+	/// </summary>
 	public class Camera : SceneNode
 	{
 		private CameraType _cameraType = CameraType.Perspective;
@@ -25,6 +34,9 @@ namespace Nursia.SceneGraph
 		private BoundingFrustum _frustum;
 		private bool _dirty = true;
 
+		/// <summary>
+		/// Gets or sets the type of camera projection.
+		/// </summary>
 		[Category("Camera")]
 		public CameraType CameraType
 		{
@@ -43,7 +55,7 @@ namespace Nursia.SceneGraph
 		}
 
 		/// <summary>
-		/// View Angle In Degrees
+		/// Gets or sets the field of view angle in degrees for perspective cameras.
 		/// </summary>
 		[Category("Camera")]
 		public float ViewAngle

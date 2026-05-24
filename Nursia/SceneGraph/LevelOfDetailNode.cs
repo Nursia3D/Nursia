@@ -9,10 +9,16 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph
 {
+	/// <summary>
+	/// Represents a level of detail entry in a level of detail node.
+	/// </summary>
 	public class LodEntry
 	{
 		private SceneNode _node;
 
+		/// <summary>
+		/// Gets or sets the scene node for this level of detail.
+		/// </summary>
 		public SceneNode Node
 		{
 			get => _node;
@@ -28,12 +34,24 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the maximum screen space size at which this LOD level is displayed.
+		/// If null, this LOD is always used.
+		/// </summary>
 		public float? MaxScreenSpaceSize { get; set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LodEntry"/> class.
+		/// </summary>
 		public LodEntry()
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LodEntry"/> class with the specified node and screen space size.
+		/// </summary>
+		/// <param name="node">The scene node for this LOD level.</param>
+		/// <param name="maxScreenSpaceSize">The maximum screen space size for this LOD level.</param>
 		public LodEntry(SceneNode node, float? maxScreenSpaceSize = null)
 		{
 			Node = node;

@@ -10,16 +10,25 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Landscape
 {
+	/// <summary>
+	/// Material for terrain rendering with support for lighting and shadows.
+	/// </summary>
 	public class TerrainMaterial : BaseMaterial, IHasExternalAssets
 	{
 		private static readonly EffectBinding[] _allBindings = new EffectBinding[128];
 
 		private MaterialFlags _flags = MaterialFlags.AcceptsLight | MaterialFlags.CastsShadows | MaterialFlags.AcceptsShadows;
 
+		/// <summary>
+		/// Gets the material flags describing this material's properties.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public override MaterialFlags Flags => _flags;
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this material casts shadows.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool CastsShadows
@@ -39,6 +48,9 @@ namespace Nursia.SceneGraph.Landscape
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this material accepts shadows.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool AcceptsShadows

@@ -11,22 +11,32 @@ using System.IO;
 namespace Nursia.SceneGraph.Landscape
 {
 	/// <summary>
-	/// Defines height data used to store values representing elevation.
+	/// Defines height data used to store values representing elevation in a heightfield.
 	/// </summary>
 	public class HeightField
 	{
 		private readonly float[,] _array;
 
+		/// <summary>
+		/// Gets the number of columns in this height field.
+		/// </summary>
 		public int Columns => _array.GetLength(0);
+
+		/// <summary>
+		/// Gets the number of rows in this height field.
+		/// </summary>
 		public int Rows => _array.GetLength(1);
 
+		/// <summary>
+		/// Gets or sets an action that is called when a height value changes.
+		/// </summary>
 		public Action<Point> HeightChanged;
 
 		/// <summary>
-		/// Creates a new HeightField of the given dimensions, with zero height data.
+		/// Initializes a new instance of the <see cref="HeightField"/> class with the given dimensions filled with zero height data.
 		/// </summary>
-		/// <param name="rows"></param>
-		/// <param name="columns"></param>
+		/// <param name="columns">The number of columns. Must be at least 2.</param>
+		/// <param name="rows">The number of rows. Must be at least 2.</param>
 		public HeightField(int columns, int rows)
 		{
 			if (columns < 2)
@@ -42,6 +52,12 @@ namespace Nursia.SceneGraph.Landscape
 			_array = new float[columns, rows];
 		}
 
+		/// <summary>
+		/// Sets the height value at the specified position.
+		/// </summary>
+		/// <param name="column">The column index.</param>
+		/// <param name="row">The row index.</param>
+		/// <param name="value">The height value to set.</param>
 		public void SetHeight(int column, int row, float value)
 		{
 			if (value.EpsilonEquals(_array[column, row]))

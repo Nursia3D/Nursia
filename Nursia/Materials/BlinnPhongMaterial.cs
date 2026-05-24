@@ -13,16 +13,28 @@ using System.IO;
 
 namespace Nursia.Materials
 {
+	/// <summary>
+	/// Blinn-Phong material implementation for realistic lighting with optional texture mapping.
+	/// </summary>
 	public class BlinnPhongMaterial : BaseMaterial, IHasExternalAssets
 	{
 		private static readonly EffectBinding[] _allBindings = new EffectBinding[512];
 
 		private MaterialFlags _flags = MaterialFlags.AcceptsLight | MaterialFlags.CastsShadows | MaterialFlags.AcceptsShadows;
 
+		/// <summary>
+		/// Gets or sets the unique identifier for this material.
+		/// </summary>
 		public string Id { get; set; }
 
+		/// <summary>
+		/// Gets the material flags describing this material's properties.
+		/// </summary>
 		public override MaterialFlags Flags => _flags;
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this material casts shadows.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool CastsShadows
@@ -42,6 +54,9 @@ namespace Nursia.Materials
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this material accepts shadows.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool AcceptsShadows
@@ -61,42 +76,79 @@ namespace Nursia.Materials
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the ambient color of the material.
+		/// </summary>
 		[Category("Appearance")]
 		public Color AmbientColor { get; set; } = Color.Black;
 
+		/// <summary>
+		/// Gets or sets the diffuse color of the material.
+		/// </summary>
 		[Category("Appearance")]
 		public Color DiffuseColor { get; set; } = Color.White;
 
+		/// <summary>
+		/// Gets or sets the specular color of the material.
+		/// </summary>
 		[Category("Appearance")]
 		public Color SpecularColor { get; set; } = Color.Black;
 
+		/// <summary>
+		/// Gets or sets the specular power (shininess) of the material.
+		/// </summary>
 		[Category("Appearance")]
 		public float SpecularPower { get; set; } = 250.0f;
 
+		/// <summary>
+		/// Gets or sets the emissive color of the material.
+		/// </summary>
 		[Category("Appearance")]
 		public Color EmissiveColor { get; set; } = Color.Black;
 
+		/// <summary>
+		/// Gets or sets the diffuse texture of the material.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D DiffuseTexture { get; set; }
 
+		/// <summary>
+		/// Gets or sets the path to the diffuse texture asset.
+		/// </summary>
 		[Browsable(false)]
 		public string DiffuseTexturePath { get; set; }
 
+		/// <summary>
+		/// Gets or sets the specular texture of the material.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D SpecularTexture { get; set; }
 
+		/// <summary>
+		/// Gets or sets the path to the specular texture asset.
+		/// </summary>
 		[Browsable(false)]
 		public string SpecularTexturePath { get; set; }
 
+		/// <summary>
+		/// Gets or sets the normal map texture of the material.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D NormalTexture { get; set; }
 
+		/// <summary>
+		/// Gets or sets the path to the normal map texture asset.
+		/// </summary>
 		[Browsable(false)]
 		public string NormalTexturePath { get; set; }
 
+		/// <summary>
+		/// Loads all external textures referenced by this material using the specified asset manager.
+		/// </summary>
+		/// <param name="assetManager">The asset manager to load textures from.</param>
 		public void Load(AssetManager assetManager)
 		{
 			if (!string.IsNullOrEmpty(DiffuseTexturePath))
@@ -115,6 +167,10 @@ namespace Nursia.Materials
 			}
 		}
 
+		/// <summary>
+		/// Creates a copy of this material instance.
+		/// </summary>
+		/// <returns>A cloned instance of this material with identical properties.</returns>
 		public override IMaterial Clone()
 		{
 			return new BlinnPhongMaterial
@@ -267,6 +323,16 @@ namespace Nursia.Materials
 			return binding;
 		}
 
+		/// <summary>
+		/// Gets the effect binding for rendering color with this material.
+		/// </summary>
+		/// <param name="materialTechnique">The material technique to use.</param>
+		/// <param name="lightTechnique">The type of lighting to apply.</param>
+		/// <param name="shadow">Whether shadows should be rendered.</param>
+		/// <param name="translucent">Whether the material is rendered as translucent.</param>
+		/// <param name="normalMapping">Whether normal mapping should be applied.</param>
+		/// <param name="clipPlane">Whether clip plane is in use.</param>
+		/// <returns>The effect binding for color rendering.</returns>
 		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane)
 		{
 			return InternalGetBinding(materialTechnique, lightTechnique, shadow, translucent, normalMapping && NormalTexture != null, clipPlane);

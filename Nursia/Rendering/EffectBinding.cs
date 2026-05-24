@@ -5,52 +5,172 @@ using System.Collections.Generic;
 
 namespace Nursia.Rendering
 {
+	/// <summary>
+	/// Enumerates effect-level parameters that can be set on shader effects.
+	/// </summary>
 	public enum EffectLevelParameter
 	{
+		/// <summary>
+		/// View-projection matrix parameter.
+		/// </summary>
 		ViewProj,
+		/// <summary>
+		/// Inverse view matrix parameter.
+		/// </summary>
 		InverseView,
+		/// <summary>
+		/// Camera position parameter.
+		/// </summary>
 		CameraPos,
+		/// <summary>
+		/// Near plane distance parameter.
+		/// </summary>
 		NearPlane,
+		/// <summary>
+		/// Far plane distance parameter.
+		/// </summary>
 		FarPlane,
+		/// <summary>
+		/// Texture U-offset parameter.
+		/// </summary>
 		UOffset,
+		/// <summary>
+		/// Texture V-offset parameter.
+		/// </summary>
 		VOffset,
+		/// <summary>
+		/// Depth mode parameter.
+		/// </summary>
 		DepthMode,
+		/// <summary>
+		/// Ambient light color parameter.
+		/// </summary>
 		AmbientLightColor,
+		/// <summary>
+		/// Light color parameter.
+		/// </summary>
 		LightColor,
+		/// <summary>
+		/// Light direction parameter.
+		/// </summary>
 		LightDir,
+		/// <summary>
+		/// Light position parameter.
+		/// </summary>
 		LightPos,
+		/// <summary>
+		/// Light ramp map parameter.
+		/// </summary>
 		LightRampMap,
+		/// <summary>
+		/// Light spot map parameter.
+		/// </summary>
 		LightSpotMap,
+		/// <summary>
+		/// Spot light transformation matrix parameter.
+		/// </summary>
 		SpotLightMatrix,
+		/// <summary>
+		/// Light transformation matrices parameter.
+		/// </summary>
 		LightMatrices,
+		/// <summary>
+		/// Shadow split distances parameter.
+		/// </summary>
 		ShadowSplits,
+		/// <summary>
+		/// Shadow map texture parameter.
+		/// </summary>
 		ShadowMap,
+		/// <summary>
+		/// Shadow parameters parameter.
+		/// </summary>
 		ShadowParams,
+		/// <summary>
+		/// Shadow map inverse size parameter.
+		/// </summary>
 		ShadowMapInvSize,
+		/// <summary>
+		/// Shadow depth fade parameter.
+		/// </summary>
 		ShadowDepthFade,
+		/// <summary>
+		/// Fog parameters parameter.
+		/// </summary>
 		FogParams,
+		/// <summary>
+		/// Fog color parameter.
+		/// </summary>
 		FogColor,
+		/// <summary>
+		/// Elapsed time parameter.
+		/// </summary>
 		ElapsedTime,
+		/// <summary>
+		/// G-buffer offsets parameter.
+		/// </summary>
 		GBufferOffsets,
+		/// <summary>
+		/// Screen map parameter.
+		/// </summary>
 		ScreenMap,
+		/// <summary>
+		/// Depth map parameter.
+		/// </summary>
 		DepthMap,
+		/// <summary>
+		/// Environment color parameter.
+		/// </summary>
 		EnvColor,
+		/// <summary>
+		/// Environment cube map parameter.
+		/// </summary>
 		EnvCubeMap
 	}
 
+	/// <summary>
+	/// Enumerates mesh-part-level parameters that can be set on shader effects.
+	/// </summary>
 	public enum MeshPartLevelParameter
 	{
+		/// <summary>
+		/// Model transformation matrix parameter.
+		/// </summary>
 		Model,
+		/// <summary>
+		/// Model-view-projection matrix parameter.
+		/// </summary>
 		ModelViewProj,
+		/// <summary>
+		/// Skin transformation matrices parameter.
+		/// </summary>
 		SkinMatrices,
+		/// <summary>
+		/// Reflection map texture parameter.
+		/// </summary>
 		ReflectionMap,
+		/// <summary>
+		/// Clip plane parameter.
+		/// </summary>
 		ClipPlane
 	}
 
+	/// <summary>
+	/// Represents an effect parameter that is set at the material level.
+	/// </summary>
 	public class MaterialLevelEffectParameter
 	{
+		/// <summary>
+		/// Gets the name of the effect parameter.
+		/// </summary>
 		public string Name { get; }
+		/// <summary>
+		/// Gets the underlying effect parameter.
+		/// </summary>
 		public EffectParameter Parameter { get; }
+		/// <summary>
+		/// Gets the setter action that applies the material's value to the parameter.
+		/// </summary>
 		public Action<object, EffectParameter> Setter { get; }
 
 		internal MaterialLevelEffectParameter(string name, EffectParameter parameter, Action<object, EffectParameter> setter)
@@ -61,6 +181,9 @@ namespace Nursia.Rendering
 		}
 	}
 
+	/// <summary>
+	/// Manages shader effect parameters and their bindings for rendering operations.
+	/// </summary>
 	public partial class EffectBinding
 	{
 		private static int _lastBatchId = 0;
@@ -69,12 +192,31 @@ namespace Nursia.Rendering
 		private readonly Dictionary<MeshPartLevelParameter, EffectParameter> _meshParameters = new Dictionary<MeshPartLevelParameter, EffectParameter>();
 		private readonly Dictionary<string, MaterialLevelEffectParameter> _materialLevelSetters = new Dictionary<string, MaterialLevelEffectParameter>();
 
+		/// <summary>
+		/// Gets the unique batch identifier for this effect binding.
+		/// </summary>
 		public int BatchId { get; }
 
+		/// <summary>
+		/// Gets a read-only dictionary of effect-level parameters bound to this effect.
+		/// </summary>
 		public IReadOnlyDictionary<EffectLevelParameter, EffectParameter> EffectLevelParameters => _effectParameters;
+		/// <summary>
+		/// Gets a read-only dictionary of mesh-part-level parameters bound to this effect.
+		/// </summary>
 		public IReadOnlyDictionary<MeshPartLevelParameter, EffectParameter> MeshPartLevelParameters => _meshParameters;
+		/// <summary>
+		/// Gets a read-only dictionary of material-level parameter setters.
+		/// </summary>
 		public IReadOnlyDictionary<string, MaterialLevelEffectParameter> MaterialLevelSetters => _materialLevelSetters;
 
+		/// <summary>
+		/// Gets or sets the shader effect for this binding.
+		/// </summary>
+		/// <remarks>
+		/// When setting a new effect, its parameters are automatically bound to this effect binding.
+		/// If the current effect becomes invalid, it will be automatically updated.
+		/// </remarks>
 		public Effect Effect
 		{
 			get
@@ -114,14 +256,25 @@ namespace Nursia.Rendering
 			}
 		}
 
+		/// <summary>
+		/// Gets the shader technique used for rendering.
+		/// </summary>
 		public EffectTechnique Technique { get; }
 
+		/// <summary>
+		/// Initializes a new instance of the EffectBinding class.
+		/// </summary>
 		public EffectBinding()
 		{
 			BatchId = _lastBatchId;
 			++_lastBatchId;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the EffectBinding class with a specific effect and optional technique.
+		/// </summary>
+		/// <param name="effect">The shader effect to bind.</param>
+		/// <param name="technique">The name of the technique to use, or null to use the default technique.</param>
 		public EffectBinding(Effect effect, string technique = null): this()
 		{
 			Effect = effect;
@@ -192,6 +345,13 @@ namespace Nursia.Rendering
 			return true;
 		}
 
+		/// <summary>
+		/// Adds a material-level parameter setter for the specified parameter name.
+		/// </summary>
+		/// <typeparam name="T">The material type that will provide values for the parameter.</typeparam>
+		/// <param name="parameterName">The name of the effect parameter.</param>
+		/// <param name="setter">The action that sets the parameter value from the material.</param>
+		/// <returns>True if the setter was successfully added; false if the parameter does not exist in the effect.</returns>
 		public bool AddMaterialLevelSetter<T>(string parameterName, Action<T, EffectParameter> setter) where T : IMaterial
 		{
 			return InternalAddMaterialLevelSetter(parameterName, (o, p) => setter((T)o, p));

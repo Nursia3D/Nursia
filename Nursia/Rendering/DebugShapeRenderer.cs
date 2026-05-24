@@ -95,12 +95,11 @@ namespace Nursia.Rendering
 		}
 
 		/// <summary>
-		/// Adds a line to be rendered for a set amount of time.
+		/// Adds a line to be rendered.
 		/// </summary>
 		/// <param name="a">The first point of the line.</param>
 		/// <param name="b">The second point of the line.</param>
 		/// <param name="color">The color in which to draw the line.</param>
-		/// <param name="life">The amount of time, in seconds, to keep rendering the line.</param>
 		public static void AddLine(Vector3 a, Vector3 b, Color color)
 		{
 			// Get a DebugShape we can use to draw the line

@@ -9,18 +9,30 @@ using System.ComponentModel;
 
 namespace Nursia.Materials
 {
+	/// <summary>
+	/// Unlit material that renders without any lighting calculations.
+	/// </summary>
 	public class UnlitMaterial : BaseMaterial, IHasExternalAssets
 	{
 		private static readonly EffectBinding[] _allBindings = new EffectBinding[8];
 
 		private MaterialFlags _flags = MaterialFlags.CastsShadows;
 
+		/// <summary>
+		/// Gets or sets the unique identifier for this material.
+		/// </summary>
 		public string Id { get; set; }
 
+		/// <summary>
+		/// Gets the material flags describing this material's properties.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public override MaterialFlags Flags => _flags;
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this material casts shadows.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(true)]
 		public bool CastsShadows
@@ -40,6 +52,9 @@ namespace Nursia.Materials
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this material is transparent.
+		/// </summary>
 		[Category("Behavior")]
 		[DefaultValue(false)]
 		public bool IsTransparent
@@ -59,17 +74,30 @@ namespace Nursia.Materials
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the texture for this unlit material.
+		/// </summary>
 		[Category("Appearance")]
 		[JsonIgnore]
 		public Texture2D Texture { get; set; }
 
+		/// <summary>
+		/// Gets or sets the path to the texture asset.
+		/// </summary>
 		[Category("Appearance")]
 		[Browsable(false)]
 		public string TexturePath { get; set; }
 
+		/// <summary>
+		/// Gets or sets the diffuse color of the material.
+		/// </summary>
 		[Category("Appearance")]
 		public Color DiffuseColor { get; set; } = Color.White;
 
+		/// <summary>
+		/// Loads the external texture referenced by this material using the specified asset manager.
+		/// </summary>
+		/// <param name="assetManager">The asset manager to load the texture from.</param>
 		public void Load(AssetManager assetManager)
 		{
 			if (!string.IsNullOrEmpty(TexturePath))
@@ -78,6 +106,10 @@ namespace Nursia.Materials
 			}
 		}
 
+		/// <summary>
+		/// Creates a copy of this material instance.
+		/// </summary>
+		/// <returns>A cloned instance of this material with identical properties.</returns>
 		public override IMaterial Clone()
 		{
 			return new UnlitMaterial
@@ -144,6 +176,16 @@ namespace Nursia.Materials
 			return binding;
 		}
 
+		/// <summary>
+		/// Gets the effect binding for rendering color with this unlit material.
+		/// </summary>
+		/// <param name="materialTechnique">The material technique to use.</param>
+		/// <param name="lightTechnique">The type of lighting to apply (ignored for unlit material).</param>
+		/// <param name="shadow">Whether shadows should be rendered (ignored for unlit material).</param>
+		/// <param name="translucent">Whether the material is rendered as translucent (ignored for unlit material).</param>
+		/// <param name="normalMapping">Whether normal mapping should be applied (ignored for unlit material).</param>
+		/// <param name="clipPlane">Whether clip plane is in use.</param>
+		/// <returns>The effect binding for unlit color rendering.</returns>
 		public override EffectBinding GetColorTechnique(MaterialTechnique materialTechnique, LightTechnique lightTechnique, bool shadow, bool translucent, bool normalMapping, bool clipPlane)
 		{
 			return InternalGetBinding(materialTechnique, Texture != null);

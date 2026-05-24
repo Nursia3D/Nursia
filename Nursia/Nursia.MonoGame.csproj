@@ -6,6 +6,7 @@
     <DefineConstants>$(DefineConstants);MONOGAME</DefineConstants>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <OutputPath>bin\MonoGame\$(Configuration)</OutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

@@ -13,15 +13,21 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph
 {
+	/// <summary>
+	/// Flags that describe scene node properties.
+	/// </summary>
 	[Flags]
 	public enum SceneFlags
 	{
+		/// <summary>No flags set.</summary>
 		None,
+
+		/// <summary>Node has render jobs.</summary>
 		HasRenderJobs = 1 << 0
 	}
 
 	/// <summary>
-	/// Base 3D Scene Node
+	/// Base class for all nodes in a Nursia 3D scene graph.
 	/// </summary>
 	[EditorInfo("Base")]
 	public partial class SceneNode : DrDisposable
@@ -47,16 +53,28 @@ namespace Nursia.SceneGraph
 		private BoundingBox? _fullBoundingBox = null;
 		private DirtyFlags _dirtyFlags = DirtyFlags.All;
 
+		/// <summary>
+		/// Gets the unique identifier for this node.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public int UniqueId { get; }
 
+		/// <summary>
+		/// Gets the flags that describe this node's properties.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public virtual SceneFlags Flags => SceneFlags.None;
 
+		/// <summary>
+		/// Gets or sets the user-defined identifier for this node.
+		/// </summary>
 		public string Id { get; set; }
 
+		/// <summary>
+		/// Gets or sets the local position of this node relative to its parent.
+		/// </summary>
 		[Category("Transform")]
 		public Vector3 Translation
 		{
@@ -74,6 +92,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the local scale of this node.
+		/// </summary>
 		[Category("Transform")]
 		public Vector3 Scale
 		{
@@ -92,8 +113,11 @@ namespace Nursia.SceneGraph
 		}
 
 		/// <summary>
-		/// X - Pitch, Y - yaw, Z - roll
+		/// Gets or sets the local rotation of this node in degrees.
 		/// </summary>
+		/// <remarks>
+		/// X - Pitch (rotation around X axis), Y - Yaw (rotation around Y axis), Z - Roll (rotation around Z axis).
+		/// </remarks>
 		[Category("Transform")]
 		public Vector3 Rotation
 		{
@@ -115,6 +139,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the local transformation matrix of this node.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix LocalTransform
@@ -153,6 +180,12 @@ namespace Nursia.SceneGraph
 		}
 
 
+		/// <summary>
+		/// Gets or sets the global (world) transformation matrix of this node.
+		/// </summary>
+		/// <remarks>
+		/// Setting this property is only supported for root nodes (nodes without a parent).
+		/// </remarks>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix GlobalTransform
@@ -175,6 +208,9 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets the inverse of the global transformation matrix.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix InverseGlobalTransform
@@ -190,11 +226,16 @@ namespace Nursia.SceneGraph
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this node and its children are visible.
+		/// </summary>
 		[DefaultValue(true)]
 		[Category("Behavior")]
-
 		public bool Visible { get; set; } = true;
 
+		/// <summary>
+		/// Gets the parent node of this node.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public SceneNode Parent

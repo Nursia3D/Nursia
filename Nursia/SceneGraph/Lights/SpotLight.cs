@@ -7,12 +7,21 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Lights
 {
+	/// <summary>
+	/// Specifies the falloff curve for spot light intensity.
+	/// </summary>
 	public enum SpotLightRamp
 	{
+		/// <summary>Normal falloff curve.</summary>
 		Normal,
+
+		/// <summary>Wide falloff curve.</summary>
 		Wide
 	}
 
+	/// <summary>
+	/// Represents a spot light that creates a cone of light in a specific direction.
+	/// </summary>
 	[EditorInfo("Lights")]
 	public class SpotLight : BaseLight
 	{
@@ -23,6 +32,9 @@ namespace Nursia.SceneGraph.Lights
 		private float _range = 10.0f;
 		private BoundingFrustum _boundingFrustum;
 
+		/// <summary>
+		/// Gets or sets the aspect ratio of the light cone.
+		/// </summary>
 		[Category("Light")]
 		public float AspectRatio
 		{
@@ -40,6 +52,9 @@ namespace Nursia.SceneGraph.Lights
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the field of view angle of the light cone in degrees.
+		/// </summary>
 		[Category("Light")]
 		public float FieldOfViewInDegrees
 		{
@@ -57,6 +72,9 @@ namespace Nursia.SceneGraph.Lights
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the effective range of this spot light.
+		/// </summary>
 		[Category("Light")]
 		public float Range
 		{
@@ -74,9 +92,15 @@ namespace Nursia.SceneGraph.Lights
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the falloff curve for light intensity.
+		/// </summary>
 		[Category("Light")]
 		public SpotLightRamp Ramp { get; set; } = SpotLightRamp.Normal;
 
+		/// <summary>
+		/// Gets the transformation matrix used for spot light projection.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Matrix SpotMatrix
@@ -89,6 +113,9 @@ namespace Nursia.SceneGraph.Lights
 			}
 		}
 
+		/// <summary>
+		/// Gets the bounding frustum of this spot light.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public BoundingFrustum Frustum
@@ -101,6 +128,9 @@ namespace Nursia.SceneGraph.Lights
 			}
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SpotLight"/> class.
+		/// </summary>
 		public SpotLight()
 		{
 			CastsShadow = false;
@@ -156,8 +186,16 @@ namespace Nursia.SceneGraph.Lights
 		{
 		}
 
+		/// <summary>
+		/// Creates a copy of this spot light node.
+		/// </summary>
+		/// <returns>A new SpotLight instance.</returns>
 		protected override SceneNode CreateInstanceCore() => new SpotLight();
 
+		/// <summary>
+		/// Copies light properties from another node.
+		/// </summary>
+		/// <param name="node">The source node to copy from.</param>
 		protected override void CopyFrom(SceneNode node)
 		{
 			base.CopyFrom(node);
@@ -169,11 +207,19 @@ namespace Nursia.SceneGraph.Lights
 			Ramp = light.Ramp;
 		}
 
+		/// <summary>
+		/// Marks the transformation matrices as dirty and requiring recalculation.
+		/// </summary>
 		private void InvalidateMatrix()
 		{
 			_dirty = true;
 		}
 
+		/// <summary>
+		/// Determines if this spot light affects the specified object.
+		/// </summary>
+		/// <param name="boundingBox">The bounding box to test.</param>
+		/// <returns><c>true</c> if the light cone intersects the bounding box; otherwise, <c>false</c>.</returns>
 		public override bool AffectsObject(BoundingBox boundingBox)
 		{
 			UpdateMatrices();

@@ -13,12 +13,25 @@ using MonoGame.Framework.Utilities;
 
 namespace Nursia
 {
+	/// <summary>
+	/// Main entry point and static configuration for the Nursia 3D engine.
+	/// </summary>
 	public static partial class Nrs
 	{
 		private static Game _game;
 
+		/// <summary>
+		/// Gets or sets the effects source used by the engine.
+		/// </summary>
 		public static IEffectsSource EffectsSource = new StaticEffectsSource();
 
+		/// <summary>
+		/// Gets or sets the MonoGame Game instance for the Nursia engine.
+		/// Must be set before using any Nursia functionality.
+		/// </summary>
+		/// <remarks>
+		/// Throws an exception if accessed before being set.
+		/// </remarks>
 		public static Game Game
 		{
 			get
@@ -68,6 +81,9 @@ namespace Nursia
 			}
 		}
 
+		/// <summary>
+		/// Gets the graphics device from the current Game instance.
+		/// </summary>
 		public static GraphicsDevice GraphicsDevice
 		{
 			get
@@ -76,12 +92,29 @@ namespace Nursia
 			}
 		}
 
+		/// <summary>
+		/// Gets the debug font used for on-screen debugging text.
+		/// </summary>
 		public static SpriteFont DebugFont => Resources.DebugFont;
 
+		/// <summary>
+		/// Gets or sets the action used for info-level logging.
+		/// </summary>
 		public static Action<string> LogInfo = Console.WriteLine;
+
+		/// <summary>
+		/// Gets or sets the action used for warning-level logging.
+		/// </summary>
 		public static Action<string> LogWarning = Console.WriteLine;
+
+		/// <summary>
+		/// Gets or sets the action used for error-level logging.
+		/// </summary>
 		public static Action<string> LogError = Console.WriteLine;
 
+		/// <summary>
+		/// Gets the version number of the Nursia engine assembly.
+		/// </summary>
 		public static string Version
 		{
 			get

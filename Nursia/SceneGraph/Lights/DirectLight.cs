@@ -6,11 +6,17 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Lights
 {
+	/// <summary>
+	/// Represents a directional light that illuminates the entire scene.
+	/// </summary>
 	[EditorInfo("Lights")]
 	public partial class DirectLight : BaseLight
 	{
 		private Vector3 _direction;
 
+		/// <summary>
+		/// Gets or sets the direction in which this light shines.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public Vector3 Direction
@@ -40,13 +46,20 @@ namespace Nursia.SceneGraph.Lights
 
 		internal ShadowCascadeManager ShadowCascadeManager => Nrs.GraphicsSettings.ShadowCascadeManager;
 
+		/// <summary>
+		/// Creates a copy of this direct light node.
+		/// </summary>
+		/// <returns>A new DirectLight instance.</returns>
 		protected override SceneNode CreateInstanceCore() => new DirectLight();
 
 		/// <summary>
-		/// Directional lights affect all objects
+		/// Determines if this directional light affects an object.
 		/// </summary>
-		/// <param name="boundingBox"></param>
-		/// <returns></returns>
+		/// <remarks>
+		/// Directional lights affect all objects in the scene.
+		/// </remarks>
+		/// <param name="boundingBox">The bounding box to test.</param>
+		/// <returns>Always returns <c>true</c> for directional lights.</returns>
 		public override bool AffectsObject(BoundingBox boundingBox) => true;
 
 		protected override void OnGlobalTransformUpdated()

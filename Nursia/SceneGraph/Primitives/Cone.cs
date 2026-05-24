@@ -6,6 +6,9 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// A primitive mesh node that renders a cone shape.
+	/// </summary>
 	[EditorInfo("Primitives")]
 	public class Cone : PrimitiveMeshNode
 	{
@@ -13,6 +16,9 @@ namespace Nursia.SceneGraph.Primitives
 		private float _height = 1.0f;
 		private int _tessellation = 16;
 
+		/// <summary>
+		/// Gets or sets the radius of the cone base.
+		/// </summary>
 		[Category("Geometry")]
 		public float Radius
 		{

@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// Base class for all primitive geometry nodes.
+	/// </summary>
 	public abstract class PrimitiveMeshNode : MeshNodeBase
 	{
 		private bool _isLeftHanded;
@@ -11,6 +14,9 @@ namespace Nursia.SceneGraph.Primitives
 		private float _uScale = 1.0f;
 		private float _vScale = 1.0f;
 
+		/// <summary>
+		/// Gets the render mesh, creating it if necessary.
+		/// </summary>
 		protected override DrMeshPart RenderMesh
 		{
 			get
@@ -24,6 +30,9 @@ namespace Nursia.SceneGraph.Primitives
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the mesh uses left-handed winding.
+		/// </summary>
 		[Category("Geometry")]
 		public bool IsLeftHanded
 		{

@@ -4,15 +4,37 @@ using Nursia.SceneGraph;
 
 namespace Nursia.Utilities
 {
+	/// <summary>
+	/// Handles keyboard and mouse input for controlling a camera in real-time.
+	/// </summary>
 	public class CameraInputController
 	{
 		private Point _lastMousePosition;
 
+		/// <summary>
+		/// Gets the camera being controlled.
+		/// </summary>
 		public Camera Camera { get; }
+
+		/// <summary>
+		/// Gets or sets the camera movement speed.
+		/// </summary>
 		public float MoveSpeed { get; set; } = 10.0f;
+
+		/// <summary>
+		/// Gets or sets the camera rotation speed.
+		/// </summary>
 		public float RotationSpeed { get; set; } = 0.1f;
+
+		/// <summary>
+		/// Gets or sets the movement speed multiplier when sprinting.
+		/// </summary>
 		public float SprintMultiplier { get; set; } = 2.0f;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CameraInputController"/> class.
+		/// </summary>
+		/// <param name="camera">The camera to control.</param>
 		public CameraInputController(Camera camera)
 		{
 			Camera = camera;
@@ -21,6 +43,9 @@ namespace Nursia.Utilities
 			_lastMousePosition = new Point(mouse.X, mouse.Y);
 		}
 
+		/// <summary>
+		/// Updates the camera based on current keyboard and mouse input.
+		/// </summary>
 		public void Update()
 		{
 			UpdateMovement();

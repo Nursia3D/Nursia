@@ -19,6 +19,13 @@ namespace Nursia
 
 		private Dictionary<string, AssetManager> _assetsManagers = new Dictionary<string, AssetManager>();
 
+		/// <summary>
+		/// Gets an effect from the specified assembly with the given name.
+		/// </summary>
+		/// <param name="assembly">The assembly to load the effect from.</param>
+		/// <param name="name">The name of the effect.</param>
+		/// <param name="defines">A dictionary of preprocessor defines to apply.</param>
+		/// <returns>The loaded effect.</returns>
 		public Effect GetEffect(Assembly assembly, string name, Dictionary<string, string> defines)
 		{
 			AssetManager assetManager;
@@ -35,12 +42,23 @@ namespace Nursia
 		}
 
 		/// <summary>
-		/// Static Effects Source doesnt update effects
+		/// Determines whether the specified effect is valid.
 		/// </summary>
-		/// <param name="effect"></param>
-		/// <returns></returns>
+		/// <remarks>
+		/// Static effects source always returns true.
+		/// </remarks>
+		/// <param name="effect">The effect to validate.</param>
+		/// <returns>Always returns <c>true</c>.</returns>
 		public bool IsEffectValid(Effect effect) => true;
 
+		/// <summary>
+		/// Updates the specified effect.
+		/// </summary>
+		/// <remarks>
+		/// Static effects source does not support effect updates.
+		/// </remarks>
+		/// <param name="effect">The effect to update.</param>
+		/// <returns>Not implemented.</returns>
 		public Effect UpdateEffect(Effect effect)
 		{
 			throw new System.NotImplementedException();

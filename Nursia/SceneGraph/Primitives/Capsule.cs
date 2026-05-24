@@ -6,6 +6,9 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// A primitive mesh node that renders a capsule shape.
+	/// </summary>
 	[EditorInfo("Primitives")]
 	public class Capsule : PrimitiveMeshNode
 	{
@@ -13,6 +16,9 @@ namespace Nursia.SceneGraph.Primitives
 		private float _radius = 0.5f;
 		private int _tessellation = 8;
 
+		/// <summary>
+		/// Gets or sets the length of the capsule.
+		/// </summary>
 		[Category("Geometry")]
 		public float Length
 		{

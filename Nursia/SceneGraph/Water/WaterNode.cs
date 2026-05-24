@@ -8,23 +8,43 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Water
 {
+	/// <summary>
+	/// A scene node that renders a water surface with realistic water rendering.
+	/// </summary>
 	[EditorInfo("Base")]
 	public class WaterNode : SceneNode
 	{
 		private readonly DrMeshPart _planeMesh;
 
+		/// <summary>
+		/// Gets the flags for this node.
+		/// </summary>
 		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
 
+		/// <summary>
+		/// Gets or sets the water material used for rendering.
+		/// </summary>
 		[Category("Appearance")]
 		public IMaterial Material { get; set; } = new WaterMaterial();
 
+		/// <summary>
+		/// Gets the bounding box of the water surface.
+		/// </summary>
 		public override BoundingBox? BoundingBox => _planeMesh.BoundingBox;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WaterNode"/> class.
+		/// </summary>
 		public WaterNode()
 		{
 			_planeMesh = MeshPrimitives.CreatePlaneMeshPart(Nrs.GraphicsDevice, normalDirection: NormalDirection.UpY);
 		}
 
+		/// <summary>
+		/// Adds render jobs for the water surface to the specified batch.
+		/// </summary>
+		/// <param name="camera">The camera used for rendering.</param>
+		/// <param name="batch">The render batch to add jobs to.</param>
 		public override void AddRenderJobs(Camera camera, IRenderJobsBatch batch)
 		{
 			base.AddRenderJobs(camera, batch);

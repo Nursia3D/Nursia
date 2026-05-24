@@ -25,7 +25,7 @@ namespace Nursia.SceneGraph
 
 		/// <summary>
 		/// Gets or sets the local transform applied to the attached model relative to the bone.
-		/// Default is identity (no additional transform).
+		/// The default is identity (no additional transform).
 		/// </summary>
 		public Matrix Transform { get; set; } = Matrix.Identity;
 
@@ -33,6 +33,11 @@ namespace Nursia.SceneGraph
 		{
 		}
 
+		/// <summary>
+		/// Creates a model bone attachment from a NursiaModelNode.
+		/// </summary>
+		/// <param name="node">The model node to create an attachment from.</param>
+		/// <returns>A new ModelBoneAttachment with the node's data copied.</returns>
 		public static ModelBoneAttachment CreateFromModelNode(NursiaModelNode node)
 		{
 			if (node == null)

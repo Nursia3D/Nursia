@@ -7,11 +7,17 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// A primitive mesh node that renders a box shape.
+	/// </summary>
 	[EditorInfo("Primitives")]
 	public class Box : PrimitiveMeshNode
 	{
 		private Vector3 _size = Vector3.One;
 
+		/// <summary>
+		/// Gets or sets the size of the box.
+		/// </summary>
 		[Category("Geometry")]
 		public Vector3 Size
 		{

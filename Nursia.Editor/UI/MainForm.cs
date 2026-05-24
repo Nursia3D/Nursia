@@ -725,7 +725,7 @@ namespace Nursia.Editor.UI
 			}
 
 			var separator = new HorizontalSeparator();
-			StackPanel.SetProportionType(separator, ProportionType.Auto);
+			SetProportionType(separator, ProportionType.Auto);
 
 			_rightPanel.Widgets.Add(separator);
 

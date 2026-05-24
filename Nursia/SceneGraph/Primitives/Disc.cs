@@ -8,7 +8,7 @@ using System.ComponentModel;
 namespace Nursia.SceneGraph.Primitives
 {
 	/// <summary>
-	/// A disc - a circular base, or a circular sector.
+	/// A primitive mesh node that renders a disc or circular sector.
 	/// </summary>
 	[EditorInfo("Primitives")]
 	public class Disc : PrimitiveMeshNode
@@ -17,6 +17,9 @@ namespace Nursia.SceneGraph.Primitives
 		private float _sectorAngle = 360;
 		private int _tessellation = 16;
 
+		/// <summary>
+		/// Gets or sets the radius of the disc.
+		/// </summary>
 		[Category("Geometry")]
 		public float Radius
 		{

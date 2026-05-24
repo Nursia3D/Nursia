@@ -6,12 +6,18 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// A primitive mesh node that renders a teapot shape.
+	/// </summary>
 	[EditorInfo("Primitives")]
 	public class Teapot : PrimitiveMeshNode
 	{
 		private float _size = 1.0f;
 		private int _tessellation = 8;
 
+		/// <summary>
+		/// Gets or sets the size of the teapot.
+		/// </summary>
 		[Category("Geometry")]
 		public float Size
 		{

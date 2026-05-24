@@ -78,22 +78,6 @@ namespace Nursia.Rendering
 			AddJob(job);
 		}
 
-
-		void IRenderJobsBatch.AddMeshLOD(List<DrMeshPart> levels, IMaterial material, Matrix transform,
-			RenderJobFlags flags, Plane? clipPlane, Plane? reflectionPlane)
-		{
-			var job = RenderJobMeshLOD.Obtain();
-
-			job.Levels = levels;
-			job.Material = material;
-			job.Transform = transform;
-			job.Flags = flags;
-			job.ClipPlane = clipPlane;
-			job.ReflectionPlane = reflectionPlane;
-
-			AddJob(job);
-		}
-
 		protected abstract void InternalAddJob(RenderJob job);
 
 		public abstract void Reset();

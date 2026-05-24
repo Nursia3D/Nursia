@@ -8,18 +8,22 @@ using System.Collections.Generic;
 
 namespace Nursia.Rendering
 {
+	/// <summary>
+	/// Flags that control how a render job is processed.
+	/// </summary>
 	[Flags]
 	public enum RenderJobFlags
 	{
+		/// <summary>No flags set.</summary>
 		None,
 
 		/// <summary>
-		/// Determines whether reflection view should be clipped by the reflection plane, if it is specified
+		/// Determines whether reflection view should be clipped by the reflection plane, if it is specified.
 		/// </summary>
 		ClipReflectionPlane = 1 << 0,
 
 		/// <summary>
-		/// Disables culling by the camera frustum
+		/// Disables culling by the camera frustum.
 		/// </summary>
 		DontCullByCameraFrustum = 1 << 1,
 	}
@@ -212,97 +216,6 @@ namespace Nursia.Rendering
 			Mesh = null;
 			InstancesTransforms = null;
 
-			_objectPool.Recycle(this);
-		}
-	}
-
-	internal class RenderJobMeshLOD : RenderJob
-	{
-		private static readonly ObjectPool<RenderJobMeshLOD> _objectPool = new ObjectPool<RenderJobMeshLOD>(() => new RenderJobMeshLOD());
-
-		private static readonly Vector3[] _corners = new Vector3[8];
-
-		private List<DrMeshPart> _levels;
-
-		public List<DrMeshPart> Levels
-		{
-			get => _levels;
-
-			set
-			{
-				_levels = value;
-
-				if (_levels != null && _levels.Count > 0)
-				{
-					LocalBoundingBox = _levels[0].BoundingBox;
-				}
-			}
-		}
-
-		internal override MaterialTechnique MaterialTechnique => MaterialTechnique.Ordinary;
-
-		internal override bool NormalMapping => _levels != null && _levels.Count > 0 && _levels[0].TangentsFormat == VertexElementFormat.Vector4;
-
-		private RenderJobMeshLOD()
-		{
-		}
-
-		protected internal override void Render(GraphicsDevice graphicsDevice, ref RenderStatistics statistics)
-		{
-			// Determine LOD
-			// First of all transform the bounding box to NDC coordinates
-			// Determine x, y bounds
-			var min = new Vector2(float.MaxValue, float.MaxValue);
-			var max = new Vector2(float.MinValue, float.MinValue);
-
-			WorldBoundingBox.GetCorners(_corners);
-			for (var i = 0; i < _corners.Length; ++i)
-			{
-				var c = _corners[i];
-				var c2 = new Vector4(c.X, c.Y, c.Z, 1.0f);
-				Vector4 r;
-
-				var modelViewProj = ModelViewProj;
-				Vector4.Transform(ref c2, ref modelViewProj, out r);
-
-				// Finish the projection
-				var mult = 1.0f / r.W;
-				r.X *= mult;
-				r.Y *= mult;
-
-				min.X = Math.Min(min.X, r.X);
-				min.Y = Math.Min(min.Y, r.Y);
-
-				max.X = Math.Max(max.X, r.X);
-				max.Y = Math.Max(max.Y, r.Y);
-			}
-
-			// NDC viewport area is 4(x and y go from -1 to 1)
-			// So we calculate LOD following way: 4 / 10 / boundingBoxArea = 0.4f / boundingBoxArea
-			var boundingBoxArea = (max.X - min.X) * (max.Y - min.Y);
-
-			var lod = 0;
-			if (boundingBoxArea.IsZero())
-			{
-				// Last lod
-				lod = _levels.Count - 1;
-			}
-			else
-			{
-				lod = (int)(0.03f / boundingBoxArea);
-				lod = lod.Clamp(0, _levels.Count - 1);
-			}
-
-			_levels[lod].Draw(graphicsDevice, ref statistics);
-		}
-
-		public static RenderJobMeshLOD Obtain() => _objectPool.Get();
-
-		public override void Recycle()
-		{
-			base.Recycle();
-
-			Levels = null;
 			_objectPool.Recycle(this);
 		}
 	}

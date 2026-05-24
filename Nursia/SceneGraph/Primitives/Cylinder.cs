@@ -6,6 +6,9 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// A primitive mesh node that renders a cylinder shape.
+	/// </summary>
 	[EditorInfo("Primitives")]
 	public class Cylinder : PrimitiveMeshNode
 	{
@@ -13,6 +16,9 @@ namespace Nursia.SceneGraph.Primitives
 		private float _radius = 0.5f;
 		private int _tessellation = 32;
 
+		/// <summary>
+		/// Gets or sets the height of the cylinder.
+		/// </summary>
 		[Category("Geometry")]
 		public float Height
 		{

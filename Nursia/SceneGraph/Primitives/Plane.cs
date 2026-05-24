@@ -7,6 +7,9 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// A primitive mesh node that renders a plane shape.
+	/// </summary>
 	[EditorInfo("Primitives")]
 	public class Plane : PrimitiveMeshNode
 	{
@@ -15,6 +18,9 @@ namespace Nursia.SceneGraph.Primitives
 		private bool _generateBackFace;
 		private NormalDirection _normalDirection;
 
+		/// <summary>
+		/// Gets or sets the size of the plane.
+		/// </summary>
 		[Category("Geometry")]
 		public Vector2 Size
 		{

@@ -6,6 +6,7 @@
     <DefineConstants>$(DefineConstants);FNA</DefineConstants>
     <TargetFramework>$(FNATargetFramework)</TargetFramework>
     <OutputPath>bin\FNA.Core\$(Configuration)</OutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
 

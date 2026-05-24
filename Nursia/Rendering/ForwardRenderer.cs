@@ -10,6 +10,9 @@ using System.Collections.Generic;
 
 namespace Nursia.Rendering
 {
+	/// <summary>
+	/// Implements forward rendering for scenes with support for lighting, shadows, and reflections.
+	/// </summary>
 	public partial class ForwardRenderer : ILightsBatch
 	{
 		private enum RenderPassType
@@ -57,8 +60,14 @@ namespace Nursia.Rendering
 		private readonly List<DirectLightCSMData> _directLightCSMReflection = new List<DirectLightCSMData>();
 		private readonly ObjectPool<DirectLightCSMData> _csmPool = new ObjectPool<DirectLightCSMData>(() => new DirectLightCSMData());
 
+		/// <summary>
+		/// Gets the list of lights that affect the current render.
+		/// </summary>
 		public List<BaseLight> Lights { get; } = new List<BaseLight>();
 
+		/// <summary>
+		/// Gets rendering statistics for the last render operation.
+		/// </summary>
 		public RenderStatistics Statistics => _statistics;
 
 		static ForwardRenderer()
@@ -67,6 +76,9 @@ namespace Nursia.Rendering
 			SetMeshPartLevelParameterSetters();
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the ForwardRenderer class.
+		/// </summary>
 		public ForwardRenderer()
 		{
 			_bindingContext = new EffectLevelBindingContext(this);
@@ -701,11 +713,11 @@ namespace Nursia.Rendering
 		}
 
 		/// <summary>
-		/// Renders the scene on the screen using any environment
+		/// Renders the scene directly to the screen using the specified environment.
 		/// </summary>
-		/// <param name="root"></param>
-		/// <param name="camera"></param>
-		/// <param name="renderToScreen"></param>
+		/// <param name="root">The render source containing scene objects.</param>
+		/// <param name="camera">The camera defining the view and projection.</param>
+		/// <param name="env">The render environment defining lighting, fog, and sky settings.</param>
 		public void Render(IRenderSource root, Camera camera, RenderEnvironment env)
 		{
 			var vp = Nrs.GraphicsDevice.Viewport;
@@ -713,17 +725,21 @@ namespace Nursia.Rendering
 		}
 
 		/// <summary>
-		/// Renders the scene on the screen using default environment
+		/// Renders the scene directly to the screen using the default environment.
 		/// </summary>
-		/// <param name="root"></param>
-		/// <param name="camera"></param>
+		/// <param name="root">The render source containing scene objects.</param>
+		/// <param name="camera">The camera defining the view and projection.</param>
 		public void Render(IRenderSource root, Camera camera) => Render(root, camera, RenderEnvironment.Default);
 
 		/// <summary>
-		/// Renders the scene on the target using any environment
+		/// Renders the scene to a render target using the specified environment.
 		/// </summary>
-		/// <param name="root"></param>
-		/// <param name="camera"></param>
+		/// <param name="root">The render source containing scene objects.</param>
+		/// <param name="camera">The camera defining the view and projection.</param>
+		/// <param name="env">The render environment defining lighting, fog, and sky settings.</param>
+		/// <param name="width">The width of the render target in pixels.</param>
+		/// <param name="height">The height of the render target in pixels.</param>
+		/// <returns>A render target containing the rendered scene.</returns>
 		public RenderTarget2D RenderToTarget(IRenderSource root, Camera camera, RenderEnvironment env, int width, int height)
 		{
 			InternalRender(root, camera, env, width, height, false);
@@ -732,10 +748,13 @@ namespace Nursia.Rendering
 		}
 
 		/// <summary>
-		/// Renders the scene on the target using default environment
+		/// Renders the scene to a render target using the default environment.
 		/// </summary>
-		/// <param name="root"></param>
-		/// <param name="camera"></param>
+		/// <param name="root">The render source containing scene objects.</param>
+		/// <param name="camera">The camera defining the view and projection.</param>
+		/// <param name="width">The width of the render target in pixels.</param>
+		/// <param name="height">The height of the render target in pixels.</param>
+		/// <returns>A render target containing the rendered scene.</returns>
 		public RenderTarget2D RenderToTarget(IRenderSource root, Camera camera, int width, int height) => RenderToTarget(root, camera, RenderEnvironment.Default, width, height);
 	}
 }

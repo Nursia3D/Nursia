@@ -6,12 +6,18 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// A primitive mesh node that renders a geodesic sphere shape.
+	/// </summary>
 	[EditorInfo("Primitives")]
 	public class GeoSphere : PrimitiveMeshNode
 	{
 		private float _radius = 0.5f;
 		private int _tessellation = 3;
 
+		/// <summary>
+		/// Gets or sets the radius of the geodesic sphere.
+		/// </summary>
 		[Category("Geometry")]
 		public float Radius
 		{

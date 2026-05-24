@@ -7,11 +7,17 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph
 {
+	/// <summary>
+	/// A scene node that contains another scene graph as a child.
+	/// </summary>
 	[EditorInfo("Base")]
 	public class SubsceneNode : SceneNode
 	{
 		private SceneNode _node;
 
+		/// <summary>
+		/// Gets or sets the root node of the subscene.
+		/// </summary>
 		[JsonIgnore]
 		[Category("Resources")]
 		public SceneNode Node

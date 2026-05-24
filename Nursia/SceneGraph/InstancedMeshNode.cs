@@ -13,7 +13,7 @@ using System.ComponentModel;
 namespace Nursia.SceneGraph
 {
 	/// <summary>
-	/// Draw single mesh-material multiple times through the hardware instancing
+	/// A scene node that renders a single mesh-material combination multiple times using hardware instancing.
 	/// </summary>
 	public class InstancedMeshNode : SceneNode
 	{
@@ -30,19 +30,37 @@ namespace Nursia.SceneGraph
 		private DynamicVertexBuffer _vertexBuffer;
 		private BoundingBox _boundingBox;
 
+		/// <summary>
+		/// Gets the flags for this node.
+		/// </summary>
 		public override SceneFlags Flags => SceneFlags.HasRenderJobs;
 
+		/// <summary>
+		/// Gets or sets the mesh to render.
+		/// </summary>
 		[Browsable(false)]
 		[JsonIgnore]
 		public DrMeshPart Mesh { get; set; }
 
+		/// <summary>
+		/// Gets or sets the material for the mesh.
+		/// </summary>
 		[DefaultMaterial]
 		public IMaterial Material { get; set; }
 
+		/// <summary>
+		/// Gets the bounding box of this node.
+		/// </summary>
 		public override BoundingBox? BoundingBox => _boundingBox;
 
+		/// <summary>
+		/// Gets the collection of transformation matrices for the instances.
+		/// </summary>
 		public ObservableCollection<Matrix> InstancesTransforms { get; } = new ObservableCollection<Matrix>();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstancedMeshNode"/> class.
+		/// </summary>
 		public InstancedMeshNode()
 		{
 			InstancesTransforms.CollectionChanged += InstancesTransforms_CollectionChanged;

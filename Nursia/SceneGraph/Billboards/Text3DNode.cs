@@ -7,6 +7,9 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Billboards
 {
+	/// <summary>
+	/// A billboard node that renders text in 3D space, always facing the camera.
+	/// </summary>
 	[EditorInfo("Billboards")]
 	public class Text3DNode : BillboardNodeBase
 	{
@@ -14,6 +17,9 @@ namespace Nursia.SceneGraph.Billboards
 		private string _text;
 		private SpriteFont _font = null;
 
+		/// <summary>
+		/// Gets the texture generated from the text.
+		/// </summary>
 		protected override Texture2D RenderTexture
 		{
 			get
@@ -24,6 +30,9 @@ namespace Nursia.SceneGraph.Billboards
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the text to display on this billboard.
+		/// </summary>
 		public string Text
 		{
 			get => _text;

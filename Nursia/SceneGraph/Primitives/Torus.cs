@@ -6,6 +6,9 @@ using System.ComponentModel;
 
 namespace Nursia.SceneGraph.Primitives
 {
+	/// <summary>
+	/// A primitive mesh node that renders a torus (donut) shape.
+	/// </summary>
 	[EditorInfo("Primitives")]
 	public class Torus : PrimitiveMeshNode
 	{
@@ -13,6 +16,9 @@ namespace Nursia.SceneGraph.Primitives
 		private float _minorRadius = 0.16666f;
 		private int _tessellation = 32;
 
+		/// <summary>
+		/// Gets or sets the major radius of the torus.
+		/// </summary>
 		[Category("Geometry")]
 		public float MajorRadius
 		{
