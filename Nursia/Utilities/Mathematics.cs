@@ -152,17 +152,6 @@ namespace Nursia.Utilities
 		public static Quaternion CreateFromAxisY(float angle) => Quaternion.CreateFromAxisAngle(Vector3.UnitY, angle);
 		public static Quaternion CreateFromAxisZ(float angle) => Quaternion.CreateFromAxisAngle(Vector3.UnitZ, angle);
 
-
-		public static Vector3 ToEulerAngles(this Quaternion r)
-		{
-			return new Vector3
-			{
-				X = (float)Math.Asin(2.0f * (r.X * r.W - r.Y * r.Z)),
-				Y = (float)Math.Atan2(2.0f * (r.Y * r.W + r.X * r.Z), 1.0f - 2.0f * (r.X * r.X + r.Y * r.Y)),
-				Z = (float)Math.Atan2(2.0f * (r.X * r.Y + r.Z * r.W), 1.0f - 2.0f * (r.X * r.X + r.Z * r.Z))
-			};
-		}
-
 		public static Vector3 ToDegrees(this Vector3 v)
 		{
 			return new Vector3
@@ -170,6 +159,16 @@ namespace Nursia.Utilities
 				X = MathHelper.ToDegrees(v.X),
 				Y = MathHelper.ToDegrees(v.Y),
 				Z = MathHelper.ToDegrees(v.Z),
+			};
+		}
+
+		public static Vector3 ToRadians(this Vector3 v)
+		{
+			return new Vector3
+			{
+				X = MathHelper.ToRadians(v.X),
+				Y = MathHelper.ToRadians(v.Y),
+				Z = MathHelper.ToRadians(v.Z)
 			};
 		}
 
@@ -274,9 +273,19 @@ namespace Nursia.Utilities
 			return BoundingBox.CreateMerged(a.Value, b.Value);
 		}
 
-		public static Quaternion EulerAnglesToQuaternion(this Vector3 _rotation)
+		public static Vector3 ToEulerAngles(this Quaternion r)
 		{
-			return Quaternion.CreateFromYawPitchRoll(MathHelper.ToRadians(_rotation.Y), MathHelper.ToRadians(_rotation.X), MathHelper.ToRadians(_rotation.Z));
+			return new Vector3
+			{
+				X = (float)Math.Asin(2.0f * (r.X * r.W - r.Y * r.Z)),
+				Y = (float)Math.Atan2(2.0f * (r.Y * r.W + r.X * r.Z), 1.0f - 2.0f * (r.X * r.X + r.Y * r.Y)),
+				Z = (float)Math.Atan2(2.0f * (r.X * r.Y + r.Z * r.W), 1.0f - 2.0f * (r.X * r.X + r.Z * r.Z))
+			};
+		}
+
+		public static Quaternion EulerAnglesToQuaternion(this Vector3 rads)
+		{
+			return Quaternion.CreateFromYawPitchRoll(rads.Y, rads.X, rads.Z);
 		}
 	}
 }

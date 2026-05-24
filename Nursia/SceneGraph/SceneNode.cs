@@ -150,7 +150,7 @@ namespace Nursia.SceneGraph
 			{
 				if (_localTransform == null)
 				{
-					var quaternion = _rotation.EulerAnglesToQuaternion();
+					var quaternion = _rotation.ToRadians().EulerAnglesToQuaternion();
 					_localTransform = SrtTransform.CreateMatrix(Translation, Scale, quaternion);
 				}
 
