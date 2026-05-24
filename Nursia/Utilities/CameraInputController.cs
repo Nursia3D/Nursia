@@ -99,6 +99,5 @@ namespace Nursia.Utilities
 
 			_lastMousePosition = mousePosition;
 		}
-
 	}
 }

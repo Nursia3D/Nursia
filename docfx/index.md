@@ -1,15 +1,34 @@
-﻿using AssetManagementBase;
+### Overview
+
+The purpose of this tutorial is to introduce Nursia and its base functionality such as rendering, scenes and asset management.
+
+### Steps
+
+1. Create MonoGame/FNA project.
+2. [Reference Nursia](docs/adding-reference-to-nursia.md)
+3. Download [Assets.zip](~/files/Assets.zip). Unzip it into the project folder.
+4. Add following lines into .csproj so assets would be copied into the build output folder:
+```xml
+  <ItemGroup>
+    <None Update="Assets\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>  
+```
+5. Use following Game class:
+```c#
+using AssetManagementBase;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nursia.SceneGraph.Lights;
 using Nursia.Materials;
 using Nursia.SceneGraph.Primitives;
+using Nursia.Rendering;
 using Nursia.SceneGraph;
 using Nursia.Utilities;
 using System;
 using System.IO;
 using System.Reflection;
-using Nursia.Rendering;
 
 namespace Nursia.Samples.Primives
 {
@@ -17,7 +36,8 @@ namespace Nursia.Samples.Primives
 	{
 		private readonly GraphicsDeviceManager _graphics;
 		private readonly ForwardRenderer _renderer = new ForwardRenderer();
-		private Scene _scene;
+		private Camera _camera;
+		private SceneNode _root;
 		private CameraInputController _controller;
 		private FramesPerSecondCounter _fpsCounter = new FramesPerSecondCounter();
 		private SpriteBatch _spriteBatch;
@@ -44,11 +64,17 @@ namespace Nursia.Samples.Primives
 			// Required to work with Nursia
 			Nrs.Game = this;
 
-			// Scene
-			_scene = new Scene();
-			
+			// Create the perspective camera at position (0, 25, 25) looking at (0, 0, 0)
+			_camera = new Camera
+			{
+				View = Matrix.CreateLookAt(new Vector3(0, 25, 25), Vector3.Zero, Vector3.Up)
+			};
+
+			// Create the camera controller that will allow to move and rotate using keyboard and mouse
+			_controller = new CameraInputController(_camera);
+
 			// Root scene node
-			var root = new SceneNode();
+			_root = new SceneNode();
 
 			// Direct light
 			var directLight = new DirectLight
@@ -56,22 +82,7 @@ namespace Nursia.Samples.Primives
 				Rotation = new Vector3(320, 320, 0),
 				Color = Color.White,
 			};
-			root.Children.Add(directLight);
-
-			// Set scene root
-			_scene.Root = root;
-
-			// Create the perspective camera at position (0, 25, 25) looking at (0, 0, 0)
-			var camera = new Camera
-			{
-				View = Matrix.CreateLookAt(new Vector3(0, 25, 25), Vector3.Zero, Vector3.Up)
-			};
-
-			// Create the camera controller that will allow to move and rotate using keyboard and mouse
-			_controller = new CameraInputController(camera);
-
-			// Set scene camera
-			_scene.Camera = camera;
+			_root.Children.Add(directLight);
 
 			// Create the asset manager
 			var assetManager = AssetManager.CreateFileAssetManager(Path.Combine(AppContext.BaseDirectory, "Assets"));
@@ -90,12 +101,12 @@ namespace Nursia.Samples.Primives
 					CastsShadows = false
 				}
 			};
-			root.Children.Add(plane);
+			_root.Children.Add(plane);
 
 			// Add model
 			var model = assetManager.LoadModelNode("Models/mixamo_base.glb");
 			model.Scale = new Vector3(5, 5, 5);
-			root.Children.Add(model);
+			_root.Children.Add(model);
 
 			// Add some more primitives
 			var sphere = new Sphere
@@ -107,7 +118,7 @@ namespace Nursia.Samples.Primives
 				Translation = new Vector3(0, 15, -10),
 				Scale = new Vector3(5, 5, 5)
 			};
-			root.Children.Add(sphere);
+			_root.Children.Add(sphere);
 
 			var capsule = new Capsule
 			{
@@ -118,7 +129,7 @@ namespace Nursia.Samples.Primives
 				Translation = new Vector3(15, 15, 0),
 				Scale = new Vector3(5, 5, 5)
 			};
-			root.Children.Add(capsule);
+			_root.Children.Add(capsule);
 
 			// Shadows settings
 			Nrs.GraphicsSettings.ShadowMapSize = Shadows.ShadowMapSize.Size4096;
@@ -133,7 +144,6 @@ namespace Nursia.Samples.Primives
 		{
 			base.Update(gameTime);
 
-			_scene.Update(gameTime);
 			_controller.Update();
 		}
 
@@ -144,7 +154,7 @@ namespace Nursia.Samples.Primives
 			GraphicsDevice.Clear(Color.Black);
 
 			// Render the scene
-			_scene.Render(_renderer);
+			_renderer.Render(_root, _camera);
 
 			_spriteBatch.Begin();
 
@@ -161,3 +171,10 @@ namespace Nursia.Samples.Primives
 		}
 	}
 }
+
+```
+5. Run the project:
+
+![alt text](~/images/quick-start-tutorial.png)
+
+6. You could move around the scene using following controls: [CameraInputController](docs/camera-input-controller.md)

@@ -268,3 +268,7 @@ Samples/Nursia.Samples.Character/Effects/MonoGameOGL/
 Nursia/Effects/FNA/
 Nursia/Effects/MonoGameDX11/
 Nursia/Effects/MonoGameOGL/
+
+# API Docs
+docfx/api
+docfx/_site
