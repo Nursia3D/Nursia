@@ -4,15 +4,15 @@
 
    Link|Description
    ----|-----------
-   https://github.com/FNA-XNA/FNA|FNA
-   https://github.com/rds1983/XNAssets|Asset management library
-   https://github.com/rds1983/DigitalRiseModel|3D model library
-   https://github.com/FontStashSharp/FontStashSharp|Text rendering library
-   https://github.com/rds1983/Myra|UI library
+   <https://github.com/FNA-XNA/FNA>|FNA
+   <https://github.com/rds1983/XNAssets>|Asset management library
+   <https://github.com/rds1983/DigitalRiseModel>|3D model library
+   <https://github.com/FontStashSharp/FontStashSharp>|Text rendering library
+   <https://github.com/rds1983/Myra>|UI library
 
    All repos must be in one folder level.
 
-3. Install [https://github.com/rds1983/efscriptgen](https://github.com/rds1983/efscriptgen): `dotnet tool install --global efscriptgen`
+3. Install [efscriptgen](https://github.com/rds1983/efscriptgen): `dotnet tool install --global efscriptgen`
 
 4. Make sure that `mgfxc`(if you want to build MonoGame version) or `fxc`(FNA) is at your PATH environment variable.
 
