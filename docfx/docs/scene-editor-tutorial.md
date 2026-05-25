@@ -17,6 +17,7 @@ The navigation around the scene is done through [CameraInputController](camera-i
 
 ## Basic Usage
 Following video demonstrates how scene from [Quick Start Tutorial](../index.md) could be drawn in the Scene Editor:
+
 https://youtu.be/LoegI7KVPMM?si=Jk_13AKRiBLdRFkS
 
 ## Scene Format
