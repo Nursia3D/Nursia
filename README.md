@@ -25,6 +25,16 @@ Use following resources if you need help with Nursia or have other questions:
 * [Discord](https://discord.gg/ZeHxhCY)
 * [Nursia Topic at gamedev.ru (Russian)](https://gamedev.ru/projects/forum/?id=292958)
 
+## Sponsor
+If this project is useful for you, you can support development:
+- Boosty: https://boosty.to/rds1983
+- Telegram Wallet: https://t.me/rds1983
+
+### Crypto
+USDT (TON): `UQCQy6tFInPvqinE44zHY4R0rYS3niaBikkqiSyGmyoAMwyO`
+
+TON: `UQCQy6tFInPvqinE44zHY4R0rYS3niaBikkqiSyGmyoAMwyO`
+
 ## Screenshots
 <img width="1873" height="1040" alt="image" src="https://github.com/user-attachments/assets/f574c09a-9ec0-4d09-843b-45fe84af0f43" />
 <img width="1602" height="932" alt="image" src="https://github.com/user-attachments/assets/18ffcec2-79b9-48f5-95bd-5c8a5aa4a2d3" />
