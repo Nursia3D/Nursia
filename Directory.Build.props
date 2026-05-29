@@ -3,8 +3,8 @@
     <Authors>NursiaTeam</Authors>
     <Product>Nursia</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/NursiaEngine/Nursia</PackageProjectUrl>
-    <Description>MonoGame/FNA library that provides simple 3D model class</Description>
+    <PackageProjectUrl>https://github.com/Nursia3D/Nursia</PackageProjectUrl>
+    <Description>3D game engine for MonoGame/FNA</Description>
     <RootNamespace>Nursia</RootNamespace>
     <MonoGameTargetFramework>netstandard2.0</MonoGameTargetFramework>
     <AppMonoGameTargetFramework>net8.0</AppMonoGameTargetFramework>
