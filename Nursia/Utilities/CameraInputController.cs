@@ -32,6 +32,18 @@ namespace Nursia.Utilities
 		public float SprintMultiplier { get; set; } = 2.0f;
 
 		/// <summary>
+		/// Gets or sets the point to keep the movement speed in proportion to.
+		/// When set, the movement speed scales with the distance from the camera
+		/// to this point, so far away objects are approached quickly.
+		/// </summary>
+		public Vector3? FocusPoint { get; set; }
+
+		/// <summary>
+		/// Gets or sets the movement speed multiplier applied after the focus distance scaling.
+		/// </summary>
+		public float MoveSpeedFactor { get; set; } = 1.0f;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="CameraInputController"/> class.
 		/// </summary>
 		/// <param name="camera">The camera to control.</param>
@@ -46,13 +58,19 @@ namespace Nursia.Utilities
 		/// <summary>
 		/// Updates the camera based on current keyboard and mouse input.
 		/// </summary>
-		public void Update()
+		public void Update() => Update(0.016f);
+
+		/// <summary>
+		/// Updates the camera based on current keyboard and mouse input.
+		/// </summary>
+		/// <param name="elapsedSeconds">The elapsed time since the last update in seconds.</param>
+		public void Update(float elapsedSeconds)
 		{
-			UpdateMovement();
+			UpdateMovement(elapsedSeconds);
 			UpdateRotation();
 		}
 
-		private void UpdateMovement()
+		private void UpdateMovement(float elapsedSeconds)
 		{
 			var keyboardState = Keyboard.GetState();
 			var movement = Vector3.Zero;
@@ -77,7 +95,15 @@ namespace Nursia.Utilities
 				if (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift))
 					speed *= SprintMultiplier;
 
-				Camera.Translation += movement * speed * 0.016f;
+				if (FocusPoint != null)
+				{
+					var distance = (transform.Translation - FocusPoint.Value).Length();
+					speed *= distance;
+				}
+
+				speed *= MoveSpeedFactor;
+
+				Camera.Translation += movement * speed * elapsedSeconds;
 			}
 		}
 
