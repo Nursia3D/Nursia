@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Events;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using Nursia.SceneGraph.Landscape;
@@ -48,7 +49,7 @@ namespace Nursia.Editor.UI
 			Update();
 		}
 
-		private void _buttonFill_Click(object sender, EventArgs e)
+		private void _buttonFill_Click(object sender, MyraEventArgs e)
 		{
 			var instrumentType = (TerrainInstrumentType)_comboInstrument.SelectedItem.Tag;
 			var dialog = Dialog.CreateMessageBox("Fill", $"Are you sure you want to fill the whole terrain with {instrumentType}");

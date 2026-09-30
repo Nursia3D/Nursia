@@ -19,7 +19,6 @@
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(AppMonoGameVersion)" />
     <PackageReference Include="Myra" Version="$(MyraVersion)" />
     <PackageReference Include="StbImageWriteSharp" Version="$(StbImageWriteSharpVersion)" />
-    <PackageReference Include="XNAssets.FontStashSharp.MonoGame" Version="$(XNAssetsVersion)" />
   </ItemGroup>
 
   <ItemGroup>

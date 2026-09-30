@@ -1,3 +1,4 @@
+using Myra.Events;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
 using Nursia.Editor.Utility;
@@ -19,7 +20,7 @@ namespace Nursia.Editor.UI
 			UpdateEnabled();
 		}
 
-		private void _buttonRemove_Click(object sender, EventArgs e)
+		private void _buttonRemove_Click(object sender, MyraEventArgs e)
 		{
 			var reference = (AssemblyReferenceInfo)_listReferences.SelectedItem.Tag;
 
@@ -44,7 +45,7 @@ namespace Nursia.Editor.UI
 			}
 		}
 
-		private void _buttonAdd_Click(object sender, EventArgs e)
+		private void _buttonAdd_Click(object sender, MyraEventArgs e)
 		{
 			try
 			{

@@ -9,12 +9,11 @@
     <MonoGameTargetFramework>netstandard2.0</MonoGameTargetFramework>
     <AppMonoGameTargetFramework>net8.0</AppMonoGameTargetFramework>
     <FNATargetFramework>net8.0</FNATargetFramework>
-    <Version>0.6.3</Version>
+    <Version>0.6.4</Version>
     <MonoGameVersion>3.8.0.1641</MonoGameVersion>
     <AppMonoGameVersion>3.8.4.1</AppMonoGameVersion>
-    <MyraVersion>1.5.11</MyraVersion>
-    <DigitalRiseModelVersion>0.7.3</DigitalRiseModelVersion>
-    <XNAssetsVersion>0.8.4</XNAssetsVersion>
+    <MyraVersion>1.6.6</MyraVersion>
+    <DigitalRiseModelVersion>0.7.5</DigitalRiseModelVersion>
     <StbImageWriteSharpVersion>1.16.7</StbImageWriteSharpVersion>
   </PropertyGroup>
 </Project>

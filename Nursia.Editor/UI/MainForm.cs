@@ -2,6 +2,7 @@ using AssetManagementBase;
 using DigitalRiseModel;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Myra.Events;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 using Myra.Graphics2D.UI.File;
@@ -160,7 +161,7 @@ namespace Nursia.Editor.UI
 			set => _buttonCameraPosition.IsToggled = value;
 		}
 
-		public event EventHandler SelectedObjectChanged
+		public event MyraEventHandler SelectedObjectChanged
 		{
 			add
 			{
@@ -274,13 +275,13 @@ namespace Nursia.Editor.UI
 			UpdateStackPanelEditor();
 		}
 
-		private void _menuItemProjectReferences_Selected(object sender, EventArgs e)
+		private void _menuItemProjectReferences_Selected(object sender, MyraEventArgs e)
 		{
 			var window = new ProjectReferencesWindow();
 			window.ShowModal(Desktop);
 		}
 
-		private void _menuItemDebugSettings_Selected(object sender, EventArgs e)
+		private void _menuItemDebugSettings_Selected(object sender, MyraEventArgs e)
 		{
 			var window = new Window
 			{
@@ -298,7 +299,7 @@ namespace Nursia.Editor.UI
 			window.Show(Desktop);
 		}
 
-		private void _menuItemRenderEnvironment_Selected(object sender, EventArgs e)
+		private void _menuItemRenderEnvironment_Selected(object sender, MyraEventArgs e)
 		{
 			var window = new Window
 			{
@@ -316,7 +317,7 @@ namespace Nursia.Editor.UI
 			window.Show(Desktop);
 		}
 
-		private void _menuItemGraphicsSettings_Selected(object sender, EventArgs e)
+		private void _menuItemGraphicsSettings_Selected(object sender, MyraEventArgs e)
 		{
 			var window = new Window
 			{
@@ -827,7 +828,7 @@ namespace Nursia.Editor.UI
 			}
 		}
 
-		private void _treeFileExplorer_SelectionChanged(object sender, EventArgs e)
+		private void _treeFileExplorer_SelectionChanged(object sender, MyraEventArgs e)
 		{
 			_propertyGrid.Object = _treeFileExplorer.SelectedNode?.Tag;
 
@@ -841,7 +842,7 @@ namespace Nursia.Editor.UI
 			UpdateSceneWidgets();
 		}
 
-		private void _treeModel_SelectionChanged(object sender, EventArgs e)
+		private void _treeModel_SelectionChanged(object sender, MyraEventArgs e)
 		{
 			if (_treeModel.SelectedNode == null)
 			{
@@ -923,7 +924,7 @@ namespace Nursia.Editor.UI
 			dialog.ShowModal(Desktop);
 		}
 
-		private void _treeFileExplorer_TouchUp(object sender, EventArgs e)
+		private void _treeFileExplorer_TouchUp(object sender, MyraEventArgs e)
 		{
 			if (_explorerTouchDown != TouchDownType.Explorer)
 			{
@@ -998,7 +999,7 @@ namespace Nursia.Editor.UI
 			Desktop.BuildContextMenu(contextMenuOptions);
 		}
 
-		private void _treeFileSolution_TouchUp(object sender, EventArgs e)
+		private void _treeFileSolution_TouchUp(object sender, MyraEventArgs e)
 		{
 			if (_explorerTouchDown != TouchDownType.FileSystem)
 			{
@@ -1281,7 +1282,7 @@ namespace Nursia.Editor.UI
 			SaveItem(_tabControlScenes.SelectedIndex.Value);
 		}
 
-		private void _menuItemSaveEverything_Selected(object sender, EventArgs e)
+		private void _menuItemSaveEverything_Selected(object sender, MyraEventArgs e)
 		{
 			for (var i = 0; i < _tabControlScenes.Items.Count; ++i)
 			{
@@ -1289,7 +1290,7 @@ namespace Nursia.Editor.UI
 			}
 		}
 
-		private void _menuItemReloadCurrentItem_Selected(object sender, EventArgs e)
+		private void _menuItemReloadCurrentItem_Selected(object sender, MyraEventArgs e)
 		{
 			if (_tabControlScenes.SelectedIndex == null)
 			{

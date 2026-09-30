@@ -220,7 +220,7 @@ namespace Nursia.ModelViewer
 			// DebugSettings.DrawLights = true;
 		}
 
-		private void _buttonPlayStop_Click(object sender, EventArgs e)
+		private void _buttonPlayStop_Click(object sender, MyraEventArgs e)
 		{
 			_isAnimating = !_isAnimating;
 
@@ -240,7 +240,7 @@ namespace Nursia.ModelViewer
 			_player.Time = passed;
 		}
 
-		private void _comboAnimations_SelectedIndexChanged(object sender, EventArgs e)
+		private void _comboAnimations_SelectedIndexChanged(object sender, MyraEventArgs e)
 		{
 			if (_mainPanel._comboAnimations.SelectedItem == null || string.IsNullOrEmpty(((Label)_mainPanel._comboAnimations.SelectedItem).Text))
 			{

@@ -15,7 +15,6 @@
     <EmbeddedResource Include="Effects\FNA\bin\*.*" />
   </ItemGroup>
 
-
   <ItemGroup>
     <ProjectReference Include="..\..\DigitalRiseModel\DigitalRiseModel\DigitalRiseModel.FNA.Core.csproj" />
   </ItemGroup>
