@@ -88,7 +88,7 @@ namespace Nursia.Samples.Character
 			SetSheathedTransform();
 
 			_player = new AnimationController(_modelNode.ModelInstance);
-			_player.StartClip("Idle", true);
+			_player.StartClip("Idle", AnimationFlags.Looped);
 			_modelNode.Translation = new Vector3(0, DefaultY, 0);
 
 			var characterModel = _modelNode.Model;
@@ -96,15 +96,15 @@ namespace Nursia.Samples.Character
 			var bottomFilter = characterModel.CreateInverseBoneFilter(topFilter);
 
 			_runDrawAnimation = new AnimationBlendNode();
-			_runDrawAnimation.AddLayer(characterModel.Animations["Run"], isLooped: true).BoneFilter = bottomFilter;
+			_runDrawAnimation.AddLayer(characterModel.Animations["Run"], AnimationFlags.Looped).BoneFilter = bottomFilter;
 			_runDrawAnimation.AddLayer(characterModel.Animations["DrawGreatSword"]).BoneFilter = topFilter;
 
 			_runSheathAnimation = new AnimationBlendNode();
-			_runSheathAnimation.AddLayer(characterModel.Animations["RunGreatSword"], isLooped: true).BoneFilter = bottomFilter;
+			_runSheathAnimation.AddLayer(characterModel.Animations["RunGreatSword"], AnimationFlags.Looped).BoneFilter = bottomFilter;
 			_runSheathAnimation.AddLayer(characterModel.Animations["DrawGreatSword"], AnimationFlags.PlayBackwards).BoneFilter = topFilter;
 
 			_runSlashAnimation = new AnimationBlendNode();
-			_runSlashAnimation.AddLayer(characterModel.Animations["RunGreatSword"], isLooped: true).BoneFilter = bottomFilter;
+			_runSlashAnimation.AddLayer(characterModel.Animations["RunGreatSword"], AnimationFlags.Looped).BoneFilter = bottomFilter;
 			_runSlashAnimation.AddLayer(characterModel.Animations["SlashGreatSword"]).BoneFilter = topFilter;
 		}
 
@@ -141,9 +141,9 @@ namespace Nursia.Samples.Character
 				return;
 
 			if (weaponDrawn)
-				_player.CrossfadeToClip("IdleGreatSword", TimeSpan.FromSeconds(0.1), true);
+				_player.CrossfadeToClip("IdleGreatSword", TimeSpan.FromSeconds(0.1), AnimationFlags.Looped);
 			else
-				_player.CrossfadeToClip("Idle", TimeSpan.FromSeconds(0.1), true);
+				_player.CrossfadeToClip("Idle", TimeSpan.FromSeconds(0.1), AnimationFlags.Looped);
 
 			_mainState = MainState.Idle;
 			WeaponDrawn = weaponDrawn;
@@ -158,9 +158,9 @@ namespace Nursia.Samples.Character
 				return;
 
 			if (weaponDrawn)
-				_player.CrossfadeToClip("RunGreatSword", TimeSpan.FromSeconds(0.1), true);
+				_player.CrossfadeToClip("RunGreatSword", TimeSpan.FromSeconds(0.1), AnimationFlags.Looped);
 			else
-				_player.CrossfadeToClip("Run", TimeSpan.FromSeconds(0.1), true);
+				_player.CrossfadeToClip("Run", TimeSpan.FromSeconds(0.1), AnimationFlags.Looped);
 
 			_mainState = MainState.Run;
 			WeaponDrawn = weaponDrawn;
@@ -180,7 +180,7 @@ namespace Nursia.Samples.Character
 
 			if (_mainState == MainState.Idle)
 			{
-				_player.CrossfadeToClip("DrawGreatSword", TimeSpan.FromSeconds(0.1), false);
+				_player.CrossfadeToClip("DrawGreatSword", TimeSpan.FromSeconds(0.1));
 			}
 			else
 			{
@@ -220,7 +220,7 @@ namespace Nursia.Samples.Character
 
 			if (_mainState == MainState.Idle)
 			{
-				_player.CrossfadeToClip("SlashGreatSword", TimeSpan.FromSeconds(0.1), false);
+				_player.CrossfadeToClip("SlashGreatSword", TimeSpan.FromSeconds(0.1));
 			}
 			else
 			{
@@ -238,7 +238,7 @@ namespace Nursia.Samples.Character
 			_jumpVelocity = JumpForce;
 			_mainState = MainState.Jump;
 			_jumpState = JumpState.Start;
-			_player.CrossfadeToClip("JumpStart", TimeSpan.FromSeconds(0.2), false);
+			_player.CrossfadeToClip("JumpStart", TimeSpan.FromSeconds(0.2));
 		}
 
 		/// <summary>Updates character animation and jump physics. Call once per frame.</summary>
@@ -257,7 +257,7 @@ namespace Nursia.Samples.Character
 						if (_modelNode.Translation.Y <= 6f)
 						{
 							_jumpState = JumpState.Land;
-							_player.CrossfadeToClip("JumpEnd", TimeSpan.FromSeconds(0.2), false);
+							_player.CrossfadeToClip("JumpEnd", TimeSpan.FromSeconds(0.2));
 						}
 						break;
 				}
