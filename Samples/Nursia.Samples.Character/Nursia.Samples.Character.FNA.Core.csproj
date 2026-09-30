@@ -9,7 +9,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <EmbeddedResource Include="Effects\MonoGameOGL\bin\ReflectionPlane.efb" />
+    <EmbeddedResource Include="Effects\FNA\bin\ReflectionPlane.efb" />
   </ItemGroup>  
 
   <ItemGroup>

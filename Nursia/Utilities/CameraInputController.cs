@@ -32,13 +32,6 @@ namespace Nursia.Utilities
 		public float SprintMultiplier { get; set; } = 2.0f;
 
 		/// <summary>
-		/// Gets or sets the point to keep the movement speed in proportion to.
-		/// When set, the movement speed scales with the distance from the camera
-		/// to this point, so far away objects are approached quickly.
-		/// </summary>
-		public Vector3? FocusPoint { get; set; }
-
-		/// <summary>
 		/// Gets or sets the movement speed multiplier applied after the focus distance scaling.
 		/// </summary>
 		public float MoveSpeedFactor { get; set; } = 1.0f;
@@ -94,12 +87,6 @@ namespace Nursia.Utilities
 				var speed = MoveSpeed;
 				if (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift))
 					speed *= SprintMultiplier;
-
-				if (FocusPoint != null)
-				{
-					var distance = (transform.Translation - FocusPoint.Value).Length();
-					speed *= distance;
-				}
 
 				speed *= MoveSpeedFactor;
 
