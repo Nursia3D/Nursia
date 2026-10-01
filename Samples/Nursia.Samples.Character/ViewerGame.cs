@@ -149,9 +149,18 @@ namespace Nursia.Samples.Character
 				isRunning = true;
 			}
 
+			// Jump first: it captures the horizontal momentum and takes over the
+			// animation state, so locomotion is skipped for the rest of the frame.
 			if (_inputService.IsKeyDown(Keys.Space))
 				_controllerService.Jump(velocity);
 
+			if (isRunning)
+				_controllerService.Run(velocity);
+			else
+				_controllerService.Idle();
+
+			// Weapon actions branch on the locomotion state, so they have to be
+			// requested after locomotion has been resolved for this frame.
 			if (_inputService.IsKeyDown(Keys.LeftShift))
 				_controllerService.Slash();
 
@@ -162,11 +171,6 @@ namespace Nursia.Samples.Character
 				else
 					_controllerService.DrawWeapon();
 			}
-
-			if (isRunning)
-				_controllerService.Run(velocity);
-			else
-				_controllerService.Idle();
 
 			_controllerService.Update(gameTime.ElapsedGameTime);
 			_scene.Update(gameTime);
